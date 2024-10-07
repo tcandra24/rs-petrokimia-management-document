@@ -57,7 +57,8 @@ class DivisionController extends Controller
     {
         try {
             Division::create([
-                'name' => $request->name
+                'name' => $request->name,
+                'acronym' => $request ->acronym,
             ]);
 
             toastr()->success('Divisi Berhasil Disimpan');
@@ -98,7 +99,8 @@ class DivisionController extends Controller
 
             $division->update([
                 'name' => $request->name,
-                'is_active' => $isActive
+                'acronym' => $request ->acronym,
+                'is_active' => $isActive,
             ]);
 
             toastr()->success('Divisi Berhasil Diupdate');
@@ -116,7 +118,7 @@ class DivisionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(string $id)
     {
         try {
             $division = Division::findOrFail($id);

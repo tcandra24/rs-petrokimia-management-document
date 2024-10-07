@@ -2,20 +2,69 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Disposition extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'counter',
         'memo_id',
         'number_transaction',
         'committee',
         'is_urgent',
-        'instruction',
         'note',
+        'file',
         'status'
     ];
+
+    public function memo(): BelongsTo
+    {
+        return $this->belongsTo(Memo::class);
+    }
+
+    public function divisions(): BelongsToMany
+    {
+        return $this->belongsToMany(Division::class, 'division_dispositions');
+    }
+
+    public function instructions(): BelongsToMany
+    {
+        return $this->belongsToMany(Instruction::class, 'instruction_dispositions');
+    }
+
+    public function status(): Attribute
+    {
+        return Attribute::make(
+            get: function(string $value){
+                if($value === 'approved') {
+                    return 'Disetujui';
+                } elseif($value === 'reject') {
+                    return 'Ditolak';
+                } else {
+                    return 'Dibuat';
+                }
+            },
+        );
+    }
+
+    public function committee(): Attribute
+    {
+        return Attribute::make(
+            get: function(string $value){
+                if($value === 'medic') {
+                    return 'Medik';
+                } elseif($value === 'nursing') {
+                    return 'Keperawatan';
+                } else {
+                    return '';
+                }
+            },
+        );
+    }
 }

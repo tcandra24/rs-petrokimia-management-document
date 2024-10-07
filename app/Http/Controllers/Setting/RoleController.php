@@ -52,10 +52,10 @@ class RoleController extends Controller
 
     }
 
-    public function edit($id)
+    public function edit(Role $role)
     {
         try {
-            $role = Role::with('permissions')->findOrFail($id);
+            // $role = Role::with('permissions')->findOrFail($id);
             $breadcrumbs = $this->setBreadcrumbs('role', 'edit', $role);
 
             $permissions = Permission::all();
@@ -86,7 +86,7 @@ class RoleController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy(string $id)
     {
         try {
             $role = Role::findOrFail($id);

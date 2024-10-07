@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('title')
+    Daftar Pengguna
+@endsection
+
 @section('styles')
     {{--  --}}
 @endsection
@@ -49,6 +53,7 @@
                                     <th scope="col">Nama</th>
                                     <th scope="col">Email</th>
                                     <th scope="col">Divisi</th>
+                                    <th scope="col">Direksi</th>
                                     <th scope="col">Peran</th>
                                     <th scope="col">Aksi</th>
                                 </tr>
@@ -60,6 +65,17 @@
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->division?->name }}</td>
+                                        <td>
+                                            @if ($user->is_director)
+                                                <div class="row">
+                                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                                        <span class="badge bg-primary rounded-3 fw-semibold">
+                                                            Y
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </td>
                                         <td>
                                             <div class="row">
                                                 <div class="d-flex align-items-center gap-2 flex-wrap"
@@ -85,14 +101,14 @@
                                                         @can('setting.users.edit')
                                                             <a href="{{ route('users.edit', $user->id) }}"
                                                                 class="dropdown-item">
-                                                                Edit
+                                                                Ubah
                                                             </a>
                                                         @endcan
 
                                                         @can('setting.users.destroy')
                                                             <button class="dropdown-item btn-delete" type="button"
                                                                 data-id="{{ $user->id }}"
-                                                                data-name="{{ $user->name }}">Delete</button>
+                                                                data-name="{{ $user->name }}">Hapus</button>
                                                             <form id="form-delete-user-{{ $user->id }}" method="POST"
                                                                 action="{{ route('users.destroy', $user->id) }}">
                                                                 @csrf

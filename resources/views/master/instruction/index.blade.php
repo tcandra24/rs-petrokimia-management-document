@@ -80,14 +80,14 @@
                                                         @can('master.instructions.edit')
                                                             <a href="{{ route('instructions.edit', $instruction->id) }}"
                                                                 class="dropdown-item">
-                                                                Edit
+                                                                Ubah
                                                             </a>
                                                         @endcan
 
                                                         @can('master.instructions.destroy')
                                                             <button class="dropdown-item btn-delete" type="button"
                                                                 data-id="{{ $instruction->id }}"
-                                                                data-name="{{ $instruction->name }}">Delete</button>
+                                                                data-name="{{ $instruction->name }}">Hapus</button>
                                                             <form id="form-delete-instruction-{{ $instruction->id }}"
                                                                 method="POST"
                                                                 action="{{ route('instructions.destroy', $instruction->id) }}">

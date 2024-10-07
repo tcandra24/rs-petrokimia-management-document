@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('divisions', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('acronym');
-            $table->boolean('is_active')->default(true);
-            $table->timestamps();
+        Schema::table('memos', function (Blueprint $table) {
+            $table->string('file')->nullable();
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('divisions');
+        Schema::table('memos', function (Blueprint $table) {
+            $table->dropColumn('file');
+        });
     }
 };

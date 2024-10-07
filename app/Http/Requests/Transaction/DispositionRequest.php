@@ -11,7 +11,7 @@ class DispositionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,11 @@ class DispositionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'is_urgent' => 'required',
+            'divisions' => 'required',
+            'instructions' => 'required',
+            'memo_id' => 'nullable',
+            'file' => 'nullable|mimes:jpg,jpeg,pdf,xls,xlsx'
         ];
     }
 }

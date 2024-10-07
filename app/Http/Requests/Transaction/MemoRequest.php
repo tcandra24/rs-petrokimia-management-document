@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Master;
+namespace App\Http\Requests\Transaction;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DivisionRequest extends FormRequest
+class MemoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,16 +22,10 @@ class DivisionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required',
-            'acronym' => 'required'
-        ];
-    }
-
-    public function messages(): array
-    {
-        return [
-            'name.required' => 'Nama wajib diisi',
-            'acronym.required' => 'Nama Pendek wajib diisi',
+            'regarding' => 'required',
+            'to_user_id' => 'required',
+            'content' => 'required',
+            'file' => 'nullable|mimes:jpg,jpeg,pdf,xls,xlsx'
         ];
     }
 }

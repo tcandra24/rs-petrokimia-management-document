@@ -161,8 +161,43 @@ trait BreadcrumbsTrait
                 return $breadcrumbs->get();
 
                 break;
+            case 'show':
+                $breadcrumbs->add('Daftar', route('dispositions.index'))->add('Tampilkan', route('dispositions.show', $routeParams->id))->add($routeParams->number_transaction );
+                return $breadcrumbs->get();
+
+                break;
             case 'edit':
-                $breadcrumbs->add('Daftar', route('dispositions.index'))->add('Edit', route('dispositions.edit', $routeParams->id))->add($routeParams->name);
+                $breadcrumbs->add('Daftar', route('dispositions.index'))->add('Edit', route('dispositions.edit', $routeParams->id))->add($routeParams->number_transaction);
+                return $breadcrumbs->get();
+
+                break;
+            default:
+                return null;
+        }
+    }
+
+    private function memo($method, $routeParams)
+    {
+        $breadcrumbs = new BreadcrumbHelper('Disposisi');
+
+        switch ($method) {
+            case 'index':
+                $breadcrumbs->add('Daftar', route('memos.index'));
+                return $breadcrumbs->get();
+
+                break;
+            case 'create':
+                $breadcrumbs->add('Daftar', route('memos.index'))->add('Tambah', route('memos.create'));
+                return $breadcrumbs->get();
+
+                break;
+            case 'show':
+                $breadcrumbs->add('Daftar', route('memos.index'))->add('Tampilkan', route('memos.show', $routeParams->id))->add($routeParams->number_transaction );
+                return $breadcrumbs->get();
+
+                break;
+            case 'edit':
+                $breadcrumbs->add('Daftar', route('memos.index'))->add('Edit', route('memos.edit', $routeParams->id))->add($routeParams->number_transaction );
                 return $breadcrumbs->get();
 
                 break;

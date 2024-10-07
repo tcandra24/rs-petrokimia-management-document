@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('title')
+    Tambah Hak Akses
+@endsection
+
 @section('styles')
     <link rel="stylesheet" href="{{ asset('assets/vendor/select2/css/select2.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/select2/css/select2-bootstrap-5-theme.min.css') }}" />

@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('title')
+    Daftar Hak Akses
+@endsection
+
 @section('styles')
     {{--  --}}
 @endsection

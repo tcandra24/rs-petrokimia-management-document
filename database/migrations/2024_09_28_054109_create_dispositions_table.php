@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('dispositions', function (Blueprint $table) {
             $table->id();
+            $table->integer('counter');
             $table->unsignedBigInteger('memo_id')->nullable();
             $table->string('number_transaction')->unique();
-            $table->enum('committee', ['medic', 'nursing']);
+            $table->enum('committee', ['medic', 'nursing', '']);
             $table->boolean('is_urgent');
-            $table->string('instruction', 100);
-            $table->text('note');
-            $table->string('file');
-            $table->enum('status', ['approved', 'no_approved', 'reject', '']);
+            $table->text('note')->nullable();
+            $table->string('file')->nullable();
+            $table->enum('status', ['approved', 'reject', '']);
             $table->timestamps();
 
             $table->foreign('memo_id')->references('id')->on('memos');

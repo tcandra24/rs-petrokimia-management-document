@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('title')
+    Edit Pengguna
+@endsection
+
 @section('styles')
     {{--  --}}
 @endsection
@@ -107,6 +111,15 @@
                                         </small>
                                     </span>
                                 @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" name="is_director" type="checkbox" id="is_director"
+                                        {{ $user->is_director ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="is_director">
+                                        Direktur
+                                    </label>
+                                </div>
                             </div>
                             <div class="text-left">
                                 <button type="submit" class="btn btn-primary">Submit</button>

@@ -51,6 +51,7 @@
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Nama</th>
+                                    <th scope="col">Nama Pendek</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Aksi</th>
                                 </tr>
@@ -60,6 +61,7 @@
                                     <tr>
                                         <th scope="row">{{ $divisions->firstItem() + $key }}</th>
                                         <td>{{ $division->name }}</td>
+                                        <td>{{ $division->acronym }}</td>
                                         <td>
                                             @if ($division->is_active)
                                                 <span class="badge rounded-pill bg-primary">Aktif</span>
@@ -80,14 +82,14 @@
                                                         @can('master.divisions.edit')
                                                             <a href="{{ route('divisions.edit', $division->id) }}"
                                                                 class="dropdown-item">
-                                                                Edit
+                                                                Ubah
                                                             </a>
                                                         @endcan
 
                                                         @can('master.divisions.destroy')
                                                             <button class="dropdown-item btn-delete" type="button"
                                                                 data-id="{{ $division->id }}"
-                                                                data-name="{{ $division->name }}">Delete</button>
+                                                                data-name="{{ $division->name }}">Hapus</button>
                                                             <form id="form-delete-division-{{ $division->id }}" method="POST"
                                                                 action="{{ route('divisions.destroy', $division->id) }}">
                                                                 @csrf
@@ -101,7 +103,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4">
+                                        <td colspan="5">
                                             <div class="alert alert-info alert-dismissible fade show text-center"
                                                 role="alert">
                                                 <i class="bi bi-info-circle me-1"></i>

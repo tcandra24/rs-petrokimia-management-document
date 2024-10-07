@@ -16,30 +16,19 @@ use App\Models\Division;
 
 // Traits
 use App\Traits\General\BreadcrumbsTrait;
-use Illuminate\Support\Facades\Route;
 
 class UserController extends Controller
 {
     use BreadcrumbsTrait;
 
-    private $breadcrumbs = null;
-
-    public function __construct() {
-        $action = Route::currentRouteAction();
-        if($action){
-            [ , $method ] = explode('@', $action);
-
-            $this->breadcrumbs = $this->setBreadcrumbs('user', $method);
-        }
-    }
-
     public function index()
     {
         $users = User::with('roles')->paginate(10);
         $roles = Role::all();
+        $breadcrumbs = $this->setBreadcrumbs('user', 'index');
 
         return view('setting.user.index', [
-            'breadcrumbs' => $this->breadcrumbs,
+            'breadcrumbs' => $breadcrumbs,
             'users' => $users,
             'roles' => $roles
         ]);
@@ -49,18 +38,22 @@ class UserController extends Controller
     {
         $roles = Role::all();
         $divisions = Division::all();
+        $breadcrumbs = $this->setBreadcrumbs('user', 'create');
 
-        return view('setting.user.create', ['roles' => $roles, 'breadcrumbs' => $this->breadcrumbs, 'divisions' => $divisions]);
+        return view('setting.user.create', ['roles' => $roles, 'breadcrumbs' => $breadcrumbs, 'divisions' => $divisions]);
     }
 
     public function store(StoreRequest $request)
     {
         try {
+            $isDirector = $request->is_director ? true : false;
+
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'division_id' => $request->division_id ?? null,
+                'is_director' => $isDirector,
             ]);
 
             $roles = Role::whereIn('id', $request->roles)->first();
@@ -69,6 +62,10 @@ class UserController extends Controller
             toastr()->success('Pengguna Berhasil Disimpan');
             return redirect()->route('users.index');
         } catch (\Exception $e) {
+            // Log::error('Error occurred: '.$e->getMessage(), [
+            //     'exception' => $e,
+            //     'request' => $request->all(),
+            // ]);
             toastr()->error($e->getMessage());
             return back();
         }
@@ -78,9 +75,10 @@ class UserController extends Controller
     {
         $roles = Role::all();
         $divisions = Division::all();
+        $breadcrumbs = $this->setBreadcrumbs('user', 'edit', $user);
 
         return view('setting.user.edit', [
-            'breadcrumbs' => $this->breadcrumbs,
+            'breadcrumbs' => $breadcrumbs,
             'user' => $user,
             'roles' => $roles,
             'divisions' => $divisions
@@ -90,10 +88,13 @@ class UserController extends Controller
     public function update(EditRequest $request, User $user)
     {
         try {
+            $isDirector = $request->is_director ? true : false;
+
             $data = [
                 'name' => $request->name,
                 'email' => $request->email,
                 'division_id' => $request->division_id ?? null,
+                'is_director' => $isDirector,
             ];
 
             if($request->filled('password')){
@@ -112,7 +113,7 @@ class UserController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy(string $id)
     {
         try {
             $user = User::findOrFail($id);

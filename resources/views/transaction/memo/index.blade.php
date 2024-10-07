@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    Tambah Peran
+    Daftar Memo
 @endsection
 
 @section('styles')
@@ -17,7 +17,7 @@
             const name = $(this).attr('data-name')
 
             Swal.fire({
-                title: "Yakin Hapus Peran ?",
+                title: "Yakin Hapus Memo ?",
                 text: name,
                 icon: "warning",
                 showCancelButton: !0,
@@ -26,7 +26,7 @@
                 closeOnConfirm: !1
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $('#form-delete-role-' + id).submit()
+                    $('#form-delete-memo-' + id).submit()
                 }
             })
         })
@@ -39,9 +39,9 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Daftar Peran</h5>
-                        @can('setting.roles.create')
-                            <a href="{{ route('roles.create') }}" class="btn btn-primary">
+                        <h5 class="card-title">Daftar Memo</h5>
+                        @can('transaction.memos.create')
+                            <a href="{{ route('memos.create') }}" class="btn btn-primary">
                                 <i class="bi bi-plus-lg me-1"></i>
                                 Tambah
                             </a>
@@ -50,51 +50,69 @@
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Nama</th>
-                                    <th scope="col">Ijin</th>
-                                    <th scope="col">Action</th>
+                                    <th scope="col">Nomer Memo</th>
+                                    <th scope="col">Perihal</th>
+                                    <th scope="col">Pemohon</th>
+                                    <th scope="col">Termohon</th>
+                                    <th scope="col">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($roles as $key => $role)
+                                @forelse ($memos as $key => $memo)
                                     <tr>
-                                        <th scope="row">{{ $roles->firstItem() + $key }}</th>
-                                        <td>{{ $role->name }}</td>
+                                        <th scope="row">{{ $memos->firstItem() + $key }}</th>
+                                        <td>{{ $memo->number_transaction }}</td>
+                                        <td>{{ $memo->regarding }}</td>
                                         <td>
                                             <div class="row">
-                                                <div class="d-flex align-items-center gap-2 flex-wrap"
-                                                    style="min-width: 200px;">
-                                                    @foreach ($role->permissions as $permission)
-                                                        <span class="badge bg-success rounded-3 fw-semibold">
-                                                            {{ $permission->name }}
-                                                        </span>
-                                                    @endforeach
+                                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                                    <span class="badge bg-primary rounded-3 fw-semibold">
+                                                        {{ $memo->from_user->name }}
+                                                    </span>
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
-                                            @if (auth()->user()->can('setting.roles.edit') || auth()->user()->can('setting.roles.destroy'))
+                                            <div class="row">
+                                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                                    <span class="badge bg-success rounded-3 fw-semibold">
+                                                        {{ $memo->to_user->name }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @if (auth()->user()->can('transaction.memos.edit') ||
+                                                    auth()->user()->can('transaction.memos.destroy') ||
+                                                    auth()->user()->can('transaction.memos.show'))
                                                 <div class="dropdown">
                                                     <a href="javascript:void(0)" class="btn btn-light"
                                                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                                        id="dropdown-menu-{{ $role->id }}">
+                                                        id="dropdown-menu-{{ $memo->id }}">
                                                         <i class="bi bi-three-dots-vertical"></i>
                                                     </a>
                                                     <div class="dropdown-menu"
-                                                        aria-labelledby="dropdown-menu-{{ $role->id }}">
-                                                        @can('setting.roles.edit')
-                                                            <a href="{{ route('roles.edit', $role->id) }}"
+                                                        aria-labelledby="dropdown-menu-{{ $memo->id }}">
+                                                        @can('transaction.memos.show')
+                                                            <a href="{{ route('memos.show', $memo->id) }}"
+                                                                class="dropdown-item">
+                                                                Tampilkan
+                                                            </a>
+                                                        @endcan
+
+                                                        @can('transaction.memos.edit')
+                                                            <a href="{{ route('memos.edit', $memo->id) }}"
                                                                 class="dropdown-item">
                                                                 Ubah
                                                             </a>
                                                         @endcan
 
-                                                        @can('setting.roles.destroy')
+                                                        @can('transaction.memos.destroy')
                                                             <button class="dropdown-item btn-delete" type="button"
-                                                                data-id="{{ $role->id }}"
-                                                                data-name="{{ $role->name }}">Hapus</button>
-                                                            <form id="form-delete-role-{{ $role->id }}" method="POST"
-                                                                action="{{ route('roles.destroy', $role->id) }}">
+                                                                data-id="{{ $memo->id }}"
+                                                                data-name="{{ $memo->number_transaction }}">Hapus</button>
+                                                            <form id="form-delete-memo-{{ $memo->id }}" method="POST"
+                                                                action="{{ route('memos.destroy', $memo->id) }}">
                                                                 @csrf
                                                                 @method('DELETE')
                                                             </form>
@@ -106,11 +124,11 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="3">
+                                        <td colspan="6">
                                             <div class="alert alert-info alert-dismissible fade show text-center"
                                                 role="alert">
                                                 <i class="bi bi-info-circle me-1"></i>
-                                                Peran Masih Kosong
+                                                Memo Masih Kosong
                                             </div>
                                         </td>
                                     </tr>
@@ -118,7 +136,7 @@
                             </tbody>
                         </table>
                         <div class="d-flex flex-column justify-content-end my-2">
-                            {{ $roles->links() }}
+                            {{ $memos->links() }}
                         </div>
                     </div>
                 </div>

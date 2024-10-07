@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('title')
+    Tambah Pengguna
+@endsection
+
 @section('styles')
     {{--  --}}
 @endsection
@@ -47,7 +51,7 @@
                                 <label for="division" class="form-label">Divisi</label>
                                 <select id="division" name="division_id"
                                     class="form-select {{ $errors->has('division_id') ? 'border border-danger' : '' }}">
-                                    <option selected="">Pilih Divisi</option>
+                                    <option value="">Pilih Divisi</option>
                                     @foreach ($divisions as $division)
                                         <option value="{{ $division->id }}">{{ $division->name }}</option>
                                     @endforeach
@@ -64,7 +68,7 @@
                                 <label for="roles" class="form-label">Peran</label>
                                 <select id="roles" name="roles[]"
                                     class="form-select {{ $errors->has('roles') ? 'border border-danger' : '' }}">
-                                    <option selected="">Pilih Peran</option>
+                                    <option value="">Pilih Peran</option>
                                     @foreach ($roles as $role)
                                         <option value="{{ $role->id }}">{{ $role->name }}</option>
                                     @endforeach
@@ -102,6 +106,14 @@
                                         </small>
                                     </span>
                                 @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" name="is_director" type="checkbox" id="is_director">
+                                    <label class="form-check-label" for="is_director">
+                                        Direktur
+                                    </label>
+                                </div>
                             </div>
                             <div class="text-left">
                                 <button type="submit" class="btn btn-primary">Submit</button>

@@ -22,11 +22,26 @@
                         <form method="POST" action="{{ route('divisions.store') }}">
                             @csrf
                             <div class="row mb-3">
-                                <label for="inputText" class="col-sm-2 col-form-label">Nama</label>
+                                <label for="name" class="col-sm-2 col-form-label">Nama</label>
                                 <div class="col-sm-10">
                                     <input type="text" name="name"
                                         class="form-control {{ $errors->has('name') ? 'border border-danger' : '' }}">
                                     @error('name')
+                                        <span class="text-danger">
+                                            <small>
+                                                <i>{{ $message }}</i>
+                                            </small>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="acronym" class="col-sm-2 col-form-label">Nama Pendek</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="acronym"
+                                        class="form-control {{ $errors->has('acronym') ? 'border border-danger' : '' }}">
+                                    @error('acronym')
                                         <span class="text-danger">
                                             <small>
                                                 <i>{{ $message }}</i>

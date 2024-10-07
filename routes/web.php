@@ -26,10 +26,14 @@ Route::group(['middleware' => ['auth']], function () {
         ->middleware('permission:master.instructions.index|master.instructions.create|master.instructions.edit|master.instructions.destroy');
     });
 
-    Route::prefix('master')->group(function() {
+    Route::prefix('transaction')->group(function() {
         Route::resource('/dispositions', \App\Http\Controllers\Transaction\DispositionController::class)
-        ->middleware('permission:transaction.dispositions.index|transaction.dispositions.create|transaction.dispositions.edit|transaction.dispositions.destroy');
+        ->middleware('permission:transaction.dispositions.index|transaction.dispositions.show|transaction.dispositions.create|transaction.dispositions.edit|transaction.dispositions.destroy');
 
+        Route::resource('/memos', \App\Http\Controllers\Transaction\MemoController::class)
+        ->middleware('permission:transaction.memos.index|transaction.memos.show|transaction.memos.create|transaction.memos.edit|transaction.memos.destroy');
+
+        Route::post('disposition/change-status/{id}', \App\Http\Controllers\Transaction\ChangeStatusController::class)->name('transaction.change-status');
     });
 
     Route::prefix('setting')->group(function(){
@@ -40,7 +44,7 @@ Route::group(['middleware' => ['auth']], function () {
         ->middleware('permission:setting.roles.index|setting.roles.create|setting.roles.edit|setting.roles.destroy');
 
         Route::resource('/permissions', \App\Http\Controllers\Setting\PermissionController::class, [ 'only' => [ 'index', 'create', 'store' ] ])
-        ->middleware('permission:setting.permission.index|setting.permission.create');
+        ->middleware('permission:setting.permissions.index|setting.permission.create');
     });
 
     Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');

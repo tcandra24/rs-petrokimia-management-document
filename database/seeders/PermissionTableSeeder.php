@@ -26,11 +26,13 @@ class PermissionTableSeeder extends Seeder
         Permission::create(['name' => 'master.instructions.destroy', 'guard_name' => 'web']);
 
         Permission::create(['name' => 'transaction.memos.index', 'guard_name' => 'web']);
+        Permission::create(['name' => 'transaction.memos.show', 'guard_name' => 'web']);
         Permission::create(['name' => 'transaction.memos.create', 'guard_name' => 'web']);
         Permission::create(['name' => 'transaction.memos.edit', 'guard_name' => 'web']);
         Permission::create(['name' => 'transaction.memos.destroy', 'guard_name' => 'web']);
 
         Permission::create(['name' => 'transaction.dispositions.index', 'guard_name' => 'web']);
+        Permission::create(['name' => 'transaction.dispositions.show', 'guard_name' => 'web']);
         Permission::create(['name' => 'transaction.dispositions.create', 'guard_name' => 'web']);
         Permission::create(['name' => 'transaction.dispositions.edit', 'guard_name' => 'web']);
         Permission::create(['name' => 'transaction.dispositions.destroy', 'guard_name' => 'web']);
@@ -46,6 +48,6 @@ class PermissionTableSeeder extends Seeder
         Permission::create(['name' => 'setting.roles.index', 'guard_name' => 'web']);
         Permission::create(['name' => 'setting.roles.create', 'guard_name' => 'web']);
         Permission::create(['name' => 'setting.roles.edit', 'guard_name' => 'web']);
-        Permission::create(['name' => 'setting.roles.delete', 'guard_name' => 'web']);
+        Permission::create(['name' => 'setting.roles.destroy', 'guard_name' => 'web']);
     }
 }

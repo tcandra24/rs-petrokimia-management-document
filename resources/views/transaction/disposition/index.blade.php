@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('title')
+    Daftar Disposisi
+@endsection
+
 @section('styles')
     {{--  --}}
 @endsection
@@ -22,7 +26,7 @@
                 closeOnConfirm: !1
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $('#form-delete-disposisi-' + id).submit()
+                    $('#form-delete-disposition-' + id).submit()
                 }
             })
         })
@@ -47,7 +51,8 @@
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Nomer Agenda</th>
-                                    <th scope="col">Memo</th>
+                                    <th scope="col">Komite</th>
+                                    <th scope="col">Tipe</th>
                                     <th scope="col">Divisi</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Aksi</th>
@@ -58,41 +63,80 @@
                                     <tr>
                                         <th scope="row">{{ $dispositions->firstItem() + $key }}</th>
                                         <td>{{ $disposition->number_transaction }}</td>
-                                        <td>{{ $disposition->memo?->number_transaction }}</td>
-                                        <td>{{ $disposition->division->name }}</td>
+                                        <td>{{ $disposition->committee }}</td>
+                                        <td>
+                                            @if ($disposition->memo)
+                                                <div class="row">
+                                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                                        <span class="badge bg-danger rounded-3 fw-semibold">
+                                                            Memo
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <div class="row">
+                                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                                        <span class="badge bg-danger rounded-3 fw-semibold">
+                                                            Surat Masuk
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <div class="row">
+                                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                                    @foreach ($disposition->divisions as $division)
+                                                        <span class="badge bg-primary rounded-3 fw-semibold">
+                                                            {{ $division->name }}
+                                                        </span>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td>
                                             <div class="row">
                                                 <div class="d-flex align-items-center gap-2 flex-wrap"
                                                     style="min-width: 200px;">
-                                                    <span class="badge bg-success rounded-3 fw-semibold">
+                                                    <span class="badge bg-secondary rounded-3 fw-semibold">
                                                         {{ $disposition->status }}
                                                     </span>
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
-                                            @if (auth()->user()->can('transaction.dispositions.edit') || auth()->user()->can('transaction.dispositions.destroy'))
+                                            @if (auth()->user()->can('transaction.dispositions.edit') ||
+                                                    auth()->user()->can('transaction.dispositions.destroy') ||
+                                                    auth()->user()->can('transaction.dispositions.show'))
                                                 <div class="dropdown">
                                                     <a href="javascript:void(0)" class="btn btn-light"
                                                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                                        id="dropdown-menu-{{ $user->id }}">
+                                                        id="dropdown-menu-{{ $disposition->id }}">
                                                         <i class="bi bi-three-dots-vertical"></i>
                                                     </a>
                                                     <div class="dropdown-menu"
-                                                        aria-labelledby="dropdown-menu-{{ $user->id }}">
-                                                        @can('transaction.dispositions.edit')
-                                                            <a href="{{ route('users.edit', $user->id) }}"
+                                                        aria-labelledby="dropdown-menu-{{ $disposition->id }}">
+                                                        @can('transaction.dispositions.show')
+                                                            <a href="{{ route('dispositions.show', $disposition->id) }}"
                                                                 class="dropdown-item">
-                                                                Edit
+                                                                Tampilkan
+                                                            </a>
+                                                        @endcan
+
+                                                        @can('transaction.dispositions.edit')
+                                                            <a href="{{ route('dispositions.edit', $disposition->id) }}"
+                                                                class="dropdown-item">
+                                                                Ubah
                                                             </a>
                                                         @endcan
 
                                                         @can('transaction.dispositions.destroy')
                                                             <button class="dropdown-item btn-delete" type="button"
-                                                                data-id="{{ $user->id }}"
-                                                                data-name="{{ $user->name }}">Delete</button>
-                                                            <form id="form-delete-user-{{ $user->id }}" method="POST"
-                                                                action="{{ route('users.destroy', $user->id) }}">
+                                                                data-id="{{ $disposition->id }}"
+                                                                data-name="{{ $disposition->number_transaction }}">Hapus</button>
+                                                            <form id="form-delete-disposition-{{ $disposition->id }}"
+                                                                method="POST"
+                                                                action="{{ route('dispositions.destroy', $disposition->id) }}">
                                                                 @csrf
                                                                 @method('DELETE')
                                                             </form>
@@ -104,7 +148,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6">
+                                        <td colspan="7">
                                             <div class="alert alert-info alert-dismissible fade show text-center"
                                                 role="alert">
                                                 <i class="bi bi-info-circle me-1"></i>
