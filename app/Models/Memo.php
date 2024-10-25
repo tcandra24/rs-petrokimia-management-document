@@ -18,7 +18,9 @@ class Memo extends Model
         'to_user_id',
         'regarding',
         'content',
-        'file'
+        'file',
+        'qr_code_file',
+        'approve_datetime'
     ];
 
     public function dispositions(): HasOne

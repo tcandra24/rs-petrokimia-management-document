@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    Tampilkan Detail Memo
+    Detail Memo {{ $memo->number_transaction }}
 @endsection
 
 @section('styles')
@@ -9,61 +9,63 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/sweetalert2/sweetalert2.min.js') }}"></script>
-    <script>
-        $('.btn-delete').on('click', function() {
-            const id = $(this).attr('data-id')
-            const name = $(this).attr('data-name')
-
-            Swal.fire({
-                title: "Yakin Hapus Disposisi ?",
-                text: name,
-                icon: "warning",
-                showCancelButton: !0,
-                confirmButtonColor: "#5d87ff",
-                confirmButtonText: "Yes",
-                closeOnConfirm: !1
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $('#form-delete-disposition-' + id).submit()
-                }
-            })
-        })
-    </script>
+    {{--  --}}
 @endsection
 
 @section('content')
-    <section class="section profile">
+    <section class="section">
         <div class="row">
-            <div class="col-xl-12">
+            <div class="col-lg-8">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Memo</h5>
-                        <div class="row my-2">
-                            <div class="col-lg-3 col-md-4 label fw-bold">Nomor Memo</div>
-                            <div class="col-lg-9 col-md-8">{{ $memo->number_transaction }}</div>
-                        </div>
+                        <h5 class="card-title">Detail Memo</h5>
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <h4 class="col-sm-4 fw-bold">Perihal</h4>
+                                <p>{{ $memo->regarding }}</p>
+                            </div>
 
-                        <div class="row my-2">
-                            <div class="col-lg-3 col-md-4 label fw-bold">Dari</div>
-                            <div class="col-lg-9 col-md-8">{{ $memo->from_user->name }}</div>
-                        </div>
+                            <div class="col-md-6">
+                                <h4 class="col-sm-4 fw-bold">Pemohon</h4>
+                                <p>{{ $memo->from_user->name }}</p>
+                            </div>
 
-                        <div class="row my-2">
-                            <div class="col-lg-3 col-md-4 label fw-bold">Dibuat</div>
-                            <div class="col-lg-9 col-md-8">{{ $memo->created_at }}</div>
-                        </div>
-
-                        <div class="row my-2">
-                            <div class="col-lg-3 col-md-4 label fw-bold">Isi</div>
-                            <div class="col-lg-9 col-md-8">{!! $memo->content !!}</div>
+                            <div class="col-md-6">
+                                <h4 class="col-sm-4 fw-bold">Termohon</h4>
+                                <p>{{ $memo->to_user->name }}</p>
+                            </div>
+                            @if ($memo->file)
+                                <div class="col-md-6">
+                                    <h4 class="col-sm-4 fw-bold">Lampiran</h4>
+                                    <a href="{{ route('attachment.memo', $memo->id) }}" target="_blank"
+                                        class="btn btn-primary" target="_blank">Download</a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
-
+            </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Tanda Tangan</h5>
+                        <div class="d-flex justify-content-center">
+                            <img src="{{ asset('/storage/memo/qr-codes-signature/' . $memo->qr_code_file) }}"
+                                alt="{{ $memo->number_transaction }}" width="200">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Isi Memo</h5>
+                        {!! $memo->content !!}
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 @endsection

@@ -3,10 +3,7 @@
 namespace App\Http\Controllers\Transaction;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon;
 
 // Requests
 use App\Http\Requests\Transaction\DispositionRequest;
@@ -71,7 +68,7 @@ class DispositionController extends Controller
                     'is_urgent' => $request->is_urgent,
                     'memo_id' => $memo,
                     'status' => '',
-                    'file' => $this->doUpload($request, 'public/files/dispositions'),
+                    'file' => $this->doUpload('local', $request, 'public/files/dispositions'),
                 ]);
 
                 $divisions = Division::select('id')->whereIn('id', $request->divisions)->get();
@@ -121,7 +118,7 @@ class DispositionController extends Controller
                     'is_urgent' => $request->is_urgent,
                     'memo_id' => $memo,
                     'status' => '',
-                    'file' => $this->doUpload($request, 'public/files/dispositions', $disposition->file),
+                    'file' => $this->doUpload('local', $request, 'public/files/dispositions', $disposition->file),
                 ]);
 
                 $divisions = Division::select('id')->whereIn('id', $request->divisions)->get();
@@ -148,7 +145,7 @@ class DispositionController extends Controller
                 $disposition->instructions()->detach();
                 $disposition->delete();
 
-                $this->deleteImage('public/files/dispositions', $disposition->file);
+                $this->deleteImage('local', 'public/files/dispositions', $disposition->file);
             });
 
             toastr()->success('Disposisi Berhasil Dihapus');

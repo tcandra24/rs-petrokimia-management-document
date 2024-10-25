@@ -4,6 +4,11 @@ namespace App\Http\Controllers\Transaction;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use phpseclib3\Crypt\RSA;
+use Illuminate\Support\Facades\Storage;
+// use Illuminate\Support\Facades\Storage;
+// use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 
 // Requests
@@ -52,6 +57,18 @@ class MemoController extends Controller
             $maxCounter = Memo::max('counter') + 1;
             $numberTransaction = $maxCounter . '/' . str_pad($now->month, 2, '0', STR_PAD_LEFT) . '/MEMO/' . strtoupper(Auth::user()->division->acronym) . '/RSPGD/' . $now->year;
 
+            $privateKey = RSA::load(Auth::user()->private_key);
+            $payload = [
+                'number_transaction' => $numberTransaction,
+                'content' => $request->content
+            ];
+
+            $signature = $privateKey->sign(json_encode($payload));
+            $qrcode_name = 'qr-code-signature-' . str_replace('/', '-', $numberTransaction) . '.png';
+            $qrcode = QrCode::format('png')->size(300)->style('round')->eye('circle')->generate(base64_encode($signature));
+
+            Storage::disk('public')->put('memo/qr-codes-signature/' . $qrcode_name, $qrcode);
+
             Memo::create([
                 'counter' => $maxCounter,
                 'number_transaction' => $numberTransaction,
@@ -59,8 +76,15 @@ class MemoController extends Controller
                 'from_user_id' => Auth::user()->id,
                 'to_user_id' => $request->to_user_id,
                 'content' => $request->content,
-                'file' => $this->doUpload($request, 'public/files/memos'),
+                'file' => $this->doUpload('local', $request, 'public/files/memos'),
+                'qr_code_file' => $qrcode_name,
+                'approve_datetime' => Carbon::now(),
             ]);
+
+            // $file = Pdf::loadView('transaction.disposition.exports.pdf.export', ['memo' => $memo ]);
+            // $content = $file->output();
+            // $filename = str_replace('/', '-', $memo->number_transaction) . '-' . $memo->regarding;
+            // Storage::put('public/files/memos/export/pdf/' . $filename, $content);
 
             toastr()->success('Memo Berhasil Disimpan');
             return redirect()->route('memos.index');
@@ -106,7 +130,7 @@ class MemoController extends Controller
                     'regarding' => $request->regarding,
                     'to_user_id' => $request->to_user_id,
                     'content' => $request->content,
-                    'file' => $this->doUpload($request, 'public/files/memos', $memo->file),
+                    'file' => $this->doUpload('local', $request, 'public/files/memos', $memo->file),
                 ]);
 
                 toastr()->success('Memo Berhasil Diupdate');
@@ -130,7 +154,8 @@ class MemoController extends Controller
             $memo = Memo::findOrFail($id);
             $memo->delete();
 
-            $this->deleteImage('public/files/memos', $memo->file);
+            $this->deleteImage('local', 'public/files/memos', $memo->file);
+            $this->deleteImage('public', 'public/memo/qr-codes-signature', $memo->qr_code_file);
 
             toastr()->success('Memo Berhasil Dihapus');
             return redirect()->route('memos.index');

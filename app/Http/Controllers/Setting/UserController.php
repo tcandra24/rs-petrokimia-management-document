@@ -5,6 +5,14 @@ namespace App\Http\Controllers\Setting;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Str;
+use phpseclib3\Crypt\RSA;
+use Carbon\Carbon;
+
+// Mail
+use App\Jobs\SendMailJob;
+use App\Mail\VerifyUserMail;
 
 // Request
 use App\Http\Requests\Setting\User\StoreRequest;
@@ -48,16 +56,31 @@ class UserController extends Controller
         try {
             $isDirector = $request->is_director ? true : false;
 
+            $privateKey = RSA::createKey(2048);
+            $privateKeyString = $privateKey->toString('PKCS8');
+            $publicKeyString = $privateKey->getPublicKey()->toString('PKCS8');
+
+            $token = hash_hmac('sha256', Crypt::encryptString(Str::uuid() . Carbon::now()->getTimestampMs() . $request->name), $request->email . $request->name);
+
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'division_id' => $request->division_id ?? null,
                 'is_director' => $isDirector,
+                'public_key' => $publicKeyString,
+                'private_key' => $privateKeyString,
+                'token' => $token
             ]);
 
             $roles = Role::whereIn('id', $request->roles)->first();
             $user->assignRole($roles);
+
+            $data = [
+                'email' => $user->email,
+                'template' => (new VerifyUserMail('Silahkan Verifikasi Email', $user->name, $token))
+            ];
+            dispatch(new SendMailJob($data));
 
             toastr()->success('Pengguna Berhasil Disimpan');
             return redirect()->route('users.index');

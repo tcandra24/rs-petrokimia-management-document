@@ -49,5 +49,7 @@ class PermissionTableSeeder extends Seeder
         Permission::create(['name' => 'setting.roles.create', 'guard_name' => 'web']);
         Permission::create(['name' => 'setting.roles.edit', 'guard_name' => 'web']);
         Permission::create(['name' => 'setting.roles.destroy', 'guard_name' => 'web']);
+
+        Permission::create(['name' => 'monitoring.pulse.index', 'guard_name' => 'web']);
     }
 }

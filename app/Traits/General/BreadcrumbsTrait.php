@@ -178,7 +178,7 @@ trait BreadcrumbsTrait
 
     private function memo($method, $routeParams)
     {
-        $breadcrumbs = new BreadcrumbHelper('Disposisi');
+        $breadcrumbs = new BreadcrumbHelper('Memo');
 
         switch ($method) {
             case 'index':

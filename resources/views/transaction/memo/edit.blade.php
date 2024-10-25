@@ -13,82 +13,18 @@
             box-shadow: unset !important;
         }
     </style>
-
-    <link href="{{ asset('assets/vendor/quill/quill.snow.css') }}" rel="stylesheet">
-    {{-- <link href="{{ asset('assets/vendor/quill/quill.bubble.css') }}" rel="stylesheet"> --}}
 @endsection
 
 @section('scripts')
     <script src="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/quill/quill.min.js') }}"></script>
+    <script src="https://cdn.tiny.cloud/1/5oql2rbngsovyxasavqk4844mwig2cn7zvt27ffehxydtxms/tinymce/7/tinymce.min.js"
+        referrerpolicy="origin"></script>
     <script src="{{ asset('assets/vendor/select2/js/select2.full.min.js') }}"></script>
 
     <script>
         $(document).ready(function() {
             $('#divisions').select2()
             $('#instructions').select2()
-
-            if (document.getElementById('quill-editor-area')) {
-                const editor = new Quill('#quill-editor', {
-                    theme: 'snow',
-                    modules: {
-                        toolbar: [
-                            [{
-                                    font: [],
-                                },
-                                {
-                                    size: [],
-                                },
-                            ],
-                            ["bold", "italic", "underline", "strike"],
-                            [{
-                                    color: [],
-                                },
-                                {
-                                    background: [],
-                                },
-                            ],
-                            [{
-                                    script: "super",
-                                },
-                                {
-                                    script: "sub",
-                                },
-                            ],
-                            [{
-                                    list: "ordered",
-                                },
-                                {
-                                    list: "bullet",
-                                },
-                                {
-                                    indent: "-1",
-                                },
-                                {
-                                    indent: "+1",
-                                },
-                            ],
-                            [
-                                "direction",
-                                {
-                                    align: [],
-                                },
-                            ],
-                            ["link", "image", "video"],
-                            ["clean"],
-                        ],
-                    },
-                });
-
-                const quillEditor = document.getElementById('quill-editor-area');
-                editor.on('text-change', function() {
-                    quillEditor.value = editor.root.innerHTML;
-                });
-
-                quillEditor.addEventListener('input', function() {
-                    editor.root.innerHTML = quillEditor.value;
-                });
-            }
         })
     </script>
 @endsection
@@ -161,9 +97,8 @@
                             <div class="col-md-12">
                                 <label for="content" class="form-label">Isi<span class="text-danger">*</span></label>
                                 <div class="d-block">
-                                    <div id="quill-editor" class="mb-3">{!! $memo->content !!}</div>
+                                    <textarea name="content" class="tinymce-editor">{!! $memo->content !!}</textarea>
                                 </div>
-                                <textarea rows="3" class="d-none" name="content" id="quill-editor-area">{{ $memo->content }}</textarea>
                                 @error('content')
                                     <span class="text-danger">
                                         <small>

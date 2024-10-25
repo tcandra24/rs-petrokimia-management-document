@@ -205,7 +205,7 @@
      * Initiate TinyMCE Editor
      */
     const useDarkMode = window.matchMedia(
-        "(prefers-color-scheme: dark)"
+        "(prefers-color-scheme: light)"
     ).matches;
     const isSmallScreen = window.matchMedia("(max-width: 1023.5px)").matches;
 

@@ -93,6 +93,11 @@
                                                     </a>
                                                     <div class="dropdown-menu"
                                                         aria-labelledby="dropdown-menu-{{ $memo->id }}">
+                                                        <a href="{{ route('download.disposition', $memo->id) }}"
+                                                            class="dropdown-item">
+                                                            Unduh
+                                                        </a>
+
                                                         @can('transaction.memos.show')
                                                             <a href="{{ route('memos.show', $memo->id) }}"
                                                                 class="dropdown-item">

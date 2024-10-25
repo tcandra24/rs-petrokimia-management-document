@@ -9,9 +9,11 @@ Route::group(['middleware' => ['guest']], function () {
 
     Route::get('/login', [App\Http\Controllers\AuthController::class, 'index']);
     Route::post('/login', [App\Http\Controllers\AuthController::class, 'login'])->name('login');
+
+    Route::get('/verify-email/{token}', App\Http\Controllers\Auth\VerifyEmailController::class)->name('verify');
 });
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/', function(){
         return redirect('/dashboard');
     });
@@ -34,6 +36,18 @@ Route::group(['middleware' => ['auth']], function () {
         ->middleware('permission:transaction.memos.index|transaction.memos.show|transaction.memos.create|transaction.memos.edit|transaction.memos.destroy');
 
         Route::post('disposition/change-status/{id}', \App\Http\Controllers\Transaction\ChangeStatusController::class)->name('transaction.change-status');
+
+        Route::prefix('export')->group(function() {
+            Route::prefix('memo')->group(function() {
+                Route::get('/pdf/{id}', [\App\Http\Controllers\Transaction\Export\Pdf\MemoController::class, 'download'])->name('download.disposition');
+            });
+        });
+
+        Route::prefix('download')->group(function() {
+            Route::prefix('memo')->group(function() {
+                Route::get('/attachment/{id}', \App\Http\Controllers\Transaction\Download\AttachmentController::class)->name('attachment.memo');
+            });
+        });
     });
 
     Route::prefix('setting')->group(function(){

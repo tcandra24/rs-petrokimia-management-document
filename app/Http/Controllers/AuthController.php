@@ -28,6 +28,14 @@ class AuthController extends Controller
                 throw new \Exception('Login Gagal, Email/Password salah');
             }
 
+            $user = Auth::user();
+            if (!$user->hasVerifiedEmail()) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                throw new \Exception('Login Gagal, Email belum terverifikasi');
+            }
+
             $request->session()->regenerate();
             return redirect()->intended()->route('dashboard.index');
         } catch (\Exception $e) {
