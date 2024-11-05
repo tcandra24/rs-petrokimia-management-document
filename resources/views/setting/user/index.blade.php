@@ -30,6 +30,25 @@
                 }
             })
         })
+
+        $('.btn-resend').on('click', function() {
+            const id = $(this).attr('data-id')
+            const name = $(this).attr('data-name')
+
+            Swal.fire({
+                title: "Yakin Kirim Email Ulang ?",
+                text: name,
+                icon: "info",
+                showCancelButton: !0,
+                confirmButtonColor: "#5d87ff",
+                confirmButtonText: "Yes",
+                closeOnConfirm: !1
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#form-resend-email-' + id).submit()
+                }
+            })
+        })
     </script>
 @endsection
 
@@ -53,7 +72,7 @@
                                     <th scope="col">Nama</th>
                                     <th scope="col">Email</th>
                                     <th scope="col">Divisi</th>
-                                    <th scope="col">Direksi</th>
+                                    <th scope="col">Tipe</th>
                                     <th scope="col">Peran</th>
                                     <th scope="col">Aksi</th>
                                 </tr>
@@ -65,17 +84,7 @@
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->division?->name }}</td>
-                                        <td>
-                                            @if ($user->is_director)
-                                                <div class="row">
-                                                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                                                        <span class="badge bg-primary rounded-3 fw-semibold">
-                                                            Y
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        </td>
+                                        <td>{{ $user->type }}</td>
                                         <td>
                                             <div class="row">
                                                 <div class="d-flex align-items-center gap-2 flex-wrap"
@@ -98,6 +107,18 @@
                                                     </a>
                                                     <div class="dropdown-menu"
                                                         aria-labelledby="dropdown-menu-{{ $user->id }}">
+                                                        @if (!$user->hasVerifiedEmail())
+                                                            <button class="dropdown-item btn-resend" type="button"
+                                                                data-id="{{ $user->id }}"
+                                                                data-name="{{ $user->name }}">
+                                                                Kirim Email Verifikasi
+                                                            </button>
+                                                            <form id="form-resend-email-{{ $user->id }}" method="POST"
+                                                                action="{{ route('email.resend', $user->email) }}">
+                                                                @csrf
+                                                            </form>
+                                                        @endif
+
                                                         @can('setting.users.edit')
                                                             <a href="{{ route('users.edit', $user->id) }}"
                                                                 class="dropdown-item">

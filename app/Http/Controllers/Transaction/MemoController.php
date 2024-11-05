@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\Storage;
 // use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 
+// Mail
+use App\Mail\SendMemoMail;
+
+// Notification
+use App\Notifications\GeneralNotification;
+
 // Requests
 use App\Http\Requests\Transaction\MemoRequest;
 
@@ -21,10 +27,16 @@ use App\Models\User;
 // Traits
 use App\Traits\General\BreadcrumbsTrait;
 use App\Traits\General\UploadImageTrait;
+use App\Traits\General\GeneratesTransactionNumberTrait;
+use App\Traits\General\DigitalSignatureTrait;
+use App\Traits\General\SendNotificationsTrait;
+
+// Events
+use App\Events\SendNotificationEvent;
 
 class MemoController extends Controller
 {
-    use BreadcrumbsTrait, UploadImageTrait;
+    use BreadcrumbsTrait, UploadImageTrait, GeneratesTransactionNumberTrait, DigitalSignatureTrait, SendNotificationsTrait;
     /**
      * Display a listing of the resource.
      */
@@ -32,6 +44,8 @@ class MemoController extends Controller
     {
         $memos = Memo::with(['to_user', 'from_user'])->paginate(10);
         $breadcrumbs = $this->setBreadcrumbs('memo', 'index');
+
+        // event(new SendNotificationEvent('Hi', Auth::user()->id));
 
         return view('transaction.memo.index', ['breadcrumbs' => $breadcrumbs, 'memos' => $memos ]);
     }
@@ -53,38 +67,65 @@ class MemoController extends Controller
     public function store(MemoRequest $request)
     {
         try {
-            $now = Carbon::now();
             $maxCounter = Memo::max('counter') + 1;
-            $numberTransaction = $maxCounter . '/' . str_pad($now->month, 2, '0', STR_PAD_LEFT) . '/MEMO/' . strtoupper(Auth::user()->division->acronym) . '/RSPGD/' . $now->year;
+            $numberTransaction = $this->generatesTransactionNumber('Memo', $maxCounter);
 
-            $privateKey = RSA::load(Auth::user()->private_key);
             $payload = [
                 'number_transaction' => $numberTransaction,
                 'content' => $request->content
             ];
+            $signature = $this->createSignature($payload);
 
-            $signature = $privateKey->sign(json_encode($payload));
-            $qrcode_name = 'qr-code-signature-' . str_replace('/', '-', $numberTransaction) . '.png';
-            $qrcode = QrCode::format('png')->size(300)->style('round')->eye('circle')->generate(base64_encode($signature));
+            // $qrcode_name = 'qr-code-signature-' . str_replace('/', '-', $numberTransaction) . '.png';
+            // $qrcode = QrCode::format('png')->size(300)->style('round')->eye('circle')->generate(base64_encode($signature));
+            // Storage::disk('public')->put('memo/qr-codes-signature/' . $qrcode_name, $qrcode);
+            $qrcode_name = $this->generateQrCode('memo/qr-codes-signature/', $signature, $numberTransaction);
 
-            Storage::disk('public')->put('memo/qr-codes-signature/' . $qrcode_name, $qrcode);
+            $file = $this->doUpload('local', $request, 'files/memos');
 
-            Memo::create([
+            $memo = Memo::create([
                 'counter' => $maxCounter,
                 'number_transaction' => $numberTransaction,
                 'regarding' => $request->regarding,
                 'from_user_id' => Auth::user()->id,
                 'to_user_id' => $request->to_user_id,
                 'content' => $request->content,
-                'file' => $this->doUpload('local', $request, 'public/files/memos'),
+                'file' => $file,
                 'qr_code_file' => $qrcode_name,
                 'approve_datetime' => Carbon::now(),
             ]);
 
-            // $file = Pdf::loadView('transaction.disposition.exports.pdf.export', ['memo' => $memo ]);
-            // $content = $file->output();
-            // $filename = str_replace('/', '-', $memo->number_transaction) . '-' . $memo->regarding;
-            // Storage::put('public/files/memos/export/pdf/' . $filename, $content);
+            $to = User::where('type', 'assistant')->first();
+            $cc = User::where('type', 'director')->get();
+
+            $files = [];
+            if($file){
+                array_push($files, 'files/memos/' . $file);
+            }
+
+            $dataEmail = [
+                'detail' => [
+                    'email' => $to->email,
+                    'name' => $to->name,
+                    'cc' => $cc,
+                ],
+                'content' => [
+                    'title' => 'Memo ' . $numberTransaction,
+                    'number_transaction' => $numberTransaction,
+                    'files' => $files,
+                ],
+            ];
+
+            $this->sendEmail($dataEmail, SendMemoMail::class);
+
+            $dataNotification = [
+                'type' => 'primary',
+                'title' => 'Memo Telah Dibuat',
+                'message' => 'Memo dengan nomor ' . $numberTransaction . ' telah dibuat',
+                'link' => route('memos.show', $memo->id),
+                'icon' => 'bi-info-circle'
+            ];
+            $this->sendNotification($to, $dataNotification);
 
             toastr()->success('Memo Berhasil Disimpan');
             return redirect()->route('memos.index');
@@ -125,20 +166,57 @@ class MemoController extends Controller
     public function update(MemoRequest $request, Memo $memo)
     {
         try {
-            try {
-                $memo->update([
-                    'regarding' => $request->regarding,
-                    'to_user_id' => $request->to_user_id,
-                    'content' => $request->content,
-                    'file' => $this->doUpload('local', $request, 'public/files/memos', $memo->file),
-                ]);
+            $data  = [
+                'regarding' => $request->regarding,
+                'to_user_id' => $request->to_user_id,
+                'content' => $request->content,
+            ];
 
-                toastr()->success('Memo Berhasil Diupdate');
-                return redirect()->route('memos.index');
-            } catch (\Exception $e) {
-                toastr()->error($e->getMessage());
-                return back();
+            $file = $this->doUpload('local', $request, 'files/memos', $memo->file);
+            if($file){
+                $data['file'] = $file;
             }
+
+            $memo->update($data);
+
+            $to = User::where('type', 'assistant')->first();
+            $cc = User::where('type', 'director')->get();
+
+            $files = [];
+            if($memo->file){
+                array_push($files, 'files/memos/' . $memo->file);
+            } else {
+                if($file){
+                    array_push($files, 'files/memos/' . $file);
+                }
+            }
+
+            $dataEmail = [
+                'detail' => [
+                    'email' => $to->email,
+                    'name' => $to->name,
+                    'cc' => $cc,
+                ],
+                'content' => [
+                    'title' => '[Update] Memo ' . $memo->number_transaction,
+                    'number_transaction' => $memo->number_transaction,
+                    'files' => $files,
+                ],
+            ];
+
+            $this->sendEmail($dataEmail, SendMemoMail::class);
+
+            $dataNotification = [
+                'type' => 'primary',
+                'title' => 'Memo Telah Dibuat',
+                'message' => 'Memo dengan nomor ' . $memo->number_transaction . ' telah dibuat',
+                'link' => route('memos.show', $memo->id),
+                'icon' => 'bi-info-circle'
+            ];
+            $this->sendNotification($to, $dataNotification);
+
+            toastr()->success('Memo Berhasil Diupdate');
+            return redirect()->route('memos.index');
         } catch (\Exception $e) {
             toastr()->error($e->getMessage());
             return back();
@@ -154,7 +232,7 @@ class MemoController extends Controller
             $memo = Memo::findOrFail($id);
             $memo->delete();
 
-            $this->deleteImage('local', 'public/files/memos', $memo->file);
+            $this->deleteImage('local', 'files/memos', $memo->file);
             $this->deleteImage('public', 'public/memo/qr-codes-signature', $memo->qr_code_file);
 
             toastr()->success('Memo Berhasil Dihapus');

@@ -5,6 +5,12 @@ namespace App\Http\Controllers\Transaction;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
+// Mail
+use App\Mail\SendDispositionMail;
+
+// Notification
+use App\Notifications\GeneralNotification;
+
 // Requests
 use App\Http\Requests\Transaction\DispositionRequest;
 
@@ -13,15 +19,17 @@ use App\Models\Disposition;
 use App\Models\Division;
 use App\Models\Instruction;
 use App\Models\Memo;
+use App\Models\User;
 
 // Traits
 use App\Traits\General\BreadcrumbsTrait;
 use App\Traits\Disposition\TransactionNumberTrait;
 use App\Traits\General\UploadImageTrait;
+use App\Traits\General\SendNotificationsTrait;
 
 class DispositionController extends Controller
 {
-    use BreadcrumbsTrait, TransactionNumberTrait, UploadImageTrait;
+    use BreadcrumbsTrait, TransactionNumberTrait, UploadImageTrait, SendNotificationsTrait;
 
     public function index()
     {
@@ -61,6 +69,8 @@ class DispositionController extends Controller
                 $maxCounter = Disposition::max('counter') + 1;
                 $numberTransaction = $this->generateNumber($maxCounter, $memo);
 
+                $file = $this->doUpload('local', $request, 'files/dispositions');
+
                 $disposition = Disposition::create([
                     'counter' => $maxCounter,
                     'number_transaction' => $numberTransaction,
@@ -68,7 +78,7 @@ class DispositionController extends Controller
                     'is_urgent' => $request->is_urgent,
                     'memo_id' => $memo,
                     'status' => '',
-                    'file' => $this->doUpload('local', $request, 'public/files/dispositions'),
+                    'file' => $file,
                 ]);
 
                 $divisions = Division::select('id')->whereIn('id', $request->divisions)->get();
@@ -76,6 +86,45 @@ class DispositionController extends Controller
 
                 $instructions = Instruction::select('id')->whereIn('id', $request->instructions)->get();
                 $disposition->instructions()->attach($instructions);
+
+                $to = User::where('type', 'director')->first();
+                $cc = User::where('type', 'assistant')->get();
+
+                $files = [];
+                if($file){
+                    array_push($files, 'files/dispositions/' . $file);
+                }
+
+                $memoRef = null;
+                if($memo){
+                    $memoRef = Memo::where('id', $memo)->first();
+                }
+
+                $dataEmail = [
+                    'detail' => [
+                        'email' => $to->email,
+                        'name' => $to->name,
+                        'cc' => $cc,
+                    ],
+                    'content' => [
+                        'title' => 'Disposisi ' . $numberTransaction,
+                        'disposition' => $numberTransaction,
+                        'memo' => $memoRef,
+                        'view' => 'emails.dispositions.create',
+                        'note' => '',
+                        'files' => $files,
+                    ],
+                ];
+
+                $this->sendEmail($dataEmail, SendDispositionMail::class);
+
+                $type = 'primary';
+                $title = 'Disposisi Telah Dibuat';
+                $message = 'Disposisi dengan nomor ' . $numberTransaction . ' telah dibuat';
+                $link = route('dispositions.show', $disposition->id);
+                $icon = 'bi-info-circle';
+
+                $to->notify(new GeneralNotification($type, $title, $message, $link, $icon));
             });
 
             toastr()->success('Disposisi Berhasil Disimpan');
@@ -113,19 +162,68 @@ class DispositionController extends Controller
             DB::transaction(function () use ($request, $disposition){
                 $memo = $request->memo_id ?? null;
 
-                $disposition->update([
+                $data  = [
                     'committee' => $request->committee,
                     'is_urgent' => $request->is_urgent,
                     'memo_id' => $memo,
                     'status' => '',
-                    'file' => $this->doUpload('local', $request, 'public/files/dispositions', $disposition->file),
-                ]);
+                ];
+
+                $file = $this->doUpload('local', $request, 'files/dispositions', $disposition->file);
+                if($file){
+                    $data['file'] = $file;
+                }
+
+                $disposition->update($data);
 
                 $divisions = Division::select('id')->whereIn('id', $request->divisions)->get();
                 $disposition->divisions()->sync($divisions);
 
                 $instructions = Instruction::select('id')->whereIn('id', $request->instructions)->get();
                 $disposition->instructions()->sync($instructions);
+
+                $to = User::where('type', 'director')->first();
+                $cc = User::where('type', 'assistant')->get();
+
+                $files = [];
+                if($disposition->file){
+                    array_push($files, 'files/dispositions/' . $disposition->file);
+                } else {
+                    if($file){
+                        array_push($files, 'files/dispositions/' . $file);
+                    }
+                }
+
+                $memoRef = null;
+                if($memo){
+                    $memoRef = Memo::where('id', $memo)->first();
+                }
+
+                $dataEmail = [
+                    'detail' => [
+                        'email' => $to->email,
+                        'name' => $to->name,
+                        'cc' => $cc,
+                    ],
+                    'content' => [
+                        'title' => '[Update] Disposisi ' . $disposition->number_transaction,
+                        'disposition' => $disposition->number_transaction,
+                        'memo' => $memoRef,
+                        'view' => 'emails.dispositions.create',
+                        'note' => '',
+                        'files' => $files,
+                    ],
+                ];
+
+                $this->sendEmail($dataEmail, SendDispositionMail::class);
+
+                $type = 'primary';
+                $title = 'Disposisi Telah Diupdate';
+                $message = 'Disposisi dengan nomor ' . $disposition->number_transaction . ' telah diupdate';
+                $link = route('dispositions.show', $disposition->id);
+                $icon = 'bi-info-circle';
+
+                $to->notify(new GeneralNotification($type, $title, $message, $link, $icon));
             });
 
             toastr()->success('Disposisi Berhasil Diupdate');
@@ -145,7 +243,7 @@ class DispositionController extends Controller
                 $disposition->instructions()->detach();
                 $disposition->delete();
 
-                $this->deleteImage('local', 'public/files/dispositions', $disposition->file);
+                $this->deleteImage('local', 'files/dispositions', $disposition->file);
             });
 
             toastr()->success('Disposisi Berhasil Dihapus');

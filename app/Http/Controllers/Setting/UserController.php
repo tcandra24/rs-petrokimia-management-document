@@ -54,8 +54,6 @@ class UserController extends Controller
     public function store(StoreRequest $request)
     {
         try {
-            $isDirector = $request->is_director ? true : false;
-
             $privateKey = RSA::createKey(2048);
             $privateKeyString = $privateKey->toString('PKCS8');
             $publicKeyString = $privateKey->getPublicKey()->toString('PKCS8');
@@ -67,7 +65,7 @@ class UserController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'division_id' => $request->division_id ?? null,
-                'is_director' => $isDirector,
+                'type' => $request->type,
                 'public_key' => $publicKeyString,
                 'private_key' => $privateKeyString,
                 'token' => $token
@@ -78,7 +76,9 @@ class UserController extends Controller
 
             $data = [
                 'email' => $user->email,
-                'template' => (new VerifyUserMail('Silahkan Verifikasi Email', $user->name, $token))
+                'name' => $user->name,
+                'template' => (new VerifyUserMail('Silahkan Verifikasi Email', $user->name, $token, [$user->email])),
+                'cc' => null
             ];
             dispatch(new SendMailJob($data));
 
@@ -111,13 +111,11 @@ class UserController extends Controller
     public function update(EditRequest $request, User $user)
     {
         try {
-            $isDirector = $request->is_director ? true : false;
-
             $data = [
                 'name' => $request->name,
                 'email' => $request->email,
                 'division_id' => $request->division_id ?? null,
-                'is_director' => $isDirector,
+                'type' => $request->type,
             ];
 
             if($request->filled('password')){

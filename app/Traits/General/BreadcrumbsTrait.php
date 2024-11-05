@@ -205,4 +205,19 @@ trait BreadcrumbsTrait
                 return null;
         }
     }
+
+    private function notification($method)
+    {
+        $breadcrumbs = new BreadcrumbHelper('Notifikasi');
+
+        switch ($method) {
+            case 'index':
+                $breadcrumbs->add('Daftar', route('memos.index'));
+                return $breadcrumbs->get();
+
+                break;
+            default:
+                return null;
+        }
+    }
 }

@@ -108,12 +108,21 @@
                                 @enderror
                             </div>
                             <div class="col-md-6">
-                                <div class="form-check">
-                                    <input class="form-check-input" name="is_director" type="checkbox" id="is_director">
-                                    <label class="form-check-label" for="is_director">
-                                        Direktur
-                                    </label>
-                                </div>
+                                <label for="type" class="form-label">Tipe</label>
+                                <select id="type" name="type"
+                                    class="form-select {{ $errors->has('type') ? 'border border-danger' : '' }}">
+                                    <option value="">Pilih Tipe</option>
+                                    <option value="general">Umum</option>
+                                    <option value="assistant">Asisten</option>
+                                    <option value="director">Direktur</option>
+                                </select>
+                                @error('type')
+                                    <span class="text-danger">
+                                        <small>
+                                            <i>{{ $message }}</i>
+                                        </small>
+                                    </span>
+                                @enderror
                             </div>
                             <div class="text-left">
                                 <button type="submit" class="btn btn-primary">Submit</button>

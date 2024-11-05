@@ -61,5 +61,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         ->middleware('permission:setting.permissions.index|setting.permission.create');
     });
 
+    Route::post('/resend-email/{email}', App\Http\Controllers\Auth\ResendEmailController::class)->name('email.resend');
+
+    Route::resource('/notifications', \App\Http\Controllers\NotificationController::class, [ 'only' => [ 'index', 'show' ] ]);
+
     Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
 });

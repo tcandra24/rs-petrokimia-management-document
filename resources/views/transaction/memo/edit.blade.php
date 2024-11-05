@@ -19,6 +19,7 @@
     <script src="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>
     <script src="https://cdn.tiny.cloud/1/5oql2rbngsovyxasavqk4844mwig2cn7zvt27ffehxydtxms/tinymce/7/tinymce.min.js"
         referrerpolicy="origin"></script>
+    <script src="{{ asset('assets/js/custom.js') }}"></script>
     <script src="{{ asset('assets/vendor/select2/js/select2.full.min.js') }}"></script>
 
     <script>

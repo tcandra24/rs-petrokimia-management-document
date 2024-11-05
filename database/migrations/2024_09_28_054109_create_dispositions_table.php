@@ -16,11 +16,11 @@ return new class extends Migration
             $table->integer('counter');
             $table->unsignedBigInteger('memo_id')->nullable();
             $table->string('number_transaction')->unique();
-            $table->enum('committee', ['medic', 'nursing', '']);
+            $table->enum('committee', ['medic', 'nursing', '-']);
             $table->boolean('is_urgent');
             $table->text('note')->nullable();
             $table->string('file')->nullable();
-            $table->enum('status', ['approved', 'reject', '']);
+            $table->enum('status', ['approve', 'reject', '']);
             $table->timestamps();
 
             $table->foreign('memo_id')->references('id')->on('memos');

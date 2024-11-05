@@ -20,7 +20,9 @@ class Disposition extends Model
         'is_urgent',
         'note',
         'file',
-        'status'
+        'status',
+        'qr_code_file',
+        'approve_datetime'
     ];
 
     public function memo(): BelongsTo
@@ -42,7 +44,7 @@ class Disposition extends Model
     {
         return Attribute::make(
             get: function(string $value){
-                if($value === 'approved') {
+                if($value === 'approve') {
                     return 'Disetujui';
                 } elseif($value === 'reject') {
                     return 'Ditolak';

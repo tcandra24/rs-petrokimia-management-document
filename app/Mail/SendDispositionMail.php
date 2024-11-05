@@ -8,24 +8,30 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-// use Illuminate\Mail\Mailables\Attachment;
+use Illuminate\Mail\Mailables\Attachment;
 
-class VerifyUserMail extends Mailable
+class SendDispositionMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $title;
-    public $name;
-    public $token;
+    public $disposition;
+    public $memo;
+    public $view;
+    public $note;
+    public $files;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($title, $name, $token)
+    public function __construct($content)
     {
-        $this->title = $title;
-        $this->name = $name;
-        $this->token = $token;
+        $this->title = $content['title'];
+        $this->disposition = $content['disposition'];
+        $this->memo = $content['memo'];
+        $this->view = $content['view'];
+        $this->note = $content['note'];
+        $this->files = $content['files'];
     }
 
     /**
@@ -35,10 +41,6 @@ class VerifyUserMail extends Mailable
     {
         return new Envelope(
             subject: $this->title,
-            // to: $this->to,
-            // from: 'noreply@example.com',
-            // cc: ['manager@rs-petrokimia.co.id'],
-            // bcc: ['admin@rs-petrokimia.co.id']
         );
     }
 
@@ -48,10 +50,11 @@ class VerifyUserMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.verify',
+            view: $this->view,
             with: [
-                'name' => $this->name,
-                'token' => $this->token,
+                'noDisposition' => $this->disposition,
+                'memo' => $this->memo,
+                'note' => $this->note
             ],
         );
     }
@@ -63,11 +66,13 @@ class VerifyUserMail extends Mailable
      */
     public function attachments(): array
     {
-        // return [
-        //     Attachment::fromPath(storage_path('app/files/document.pdf'))
-        //         ->as('verification-document.pdf')
-        //         ->withMime('application/pdf'),
-        // ];
-        return [];
+        $files = [];
+        if(count($this->files) > 0){
+            $files = array_map(function($data){
+                return Attachment::fromStorageDisk('local', $data);
+            }, $this->files);
+        }
+
+        return $files;
     }
 }

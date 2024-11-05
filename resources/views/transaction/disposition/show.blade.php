@@ -87,18 +87,18 @@
 
                         <div class="row my-2">
                             <div class="col-lg-3 col-md-4 label fw-bold">Note</div>
-                            @if (auth()->user()->is_director && $disposition->status === 'Dibuat')
+                            @if (auth()->user()->type === 'director' && $disposition->status === 'Dibuat')
                                 <div class="col-lg-9 col-md-8">
                                     <form class="row g-3" method="POST"
                                         action="{{ route('transaction.change-status', $disposition->id) }}">
                                         @csrf
-                                        <input type="hidden" name="memo_id" value="{{ $disposition->memo_id }}">
+                                        {{-- <input type="hidden" name="memo_id" value="{{ $disposition->memo_id }}"> --}}
                                         <textarea class="form-control" name="note" id="" cols="30" rows="5"></textarea>
                                         <fieldset class="row my-2">
                                             <div class="col-sm-10">
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="radio" name="status"
-                                                        id="approve" value="approved" checked>
+                                                        id="approve" value="approve" checked>
                                                     <label class="form-check-label" for="approve">
                                                         Menyutujui
                                                     </label>
@@ -139,8 +139,9 @@
                         @else
                             <div class="row my-2">
                                 <div class="col-lg-12">
-                                    <div class="alert alert-primary alert-dismissible fade show" role="alert">
-                                        Sudah Disetujui
+                                    <div class="d-flex justify-content-center">
+                                        <img src="{{ asset('/storage/disposition/qr-codes-signature/' . $disposition->qr_code_file) }}"
+                                            alt="{{ $disposition->number_transaction }}" width="200">
                                     </div>
                                 </div>
                             </div>

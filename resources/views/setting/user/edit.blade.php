@@ -52,7 +52,7 @@
                                 <label for="division" class="form-label">Divisi</label>
                                 <select id="division" name="division_id"
                                     class="form-select {{ $errors->has('division_id') ? 'border border-danger' : '' }}">
-                                    <option selected="">Pilih Divisi</option>
+                                    <option value="">Pilih Divisi</option>
                                     @foreach ($divisions as $division)
                                         <option value="{{ $division->id }}"
                                             {{ $division->id === $user->division?->id ? 'selected' : '' }}>
@@ -113,13 +113,27 @@
                                 @enderror
                             </div>
                             <div class="col-md-6">
-                                <div class="form-check">
-                                    <input class="form-check-input" name="is_director" type="checkbox" id="is_director"
-                                        {{ $user->is_director ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="is_director">
+                                <label for="type" class="form-label">Tipe</label>
+                                <select id="type" name="type"
+                                    class="form-select {{ $errors->has('type') ? 'border border-danger' : '' }}">
+                                    <option value="">Pilih Tipe</option>
+                                    <option value="general" {{ $user->type === 'general' ? 'selected' : '' }}>
+                                        Umum
+                                    </option>
+                                    <option value="assistant" {{ $user->type === 'assistant' ? 'selected' : '' }}>
+                                        Asisten
+                                    </option>
+                                    <option value="director" {{ $user->type === 'director' ? 'selected' : '' }}>
                                         Direktur
-                                    </label>
-                                </div>
+                                    </option>
+                                </select>
+                                @error('type')
+                                    <span class="text-danger">
+                                        <small>
+                                            <i>{{ $message }}</i>
+                                        </small>
+                                    </span>
+                                @enderror
                             </div>
                             <div class="text-left">
                                 <button type="submit" class="btn btn-primary">Submit</button>
