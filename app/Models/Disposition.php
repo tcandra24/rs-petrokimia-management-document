@@ -30,9 +30,9 @@ class Disposition extends Model
         return $this->belongsTo(Memo::class);
     }
 
-    public function divisions(): BelongsToMany
+    public function sub_divisions(): BelongsToMany
     {
-        return $this->belongsToMany(Division::class, 'division_dispositions');
+        return $this->belongsToMany(SubDivision::class, 'sub_division_dispositions');
     }
 
     public function instructions(): BelongsToMany

@@ -86,9 +86,9 @@
                                         <td>
                                             <div class="row">
                                                 <div class="d-flex align-items-center gap-2 flex-wrap">
-                                                    @foreach ($disposition->divisions as $division)
+                                                    @foreach ($disposition->sub_divisions as $sub_division)
                                                         <span class="badge bg-primary rounded-3 fw-semibold">
-                                                            {{ $division->name }}
+                                                            {{ $sub_division->division->name }} | {{ $sub_division->name }}
                                                         </span>
                                                     @endforeach
                                                 </div>
@@ -124,10 +124,12 @@
                                                         @endcan
 
                                                         @can('transaction.dispositions.edit')
-                                                            <a href="{{ route('dispositions.edit', $disposition->id) }}"
-                                                                class="dropdown-item">
-                                                                Ubah
-                                                            </a>
+                                                            @if ($disposition->status !== 'Disetujui')
+                                                                <a href="{{ route('dispositions.edit', $disposition->id) }}"
+                                                                    class="dropdown-item">
+                                                                    Ubah
+                                                                </a>
+                                                            @endif
                                                         @endcan
 
                                                         @can('transaction.dispositions.destroy')

@@ -50,9 +50,9 @@
                             <div class="col-lg-9 col-md-8">
                                 <div class="row">
                                     <div class="d-flex align-items-center gap-2 flex-wrap" style="min-width: 200px;">
-                                        @foreach ($disposition->divisions as $division)
+                                        @foreach ($disposition->sub_divisions as $sub_division)
                                             <span class="badge bg-primary rounded-3 fw-semibold">
-                                                {{ $division->name }}
+                                                {{ $sub_division->division->name }} | {{ $sub_division->name }}
                                             </span>
                                         @endforeach
                                     </div>

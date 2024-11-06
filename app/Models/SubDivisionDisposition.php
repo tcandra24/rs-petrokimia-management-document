@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DivisionDisposition extends Model
+class SubDivisionDisposition extends Model
 {
     use HasFactory;
-    public $table = 'division_dispositions';
+    public $table = 'sub_division_dispositions';
 
     protected $fillable = [
         'disposition_id',
-        'division_id'
+        'sub_division_id'
     ];
 
 }

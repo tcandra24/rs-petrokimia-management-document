@@ -20,6 +20,11 @@ class PermissionTableSeeder extends Seeder
         Permission::create(['name' => 'master.divisions.edit', 'guard_name' => 'web']);
         Permission::create(['name' => 'master.divisions.destroy', 'guard_name' => 'web']);
 
+        Permission::create(['name' => 'master.sub-divisions.index', 'guard_name' => 'web']);
+        Permission::create(['name' => 'master.sub-divisions.create', 'guard_name' => 'web']);
+        Permission::create(['name' => 'master.sub-divisions.edit', 'guard_name' => 'web']);
+        Permission::create(['name' => 'master.sub-divisions.destroy', 'guard_name' => 'web']);
+
         Permission::create(['name' => 'master.instructions.index', 'guard_name' => 'web']);
         Permission::create(['name' => 'master.instructions.create', 'guard_name' => 'web']);
         Permission::create(['name' => 'master.instructions.edit', 'guard_name' => 'web']);

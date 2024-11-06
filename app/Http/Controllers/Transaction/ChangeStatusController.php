@@ -40,7 +40,7 @@ class ChangeStatusController extends Controller
             'status' => 'required',
         ]);
 
-        try {
+        // try {
             $disposition = Disposition::with(['memo', 'memo.from_user'])->where('id', $id)->first();
             $numberTransaction = $disposition->number_transaction;
 
@@ -97,9 +97,9 @@ class ChangeStatusController extends Controller
 
             toastr()->success('Disposisi Berhasil Diubah Statusnya');
             return redirect()->route('dispositions.index');
-        } catch (\Exception $e) {
-            toastr()->error($e->getMessage());
-            return back();
-        }
+        // } catch (\Exception $e) {
+        //     toastr()->error($e->getMessage());
+        //     return back();
+        // }
     }
 }

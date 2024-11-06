@@ -24,6 +24,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::resource('/divisions', \App\Http\Controllers\Master\DivisionController::class, [ 'except' => [ 'show' ] ])
         ->middleware('permission:master.divisions.index|master.divisions.create|master.divisions.edit|master.divisions.destroy');
 
+        Route::resource('/sub-divisions', \App\Http\Controllers\Master\SubDivisionController::class, [ 'except' => [ 'show' ] ])
+        ->middleware('permission:master.sub-divisions.index|master.sub-divisions.create|master.sub-divisions.edit|master.sub-divisions.destroy');
+
         Route::resource('/instructions', \App\Http\Controllers\Master\InstructionController::class, [ 'except' => [ 'show' ] ])
         ->middleware('permission:master.instructions.index|master.instructions.create|master.instructions.edit|master.instructions.destroy');
     });

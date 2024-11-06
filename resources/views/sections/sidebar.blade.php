@@ -9,15 +9,17 @@
             </a>
         </li>
 
-        @if (auth()->user()->can('master.divisions.index') || auth()->user()->can('master.instructions.index'))
+        @if (auth()->user()->can('master.divisions.index') ||
+                auth()->user()->can('master.sub-divisions.index') ||
+                auth()->user()->can('master.instructions.index'))
             <li class="nav-heading">Master</li>
             @can('master.divisions.index')
                 <li class="nav-item">
                     <a class="nav-link {{ request()->is('master/divisions/*') || request()->is('master/divisions') ? '' : 'collapsed' }}"
-                        data-bs-target="#departement-nav" data-bs-toggle="collapse" href="#">
+                        data-bs-target="#division-nav" data-bs-toggle="collapse" href="#">
                         <i class="bi bi-building"></i><span>Divisi</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-                    <ul id="departement-nav"
+                    <ul id="division-nav"
                         class="nav-content collapse {{ request()->is('master/divisions/*') || request()->is('master/divisions') ? 'show' : '' }}"
                         data-bs-parent="#sidebar-nav">
                         <li>
@@ -28,13 +30,30 @@
                     </ul>
                 </li>
             @endcan
+            @can('master.sub-divisions.index')
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->is('master/sub-divisions/*') || request()->is('master/sub-divisions') ? '' : 'collapsed' }}"
+                        data-bs-target="#sub-division-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-collection"></i><span>Sub Divisi</span><i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="sub-division-nav"
+                        class="nav-content collapse {{ request()->is('master/sub-divisions/*') || request()->is('master/sub-divisions') ? 'show' : '' }}"
+                        data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a href="{{ route('sub-divisions.index') }}">
+                                <i class="bi bi-circle"></i><span>Daftar</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endcan
             @can('master.instructions.index')
                 <li class="nav-item">
                     <a class="nav-link {{ request()->is('master/instructions/*') || request()->is('master/instructions') ? '' : 'collapsed' }}"
-                        data-bs-target="#employee-nav" data-bs-toggle="collapse" href="#">
+                        data-bs-target="#instruction-nav" data-bs-toggle="collapse" href="#">
                         <i class="bi bi-person-badge"></i><span>Instruksi</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
-                    <ul id="employee-nav"
+                    <ul id="instruction-nav"
                         class="nav-content collapse {{ request()->is('master/instructions/*') || request()->is('master/instructions') ? 'show' : '' }}"
                         data-bs-parent="#sidebar-nav">
                         <li>

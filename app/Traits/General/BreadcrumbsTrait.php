@@ -51,6 +51,31 @@ trait BreadcrumbsTrait
         }
     }
 
+    private function sub_division($method, $routeParams)
+    {
+        $breadcrumbs = new BreadcrumbHelper('Sub Divisi');
+
+        switch ($method) {
+            case 'index':
+                $breadcrumbs->add('Daftar', route('sub-divisions.index'));
+                return $breadcrumbs->get();
+
+                break;
+            case 'create':
+                $breadcrumbs->add('Daftar', route('sub-divisions.index'))->add('Tambah', route('sub-divisions.create'));
+                return $breadcrumbs->get();
+
+                break;
+            case 'edit':
+                $breadcrumbs->add('Daftar', route('sub-divisions.index'))->add('Edit', route('sub-divisions.edit', $routeParams->id))->add($routeParams->name);
+                return $breadcrumbs->get();
+
+                break;
+            default:
+                return null;
+        }
+    }
+
     private function instruction($method, $routeParams)
     {
         $breadcrumbs = new BreadcrumbHelper('Instruksi');

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Transaction;
+namespace App\Http\Requests\Master;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DispositionRequest extends FormRequest
+class SubDivisionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +22,16 @@ class DispositionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'is_urgent' => 'required',
-            'sub_divisions' => 'required',
-            'instructions' => 'required',
-            'memo_id' => 'nullable',
-            'file' => 'nullable|mimes:jpg,jpeg,pdf,xls,xlsx'
+            'name' => 'required',
+            'division_id' => 'required'
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Nama wajib diisi',
+            'division_id.required' => 'Divisi wajib diisi',
         ];
     }
 }

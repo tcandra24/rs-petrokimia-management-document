@@ -19,6 +19,7 @@ use App\Models\Disposition;
 use App\Models\Division;
 use App\Models\Instruction;
 use App\Models\Memo;
+use App\Models\SubDivision;
 use App\Models\User;
 
 // Traits
@@ -33,7 +34,7 @@ class DispositionController extends Controller
 
     public function index()
     {
-        $dispositions = Disposition::with(['divisions', 'instructions'])->paginate(10);
+        $dispositions = Disposition::with(['sub_divisions', 'sub_divisions.division', 'instructions'])->paginate(10);
         $breadcrumbs = $this->setBreadcrumbs('disposition', 'index');
 
         return view('transaction.disposition.index', ['breadcrumbs' => $breadcrumbs, 'dispositions' => $dispositions ]);
@@ -50,7 +51,7 @@ class DispositionController extends Controller
     {
         $memos = Memo::doesntHave('dispositions')->get();
         $instructions = Instruction::all();
-        $divisions = Division::all();
+        $divisions = Division::with(['sub_divisions'])->get();
         $breadcrumbs = $this->setBreadcrumbs('disposition', 'create');
 
         return view('transaction.disposition.create', [
@@ -63,7 +64,7 @@ class DispositionController extends Controller
 
     public function store(DispositionRequest $request)
     {
-        try {
+        // try {
             DB::transaction(function () use ($request){
                 $memo =  $request->memo_id ?? null;
                 $maxCounter = Disposition::max('counter') + 1;
@@ -81,8 +82,8 @@ class DispositionController extends Controller
                     'file' => $file,
                 ]);
 
-                $divisions = Division::select('id')->whereIn('id', $request->divisions)->get();
-                $disposition->divisions()->attach($divisions);
+                $subDivision = SubDivision::select('id')->whereIn('id', $request->sub_divisions)->get();
+                $disposition->sub_divisions()->attach($subDivision);
 
                 $instructions = Instruction::select('id')->whereIn('id', $request->instructions)->get();
                 $disposition->instructions()->attach($instructions);
@@ -129,10 +130,10 @@ class DispositionController extends Controller
 
             toastr()->success('Disposisi Berhasil Disimpan');
             return redirect()->route('dispositions.index');
-        } catch (\Exception $e) {
-            toastr()->error($e->getMessage());
-            return back();
-        }
+        // } catch (\Exception $e) {
+        //     toastr()->error($e->getMessage());
+        //     return back();
+        // }
     }
 
     public function edit(Disposition $disposition)
@@ -144,7 +145,7 @@ class DispositionController extends Controller
         }
 
         $instructions = Instruction::all();
-        $divisions = Division::all();
+        $divisions = Division::with(['sub_divisions'])->get();
         $breadcrumbs = $this->setBreadcrumbs('disposition', 'edit', $disposition);
 
         return view('transaction.disposition.edit', [
@@ -176,8 +177,8 @@ class DispositionController extends Controller
 
                 $disposition->update($data);
 
-                $divisions = Division::select('id')->whereIn('id', $request->divisions)->get();
-                $disposition->divisions()->sync($divisions);
+                $subDivisions = Division::select('id')->whereIn('id', $request->sub_divisions)->get();
+                $disposition->sub_divisions()->sync($subDivisions);
 
                 $instructions = Instruction::select('id')->whereIn('id', $request->instructions)->get();
                 $disposition->instructions()->sync($instructions);
@@ -239,7 +240,7 @@ class DispositionController extends Controller
         try {
             DB::transaction(function () use ($id){
                 $disposition = Disposition::findOrFail($id);
-                $disposition->divisions()->detach();
+                $disposition->sub_divisions()->detach();
                 $disposition->instructions()->detach();
                 $disposition->delete();
 

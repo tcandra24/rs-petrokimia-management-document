@@ -20,8 +20,14 @@
     <script src="{{ asset('assets/vendor/select2/js/select2.full.min.js') }}"></script>
 
     <script>
-        $('#divisions').select2()
-        $('#instructions').select2()
+        $('#divisions').select2({
+            placeholder: "Pilih Divisi",
+            allowClear: true
+        })
+        $('#instructions').select2({
+            placeholder: "Pilih instruksi",
+            allowClear: true
+        })
     </script>
 @endsection
 
@@ -83,16 +89,20 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="divisions" class="form-label">Divisi<span class="text-danger">*</span></label>
-                                <select id="divisions" name="divisions[]"
-                                    class="form-select {{ $errors->has('divisions') ? 'border border-danger' : '' }}"
+                                <select id="divisions" name="sub_divisions[]"
+                                    class="form-select {{ $errors->has('sub_divisions') ? 'border border-danger' : '' }}"
                                     multiple>
                                     @foreach ($divisions as $division)
-                                        <option value="{{ $division->id }}"
-                                            {{ in_array($division->id, $disposition->divisions->pluck('id')->toarray()) ? 'selected' : '' }}>
-                                            {{ $division->name }}</option>
+                                        <optgroup label="{{ $division->name }}">
+                                            @foreach ($division->sub_divisions as $sub_division)
+                                                <option value="{{ $sub_division->id }}"
+                                                    {{ in_array($sub_division->id, $disposition->sub_divisions->pluck('id')->toarray()) ? 'selected' : '' }}>
+                                                    {{ $sub_division->name }}</option>
+                                            @endforeach
+                                        </optgroup>
                                     @endforeach
                                 </select>
-                                @error('divisions')
+                                @error('sub_divisions')
                                     <span class="text-danger">
                                         <small>
                                             <i>{{ $message }}</i>
