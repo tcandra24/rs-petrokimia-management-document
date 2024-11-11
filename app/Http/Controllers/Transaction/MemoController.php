@@ -25,7 +25,7 @@ use App\Traits\General\DigitalSignatureTrait;
 use App\Traits\General\SendNotificationsTrait;
 
 // Events
-use App\Events\SendNotificationEvent;
+// use App\Events\SendNotificationEvent;
 
 class MemoController extends Controller
 {
@@ -35,7 +35,11 @@ class MemoController extends Controller
      */
     public function index()
     {
-        $memos = Memo::with(['to_user', 'from_user'])->paginate(10);
+        $memos = Memo::when(Auth::user()->division_id, function($query){
+            $query->whereHas('from_user', function($query){
+                $query->where('division_id', Auth::user()->division_id);
+            });
+        })->with(['to_user', 'from_user'])->paginate(10);
         $breadcrumbs = $this->setBreadcrumbs('memo', 'index');
 
         // event(new SendNotificationEvent('Hi', Auth::user()->id));
@@ -48,7 +52,7 @@ class MemoController extends Controller
      */
     public function create()
     {
-        $users = User::all();
+        $users = User::where('type', 'assistant')->get();
         $breadcrumbs = $this->setBreadcrumbs('memo', 'create');
 
         return view('transaction.memo.create', ['users' => $users, 'breadcrumbs' => $breadcrumbs]);
@@ -140,7 +144,7 @@ class MemoController extends Controller
      */
     public function edit(Memo $memo)
     {
-        $users = User::all();
+        $users = User::where('type', 'assistant')->get();
         $breadcrumbs = $this->setBreadcrumbs('memo', 'edit', $memo);
 
         return view('transaction.memo.edit', [
