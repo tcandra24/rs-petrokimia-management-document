@@ -26,7 +26,7 @@ class DispositionRequest extends FormRequest
             'sub_divisions' => 'required',
             'instructions' => 'required',
             'memo_id' => 'nullable',
-            'file' => 'nullable|mimes:jpg,jpeg,pdf,xls,xlsx'
+            'file' => 'nullable|mimes:pdf'
         ];
     }
 }

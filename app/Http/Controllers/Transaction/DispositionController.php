@@ -64,7 +64,7 @@ class DispositionController extends Controller
 
     public function store(DispositionRequest $request)
     {
-        // try {
+        try {
             DB::transaction(function () use ($request){
                 $memo =  $request->memo_id ?? null;
                 $maxCounter = Disposition::max('counter') + 1;
@@ -114,6 +114,7 @@ class DispositionController extends Controller
                         'view' => 'emails.dispositions.create',
                         'note' => '',
                         'files' => $files,
+                        'link' => route('dispositions.show', $disposition->id),
                     ],
                 ];
 
@@ -130,10 +131,10 @@ class DispositionController extends Controller
 
             toastr()->success('Disposisi Berhasil Disimpan');
             return redirect()->route('dispositions.index');
-        // } catch (\Exception $e) {
-        //     toastr()->error($e->getMessage());
-        //     return back();
-        // }
+        } catch (\Exception $e) {
+            toastr()->error($e->getMessage());
+            return back();
+        }
     }
 
     public function edit(Disposition $disposition)
@@ -213,6 +214,7 @@ class DispositionController extends Controller
                         'view' => 'emails.dispositions.create',
                         'note' => '',
                         'files' => $files,
+                        'link' => route('dispositions.show', $disposition->id),
                     ],
                 ];
 

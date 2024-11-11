@@ -3,7 +3,7 @@
 @section('content')
     <div class="d-flex justify-content-center py-4">
         <a href="#" class="logo d-flex align-items-center w-auto">
-            <img src="{{ asset('assets/img/logo.png') }}" alt="Fuboru Indonesia">
+            <img src="{{ asset('assets/img/logo.png') }}" alt="Document Control">
         </a>
     </div>
     <div class="card mb-3">
@@ -49,6 +49,6 @@
         </div>
     </div>
     <div class="credits">
-        Dibuat oleh <a href="#">___</a>
+        Dibuat oleh <a href="#">{{ env('APP_CREATE_BY') }}</a>.
     </div>
 @endsection

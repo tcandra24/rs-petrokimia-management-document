@@ -22,7 +22,8 @@ class Disposition extends Model
         'file',
         'status',
         'qr_code_file',
-        'approve_datetime'
+        'approve_datetime',
+        'approve_by'
     ];
 
     public function memo(): BelongsTo
@@ -67,6 +68,14 @@ class Disposition extends Model
                     return '';
                 }
             },
+        );
+    }
+
+    public function approveBy(): Attribute
+    {
+        return Attribute::make(
+            get: fn(string $value) => ucwords($value),
+            set: fn(string $value) => strtolower($value)
         );
     }
 }

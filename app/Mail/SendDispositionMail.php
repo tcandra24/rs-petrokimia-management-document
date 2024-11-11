@@ -20,6 +20,7 @@ class SendDispositionMail extends Mailable
     public $view;
     public $note;
     public $files;
+    public $link;
 
     /**
      * Create a new message instance.
@@ -32,6 +33,7 @@ class SendDispositionMail extends Mailable
         $this->view = $content['view'];
         $this->note = $content['note'];
         $this->files = $content['files'];
+        $this->link = $content['link'];
     }
 
     /**
@@ -54,7 +56,8 @@ class SendDispositionMail extends Mailable
             with: [
                 'noDisposition' => $this->disposition,
                 'memo' => $this->memo,
-                'note' => $this->note
+                'note' => $this->note,
+                'link' => $this->link
             ],
         );
     }

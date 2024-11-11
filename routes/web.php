@@ -42,7 +42,11 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
         Route::prefix('export')->group(function() {
             Route::prefix('memo')->group(function() {
-                Route::get('/pdf/{id}', [\App\Http\Controllers\Transaction\Export\Pdf\MemoController::class, 'download'])->name('download.disposition');
+                Route::get('/pdf/{id}', [\App\Http\Controllers\Transaction\Export\Pdf\MemoController::class, 'download'])->name('download.memos');
+            });
+
+            Route::prefix('disposition')->group(function() {
+                Route::get('/pdf/{id}', [\App\Http\Controllers\Transaction\Export\Pdf\DispositionController::class, 'download'])->name('download.dispositions');
             });
         });
 

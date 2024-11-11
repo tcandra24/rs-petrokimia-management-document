@@ -18,6 +18,7 @@ class SendMemoMail extends Mailable
     public $title;
     public $memo;
     public $files;
+    public $link;
 
     /**
      * Create a new message instance.
@@ -27,6 +28,7 @@ class SendMemoMail extends Mailable
         $this->title = $content['title'];
         $this->memo  = $content['number_transaction'];
         $this->files = $content['files'];
+        $this->link = $content['link'];
     }
 
     /**
@@ -48,6 +50,7 @@ class SendMemoMail extends Mailable
             view: 'emails.memo',
             with: [
                 'noMemo' => $this->memo,
+                'link' => $this->link
             ],
         );
     }

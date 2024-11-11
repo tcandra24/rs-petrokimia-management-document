@@ -25,7 +25,7 @@ class MemoRequest extends FormRequest
             'regarding' => 'required',
             'to_user_id' => 'required',
             'content' => 'required',
-            'file' => 'nullable|mimes:jpg,jpeg,pdf,xls,xlsx'
+            'file' => 'nullable|mimes:pdf'
         ];
     }
 }

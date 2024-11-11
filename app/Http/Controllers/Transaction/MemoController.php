@@ -4,18 +4,11 @@ namespace App\Http\Controllers\Transaction;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use phpseclib3\Crypt\RSA;
-use Illuminate\Support\Facades\Storage;
-// use Illuminate\Support\Facades\Storage;
-// use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 
 // Mail
 use App\Mail\SendMemoMail;
-
-// Notification
-use App\Notifications\GeneralNotification;
 
 // Requests
 use App\Http\Requests\Transaction\MemoRequest;
@@ -75,10 +68,6 @@ class MemoController extends Controller
                 'content' => $request->content
             ];
             $signature = $this->createSignature($payload);
-
-            // $qrcode_name = 'qr-code-signature-' . str_replace('/', '-', $numberTransaction) . '.png';
-            // $qrcode = QrCode::format('png')->size(300)->style('round')->eye('circle')->generate(base64_encode($signature));
-            // Storage::disk('public')->put('memo/qr-codes-signature/' . $qrcode_name, $qrcode);
             $qrcode_name = $this->generateQrCode('memo/qr-codes-signature/', $signature, $numberTransaction);
 
             $file = $this->doUpload('local', $request, 'files/memos');
@@ -113,6 +102,7 @@ class MemoController extends Controller
                     'title' => 'Memo ' . $numberTransaction,
                     'number_transaction' => $numberTransaction,
                     'files' => $files,
+                    'link' => route('memos.show', $memo->id),
                 ],
             ];
 
@@ -201,6 +191,7 @@ class MemoController extends Controller
                     'title' => '[Update] Memo ' . $memo->number_transaction,
                     'number_transaction' => $memo->number_transaction,
                     'files' => $files,
+                    'link' => route('memos.show', $memo->id),
                 ],
             ];
 

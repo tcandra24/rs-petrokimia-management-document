@@ -93,7 +93,7 @@
                                                     </a>
                                                     <div class="dropdown-menu"
                                                         aria-labelledby="dropdown-menu-{{ $memo->id }}">
-                                                        <a href="{{ route('download.disposition', $memo->id) }}"
+                                                        <a href="{{ route('download.memos', $memo->id) }}"
                                                             class="dropdown-item">
                                                             Unduh
                                                         </a>

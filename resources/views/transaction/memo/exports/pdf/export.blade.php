@@ -77,7 +77,7 @@
 
     <div class="header">
         <div class="image">
-            <img src="{{ asset('assets/img/logo-black-white.png') }}" width="250" alt="Logo">
+            <img src="{{ $logo }}" width="200" alt="Logo">
         </div>
 
         <div class="container-title">
@@ -86,11 +86,12 @@
             </h1>
         </div>
         <p>
-            Kepada: Direktur RSPG Driyorejo<br>
-            Dari: {{ $memo->from_user->division->name }}<br>
-            Perihal: {{ $memo->regarding }}<br>
-            Nomor: {{ $memo->number_transaction }}<br>
-            Tanggal: {{ Carbon\Carbon::parse($memo->created_at)->format('d F Y') }}
+            <span style="font-weight: bold">Kepada:</span> Direktur RSPG Driyorejo<br>
+            <span style="font-weight: bold">Dari:</span> {{ $memo->from_user->division->name }}<br>
+            <span style="font-weight: bold">Perihal:</span> {{ $memo->regarding }}<br>
+            <span style="font-weight: bold">Nomor:</span> {{ $memo->number_transaction }}<br>
+            <span style="font-weight: bold">Tanggal:</span>
+            {{ Carbon\Carbon::parse($memo->created_at)->format('d F Y') }}
         </p>
         <hr>
     </div>

@@ -116,6 +116,13 @@
                                                     </a>
                                                     <div class="dropdown-menu"
                                                         aria-labelledby="dropdown-menu-{{ $disposition->id }}">
+                                                        @if ($disposition->status === 'Disetujui')
+                                                            <a href="{{ route('download.dispositions', $disposition->id) }}"
+                                                                class="dropdown-item">
+                                                                Unduh
+                                                            </a>
+                                                        @endif
+
                                                         @can('transaction.dispositions.show')
                                                             <a href="{{ route('dispositions.show', $disposition->id) }}"
                                                                 class="dropdown-item">

@@ -7,19 +7,16 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use phpseclib3\Crypt\RSA;
 use Carbon\Carbon;
 
 // Notification
 use App\Notifications\GeneralNotification;
 
 // Mail
-use App\Jobs\SendMailJob;
 use App\Mail\SendDispositionMail;
 
 // Models
 use App\Models\Disposition;
-use App\Models\Memo;
 use App\Models\User;
 
 // Traits
@@ -40,7 +37,7 @@ class ChangeStatusController extends Controller
             'status' => 'required',
         ]);
 
-        // try {
+        try {
             $disposition = Disposition::with(['memo', 'memo.from_user'])->where('id', $id)->first();
             $numberTransaction = $disposition->number_transaction;
 
@@ -54,20 +51,23 @@ class ChangeStatusController extends Controller
                     'number_transaction' => $numberTransaction,
                     'content' => $request->content
                 ];
+
                 $signature = $this->createSignature($payload);
                 $qrcode_name = $this->generateQrCode('disposition/qr-codes-signature/', $signature, $numberTransaction);
 
                 $data['qr_code_file'] = $qrcode_name;
                 $data['approve_datetime'] = Carbon::now();
-            }
+                $data['approve_by'] = Auth::user()->name;
 
-            $to = User::where('type', 'assistant')->first();
-            if($disposition->memo){
-                $numberTransaction = $this->generateNumber($disposition->counter);
-                $data['number_transaction'] = $numberTransaction;
+                if($disposition->memo){
+                    $numberTransaction = $this->generateNumber($disposition->counter);
+                    $data['number_transaction'] = $numberTransaction;
+                }
             }
 
             $disposition->update($data);
+
+            $to = User::where('type', 'assistant')->first();
 
             $dataEmail = [
                 'detail' => [
@@ -82,6 +82,7 @@ class ChangeStatusController extends Controller
                     'view' => $request->status === 'approve' ? 'emails.dispositions.approve' : 'emails.dispositions.reject',
                     'note' => $request->note,
                     'files' => [],
+                    'link' => route('dispositions.show', $disposition->id),
                 ],
             ];
 
@@ -97,9 +98,9 @@ class ChangeStatusController extends Controller
 
             toastr()->success('Disposisi Berhasil Diubah Statusnya');
             return redirect()->route('dispositions.index');
-        // } catch (\Exception $e) {
-        //     toastr()->error($e->getMessage());
-        //     return back();
-        // }
+        } catch (\Exception $e) {
+            toastr()->error($e->getMessage());
+            return back();
+        }
     }
 }
