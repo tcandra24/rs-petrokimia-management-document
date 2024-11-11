@@ -28,11 +28,11 @@
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
 
     <!-- Scripts -->
-    @vite(['resources/js/app.js'])
+    {{-- @vite(['resources/js/app.js']) --}}
 
     <script type="module">
-        const userId = @json(auth()->id());
-        console.log(`Mendengarkan channel notifications.${userId}`);
+        // const userId = @json(auth()->id());
+        // console.log(`Mendengarkan channel notifications.${userId}`);
 
         // window.Echo.channel(`notifications.${userId}`)
         //     .listen('notifications', (event) => {
