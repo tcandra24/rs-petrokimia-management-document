@@ -5,30 +5,11 @@
 @endsection
 
 @section('styles')
-    <link rel="stylesheet" href="{{ asset('assets/vendor/select2/css/select2.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/vendor/select2/css/select2-bootstrap-5-theme.min.css') }}" />
-    <style>
-        .select2-container--bootstrap-5.select2-container--focus .select2-selection,
-        .select2-container--bootstrap-5.select2-container--open .select2-selection {
-            box-shadow: unset !important;
-        }
-    </style>
+    {{--  --}}
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/select2/js/select2.full.min.js') }}"></script>
-
-    <script>
-        $('#divisions').select2({
-            placeholder: "Pilih Divisi",
-            allowClear: true
-        })
-        $('#instructions').select2({
-            placeholder: "Pilih instruksi",
-            allowClear: true
-        })
-    </script>
+    {{--  --}}
 @endsection
 
 @section('content')
@@ -42,7 +23,7 @@
                             enctype="multipart/form-data">
                             @method('PATCH')
                             @csrf
-                            <div class="col-md-6">
+                            {{-- <div class="col-md-6">
                                 <label for="committee" class="form-label">Komite</label>
                                 <select id="committee" name="committee"
                                     class="form-select {{ $errors->has('committee') ? 'border border-danger' : '' }}">
@@ -129,7 +110,7 @@
                                         </small>
                                     </span>
                                 @enderror
-                            </div>
+                            </div> --}}
                             <div class="col-md-6">
                                 <label for="file" class="form-label">File</label>
                                 <input type="file" name="file"

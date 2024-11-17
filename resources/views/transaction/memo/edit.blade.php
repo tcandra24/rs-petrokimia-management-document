@@ -54,47 +54,6 @@
                                     </span>
                                 @enderror
                             </div>
-                            <div class="col-md-6">
-                                <label for="from_user_id" class="form-label">Pemohon<span
-                                        class="text-danger">*</span></label>
-                                <select id="from_user_id" name="from_user_id" disabled
-                                    class="form-select {{ $errors->has('from_user_id') ? 'border border-danger' : '' }}">
-                                    <option value="">Pilih Pemohon</option>
-                                    @foreach ($users as $user)
-                                        <option value="{{ $user->id }}"
-                                            {{ $user->id === auth()->user()->id ? 'selected' : '' }}>
-                                            {{ $user->name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('from_user_id')
-                                    <span class="text-danger">
-                                        <small>
-                                            <i>{{ $message }}</i>
-                                        </small>
-                                    </span>
-                                @enderror
-                            </div>
-                            <div class="col-md-6">
-                                <label for="to_user_id" class="form-label">Termohon<span
-                                        class="text-danger">*</span></label>
-                                <select id="to_user_id" name="to_user_id"
-                                    class="form-select {{ $errors->has('to_user_id') ? 'border border-danger' : '' }}">
-                                    <option value="">Pilih Termohon</option>
-                                    @foreach ($users as $user)
-                                        <option value="{{ $user->id }}"
-                                            {{ $user->id === $memo->to_user->id ? 'selected' : '' }}>{{ $user->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('to_user_id')
-                                    <span class="text-danger">
-                                        <small>
-                                            <i>{{ $message }}</i>
-                                        </small>
-                                    </span>
-                                @enderror
-                            </div>
-
                             <div class="col-md-12">
                                 <label for="content" class="form-label">Isi<span class="text-danger">*</span></label>
                                 <div class="d-block">

@@ -18,6 +18,8 @@ use App\Mail\SendDispositionMail;
 // Models
 use App\Models\Disposition;
 use App\Models\User;
+use App\Models\Instruction;
+use App\Models\SubDivision;
 
 // Traits
 use App\Traits\Disposition\TransactionNumberTrait;
@@ -33,6 +35,9 @@ class ChangeStatusController extends Controller
     public function __invoke(Request $request, $id)
     {
         $request->validate([
+            'is_urgent' => 'required',
+            'sub_divisions' => 'required',
+            'instructions' => 'required',
             'note' => 'required',
             'status' => 'required',
         ]);
@@ -43,7 +48,9 @@ class ChangeStatusController extends Controller
 
             $data = [
                 'status' => $request->status,
-                'note' => $request->note
+                'note' => $request->note,
+                'committee' => $request->committee,
+                'is_urgent' => $request->is_urgent,
             ];
 
             if($request->status === 'approve') {
@@ -66,6 +73,12 @@ class ChangeStatusController extends Controller
             }
 
             $disposition->update($data);
+
+            $subDivision = SubDivision::select('id')->whereIn('id', $request->sub_divisions)->get();
+            $disposition->sub_divisions()->attach($subDivision);
+
+            $instructions = Instruction::select('id')->whereIn('id', $request->instructions)->get();
+            $disposition->instructions()->attach($instructions);
 
             $to = User::where('type', 'assistant')->first();
 

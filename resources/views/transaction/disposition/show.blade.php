@@ -5,12 +5,20 @@
 @endsection
 
 @section('styles')
-    {{--  --}}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/select2/css/select2-bootstrap-5-theme.min.css') }}" />
+    <style>
+        .select2-container--bootstrap-5.select2-container--focus .select2-selection,
+        .select2-container--bootstrap-5.select2-container--open .select2-selection {
+            box-shadow: unset !important;
+        }
+    </style>
 @endsection
 
 @section('scripts')
     <script src="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/select2/js/select2.full.min.js') }}"></script>
     <script>
         $('.btn-delete').on('click', function() {
             const id = $(this).attr('data-id')
@@ -30,6 +38,15 @@
                 }
             })
         })
+
+        $('#divisions').select2({
+            placeholder: "Pilih Divisi",
+            allowClear: true
+        })
+        $('#instructions').select2({
+            placeholder: "Pilih instruksi",
+            allowClear: true
+        })
     </script>
 @endsection
 
@@ -46,36 +63,6 @@
                         </div>
 
                         <div class="row my-2">
-                            <div class="col-lg-3 col-md-4 label fw-bold">Divisi</div>
-                            <div class="col-lg-9 col-md-8">
-                                <div class="row">
-                                    <div class="d-flex align-items-center gap-2 flex-wrap" style="min-width: 200px;">
-                                        @foreach ($disposition->sub_divisions as $sub_division)
-                                            <span class="badge bg-primary rounded-3 fw-semibold">
-                                                {{ $sub_division->division->name }} | {{ $sub_division->name }}
-                                            </span>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row my-2">
-                            <div class="col-lg-3 col-md-4 label fw-bold">Instruksi</div>
-                            <div class="col-lg-9 col-md-8">
-                                <div class="row">
-                                    <div class="d-flex align-items-center gap-2 flex-wrap" style="min-width: 200px;">
-                                        @foreach ($disposition->instructions as $instruction)
-                                            <span class="badge bg-primary rounded-3 fw-semibold">
-                                                {{ $instruction->name }}
-                                            </span>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row my-2">
                             <div class="col-lg-3 col-md-4 label fw-bold">Status</div>
                             <div class="col-lg-9 col-md-8">{{ $disposition->status }}</div>
                         </div>
@@ -85,42 +72,186 @@
                             <div class="col-lg-9 col-md-8">{{ $disposition->created_at }}</div>
                         </div>
 
-                        <div class="row my-2">
-                            <div class="col-lg-3 col-md-4 label fw-bold">Note</div>
-                            @if (auth()->user()->type === 'director' && $disposition->status === 'Dibuat')
-                                <div class="col-lg-9 col-md-8">
-                                    <form class="row g-3" method="POST"
-                                        action="{{ route('transaction.change-status', $disposition->id) }}">
-                                        @csrf
-                                        {{-- <input type="hidden" name="memo_id" value="{{ $disposition->memo_id }}"> --}}
-                                        <textarea class="form-control" name="note" id="" cols="30" rows="5"></textarea>
-                                        <fieldset class="row my-2">
-                                            <div class="col-sm-10">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="status"
-                                                        id="approve" value="approve" checked>
-                                                    <label class="form-check-label" for="approve">
-                                                        Menyutujui
+                        @if (auth()->user()->type === 'director' && $disposition->status === 'Dibuat')
+                            <form method="POST" action="{{ route('transaction.change-status', $disposition->id) }}">
+                                @csrf
+                                <div class="row my-2">
+                                    <div class="col-lg-3 col-md-4 label fw-bold">Dituju Kepada</div>
+                                    <div class="col-lg-6 col-md-4">
+                                        <div class="row g-3">
+                                            <select id="committee" name="committee"
+                                                class="form-select {{ $errors->has('committee') ? 'border border-danger' : '' }}">
+                                                <option value="-" selected>Pilih Komite</option>
+                                                <option value="medic">Medik</option>
+                                                <option value="nursing">Keperawatan</option>
+                                            </select>
+                                            @error('committee')
+                                                <span class="text-danger">
+                                                    <small>
+                                                        <i>{{ $message }}</i>
+                                                    </small>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row my-2">
+                                    <div class="col-lg-3 col-md-4 label fw-bold">Sifat</div>
+                                    <div class="col-lg-9 col-md-8">
+                                        <div class="row g-3">
+                                            <div class="col-sm-10 d-flex">
+                                                <div class="form-check mx-2">
+                                                    <input class="form-check-input" type="radio" name="is_urgent"
+                                                        id="is_urgent" value="1" checked>
+                                                    <label class="form-check-label" for="is_urgent">
+                                                        Segera
                                                     </label>
                                                 </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="status"
-                                                        id="reject" value="reject">
-                                                    <label class="form-check-label" for="reject">
-                                                        Menolak
+                                                <div class="form-check mx-2">
+                                                    <input class="form-check-input" type="radio" name="is_urgent"
+                                                        id="is_not_urgent" value="0">
+                                                    <label class="form-check-label" for="is_not_urgent">
+                                                        Biasa
                                                     </label>
                                                 </div>
                                             </div>
-                                        </fieldset>
-                                        <div class="d-flex px-0">
-                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                            @error('is_urgent')
+                                                <span class="text-danger">
+                                                    <small>
+                                                        <i>{{ $message }}</i>
+                                                    </small>
+                                                </span>
+                                            @enderror
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
-                            @else
+                                <div class="row my-2">
+                                    <div class="col-lg-3 col-md-4 label fw-bold">Unit</div>
+                                    <div class="col-lg-9 col-md-8">
+                                        <select id="divisions" name="sub_divisions[]"
+                                            class="form-select {{ $errors->has('sub_divisions') ? 'border border-danger' : '' }}"
+                                            multiple="multiple">
+                                            @foreach ($divisions as $division)
+                                                <optgroup label="{{ $division->name }}">
+                                                    @foreach ($division->sub_divisions as $sub_division)
+                                                        <option value="{{ $sub_division->id }}">
+                                                            {{ $sub_division->name }}</option>
+                                                    @endforeach
+                                                </optgroup>
+                                            @endforeach
+                                        </select>
+                                        @error('sub_divisions')
+                                            <span class="text-danger">
+                                                <small>
+                                                    <i>{{ $message }}</i>
+                                                </small>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="row my-2">
+                                    <div class="col-lg-3 col-md-4 label fw-bold">Instruksi</div>
+                                    <div class="col-lg col-md-8">
+                                        <select id="instructions" name="instructions[]"
+                                            class="form-select {{ $errors->has('instructions') ? 'border border-danger' : '' }}"
+                                            multiple>
+                                            @foreach ($instructions as $instruction)
+                                                <option value="{{ $instruction->id }}">{{ $instruction->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('instructions')
+                                            <span class="text-danger">
+                                                <small>
+                                                    <i>{{ $message }}</i>
+                                                </small>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="row my-2">
+                                    <div class="col-lg-3 col-md-4 label fw-bold">Note</div>
+                                    <div class="col-lg-9 col-md-8">
+                                        <div class="row g-3">
+                                            <textarea class="form-control" name="note" id="" cols="30" rows="5"></textarea>
+                                            <fieldset class="row my-2">
+                                                <div class="col-sm-10">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="status"
+                                                            id="approve" value="approve" checked>
+                                                        <label class="form-check-label" for="approve">
+                                                            Menyutujui
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="status"
+                                                            id="reject" value="reject">
+                                                        <label class="form-check-label" for="reject">
+                                                            Menolak
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row my-2">
+                                    <div class="col-lg-3 col-md-4 label fw-bold"></div>
+                                    <div class="col-lg-9 col-md-8">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        @else
+                            <div class="row my-2">
+                                <div class="col-lg-3 col-md-4 label fw-bold">Sifat</div>
+                                <div class="col-lg-9 col-md-8">
+                                    @if ($disposition->is_urgent)
+                                        Segera
+                                    @else
+                                        Biasa
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row my-2">
+                                <div class="col-lg-3 col-md-4 label fw-bold">Dituju Kepada</div>
+                                <div class="col-lg-9 col-md-8">{{ $disposition->committee }}</div>
+                            </div>
+
+                            <div class="row my-2">
+                                <div class="col-lg-3 col-md-4 label fw-bold">Unit</div>
+                                <div class="col-lg-9 col-md-8">
+                                    <div class="row">
+                                        <div class="d-flex align-items-center gap-2 flex-wrap" style="min-width: 200px;">
+                                            @foreach ($disposition->sub_divisions as $sub_division)
+                                                <span class="badge bg-primary rounded-3 fw-semibold">
+                                                    {{ $sub_division->division->name }} | {{ $sub_division->name }}
+                                                </span>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row my-2">
+                                <div class="col-lg-3 col-md-4 label fw-bold">Instruksi</div>
+                                <div class="col-lg-9 col-md-8">
+                                    <div class="row">
+                                        <div class="d-flex align-items-center gap-2 flex-wrap" style="min-width: 200px;">
+                                            @foreach ($disposition->instructions as $instruction)
+                                                <span class="badge bg-primary rounded-3 fw-semibold">
+                                                    {{ $instruction->name }}
+                                                </span>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row my-2">
+                                <div class="col-lg-3 col-md-4 label fw-bold">Note</div>
                                 <div class="col-lg-9 col-md-8">{{ $disposition->note }}</div>
-                            @endif
-                        </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -150,7 +281,6 @@
                 </div>
             </div>
         </div>
-
 
         @if ($disposition->memo)
             <div class="row">

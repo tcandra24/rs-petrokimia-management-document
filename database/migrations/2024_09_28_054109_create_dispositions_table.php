@@ -16,8 +16,8 @@ return new class extends Migration
             $table->integer('counter');
             $table->unsignedBigInteger('memo_id')->nullable();
             $table->string('number_transaction')->unique();
-            $table->enum('committee', ['medic', 'nursing', '-']);
-            $table->boolean('is_urgent');
+            $table->enum('committee', ['medic', 'nursing', '-'])->nullable();
+            $table->boolean('is_urgent')->nullable();
             $table->text('note')->nullable();
             $table->string('file')->nullable();
             $table->enum('status', ['approve', 'reject', '']);

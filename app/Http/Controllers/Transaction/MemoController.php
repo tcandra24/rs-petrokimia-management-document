@@ -52,10 +52,9 @@ class MemoController extends Controller
      */
     public function create()
     {
-        $users = User::where('type', 'assistant')->get();
         $breadcrumbs = $this->setBreadcrumbs('memo', 'create');
 
-        return view('transaction.memo.create', ['users' => $users, 'breadcrumbs' => $breadcrumbs]);
+        return view('transaction.memo.create', ['breadcrumbs' => $breadcrumbs]);
     }
 
     /**
@@ -76,12 +75,14 @@ class MemoController extends Controller
 
             $file = $this->doUpload('local', $request, 'files/memos');
 
+            $assistant = User::where('type', 'assistant')->first();
+
             $memo = Memo::create([
                 'counter' => $maxCounter,
                 'number_transaction' => $numberTransaction,
                 'regarding' => $request->regarding,
                 'from_user_id' => Auth::user()->id,
-                'to_user_id' => $request->to_user_id,
+                'to_user_id' => $assistant->id,
                 'content' => $request->content,
                 'file' => $file,
                 'qr_code_file' => $qrcode_name,
@@ -144,12 +145,10 @@ class MemoController extends Controller
      */
     public function edit(Memo $memo)
     {
-        $users = User::where('type', 'assistant')->get();
         $breadcrumbs = $this->setBreadcrumbs('memo', 'edit', $memo);
 
         return view('transaction.memo.edit', [
             'breadcrumbs' => $breadcrumbs,
-            'users' => $users,
             'memo' => $memo,
         ]);
     }
@@ -162,7 +161,6 @@ class MemoController extends Controller
         try {
             $data  = [
                 'regarding' => $request->regarding,
-                'to_user_id' => $request->to_user_id,
                 'content' => $request->content,
             ];
 

@@ -17,7 +17,7 @@
                 <li class="nav-item">
                     <a class="nav-link {{ request()->is('master/divisions/*') || request()->is('master/divisions') ? '' : 'collapsed' }}"
                         data-bs-target="#division-nav" data-bs-toggle="collapse" href="#">
-                        <i class="bi bi-building"></i><span>Divisi</span><i class="bi bi-chevron-down ms-auto"></i>
+                        <i class="bi bi-building"></i><span>Unit</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
                     <ul id="division-nav"
                         class="nav-content collapse {{ request()->is('master/divisions/*') || request()->is('master/divisions') ? 'show' : '' }}"
@@ -34,7 +34,7 @@
                 <li class="nav-item">
                     <a class="nav-link {{ request()->is('master/sub-divisions/*') || request()->is('master/sub-divisions') ? '' : 'collapsed' }}"
                         data-bs-target="#sub-division-nav" data-bs-toggle="collapse" href="#">
-                        <i class="bi bi-collection"></i><span>Sub Divisi</span><i class="bi bi-chevron-down ms-auto"></i>
+                        <i class="bi bi-collection"></i><span>Sub Unit</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
                     <ul id="sub-division-nav"
                         class="nav-content collapse {{ request()->is('master/sub-divisions/*') || request()->is('master/sub-divisions') ? 'show' : '' }}"

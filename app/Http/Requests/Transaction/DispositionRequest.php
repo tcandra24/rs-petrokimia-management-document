@@ -22,9 +22,6 @@ class DispositionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'is_urgent' => 'required',
-            'sub_divisions' => 'required',
-            'instructions' => 'required',
             'memo_id' => 'nullable',
             'file' => 'nullable|mimes:pdf'
         ];

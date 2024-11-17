@@ -59,7 +59,7 @@ class Disposition extends Model
     public function committee(): Attribute
     {
         return Attribute::make(
-            get: function(string $value){
+            get: function(string|null $value){
                 if($value === 'medic') {
                     return 'Medik';
                 } elseif($value === 'nursing') {

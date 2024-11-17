@@ -26,12 +26,14 @@ trait PdfHandlerTrait
         $instanceMerger->setFileName($filename);
     }
 
-    public function addFilePdf($instanceMerger, $filename, $attachment, $path, $disk)
+    public function addFilePdf($instanceMerger, $filename, $path, $disk)
     {
         $instanceMerger->addPDF(Storage::disk($disk)->path($path . 'tmp/' . $filename), 'all');
-        if($attachment){
-            $instanceMerger->addPDF(Storage::disk($disk)->path($path . $attachment), 'all');
-        }
+    }
+
+    public function addAttachmentFile($instanceMerger, $attachment, $path, $disk)
+    {
+        $instanceMerger->addPDF(Storage::disk($disk)->path($path . $attachment), 'all');
     }
 
     public function deletePdf($disk, $path, $filename)

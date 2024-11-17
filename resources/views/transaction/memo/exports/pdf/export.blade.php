@@ -101,6 +101,7 @@
     </div>
 
     <div class="container-signature">
+        <p style="font-weight: bold">Rumah sakit Petrokimia Gresik</p>
         <div class="signature">
             <img src="{{ $qrcode_image }}" width="100" height="100" alt="{{ $memo->number_transaction }}">
         </div>

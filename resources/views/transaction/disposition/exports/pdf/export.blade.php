@@ -127,7 +127,7 @@
                     alt="{{ $disposition->number_transaction }}">
             </div>
             <p style="font-weight: bold">{{ $disposition->approve_by }}</p>
-            <p> Direksi </p>
+            <p> Direktur </p>
         </div>
     @endif
 </body>

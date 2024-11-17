@@ -19,7 +19,6 @@ use App\Models\Disposition;
 use App\Models\Division;
 use App\Models\Instruction;
 use App\Models\Memo;
-use App\Models\SubDivision;
 use App\Models\User;
 
 // Traits
@@ -43,22 +42,25 @@ class DispositionController extends Controller
     public function show(Disposition $disposition)
     {
         $breadcrumbs = $this->setBreadcrumbs('disposition', 'show', $disposition);
+        $instructions = Instruction::all();
+        $divisions = Division::with(['sub_divisions'])->get();
 
-        return view('transaction.disposition.show', ['breadcrumbs' => $breadcrumbs, 'disposition' => $disposition]);
+        return view('transaction.disposition.show', [
+            'breadcrumbs' => $breadcrumbs,
+            'disposition' => $disposition,
+            'instructions' => $instructions,
+            'divisions' => $divisions,
+        ]);
     }
 
     public function create()
     {
         $memos = Memo::doesntHave('dispositions')->get();
-        $instructions = Instruction::all();
-        $divisions = Division::with(['sub_divisions'])->get();
         $breadcrumbs = $this->setBreadcrumbs('disposition', 'create');
 
         return view('transaction.disposition.create', [
             'breadcrumbs' => $breadcrumbs,
             'memos' => $memos,
-            'instructions' => $instructions,
-            'divisions' => $divisions,
         ]);
     }
 
@@ -75,18 +77,10 @@ class DispositionController extends Controller
                 $disposition = Disposition::create([
                     'counter' => $maxCounter,
                     'number_transaction' => $numberTransaction,
-                    'committee' => $request->committee,
-                    'is_urgent' => $request->is_urgent,
                     'memo_id' => $memo,
                     'status' => '',
                     'file' => $file,
                 ]);
-
-                $subDivision = SubDivision::select('id')->whereIn('id', $request->sub_divisions)->get();
-                $disposition->sub_divisions()->attach($subDivision);
-
-                $instructions = Instruction::select('id')->whereIn('id', $request->instructions)->get();
-                $disposition->instructions()->attach($instructions);
 
                 $to = User::where('type', 'director')->first();
                 $cc = User::where('type', 'assistant')->get();
@@ -145,15 +139,11 @@ class DispositionController extends Controller
             $memos = $memos->sortBy('id');
         }
 
-        $instructions = Instruction::all();
-        $divisions = Division::with(['sub_divisions'])->get();
         $breadcrumbs = $this->setBreadcrumbs('disposition', 'edit', $disposition);
 
         return view('transaction.disposition.edit', [
             'breadcrumbs' => $breadcrumbs,
             'memos' => $memos,
-            'instructions' => $instructions,
-            'divisions' => $divisions,
             'disposition' => $disposition
         ]);
     }
@@ -165,8 +155,6 @@ class DispositionController extends Controller
                 $memo = $request->memo_id ?? null;
 
                 $data  = [
-                    'committee' => $request->committee,
-                    'is_urgent' => $request->is_urgent,
                     'memo_id' => $memo,
                     'status' => '',
                 ];
@@ -177,12 +165,6 @@ class DispositionController extends Controller
                 }
 
                 $disposition->update($data);
-
-                $subDivisions = Division::select('id')->whereIn('id', $request->sub_divisions)->get();
-                $disposition->sub_divisions()->sync($subDivisions);
-
-                $instructions = Instruction::select('id')->whereIn('id', $request->instructions)->get();
-                $disposition->instructions()->sync($instructions);
 
                 $to = User::where('type', 'director')->first();
                 $cc = User::where('type', 'assistant')->get();

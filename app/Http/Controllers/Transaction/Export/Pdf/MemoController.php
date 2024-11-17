@@ -33,7 +33,12 @@ class MemoController extends Controller
         $this->generatePdf($data, 'transaction.memo.exports.pdf.export', $filename, $path, 'local');
 
         $mergerInstance = $this->initMergePdf();
-        $this->addFilePdf($mergerInstance, $filename, $memo->file, $path, 'local');
+        $this->addFilePdf($mergerInstance, $filename, $path, 'local');
+
+        if($memo->file){
+            $this->addAttachmentFile($mergerInstance, $memo->file, $path, 'local');
+        }
+
         $this->doMerger($mergerInstance, $filename);
 
         $this->deletePdf('local', $path, $filename);

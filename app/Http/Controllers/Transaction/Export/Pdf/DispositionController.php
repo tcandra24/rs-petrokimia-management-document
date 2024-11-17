@@ -34,7 +34,7 @@ class DispositionController extends Controller
 
         // Start Merging
         $mergerInstance = $this->initMergePdf();
-        $this->addFilePdf($mergerInstance, $filenameDisposition, $disposition->file, $pathDisposition, 'local');
+        $this->addFilePdf($mergerInstance, $filenameDisposition, $pathDisposition, 'local');
 
         if($disposition->memo){
             $filenameMemo = str_replace('/', '-', $disposition->memo->number_transaction) . '-' . $disposition->memo->regarding . '.pdf';
@@ -48,13 +48,25 @@ class DispositionController extends Controller
 
             $this->generatePdf($dataMemo, 'transaction.memo.exports.pdf.export', $filenameMemo, $pathMemo, 'local');
 
-            $this->addFilePdf($mergerInstance, $filenameMemo, $disposition->memo->file, $pathMemo, 'local');
+            $this->addFilePdf($mergerInstance, $filenameMemo, $pathMemo, 'local');
+
+            if($disposition->file){
+                $this->addAttachmentFile($mergerInstance, $disposition->file, $pathDisposition, 'local');
+            }
+
+            if($disposition->memo->file){
+                $this->addAttachmentFile($mergerInstance, $disposition->memo->file, $pathMemo, 'local');
+            }
 
             $this->doMerger($mergerInstance, $filenameDisposition);
 
             $this->deletePdf('local', $pathMemo, $filenameMemo);
             $this->deletePdf('local', $pathDisposition, $filenameDisposition);
         } else {
+            if($disposition->file){
+                $this->addAttachmentFile($mergerInstance, $disposition->file, $pathDisposition, 'local');
+            }
+
             $this->doMerger($mergerInstance, $filenameDisposition);
             $this->deletePdf('local', $pathDisposition, $filenameDisposition);
             $this->deletePdf('local', $pathDisposition, $filenameDisposition);

@@ -23,7 +23,6 @@ class MemoRequest extends FormRequest
     {
         return [
             'regarding' => 'required',
-            'to_user_id' => 'required',
             'content' => 'required',
             'file' => 'nullable|mimes:pdf'
         ];
