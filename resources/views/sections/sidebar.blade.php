@@ -11,7 +11,8 @@
 
         @if (auth()->user()->can('master.divisions.index') ||
                 auth()->user()->can('master.sub-divisions.index') ||
-                auth()->user()->can('master.instructions.index'))
+                auth()->user()->can('master.instructions.index') ||
+                auth()->user()->can('master.purposes.index'))
             <li class="nav-heading">Master</li>
             @can('master.divisions.index')
                 <li class="nav-item">
@@ -58,6 +59,24 @@
                         data-bs-parent="#sidebar-nav">
                         <li>
                             <a href="{{ route('instructions.index') }}">
+                                <i class="bi bi-circle"></i><span>Daftar</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endcan
+
+            @can('master.purposes.index')
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->is('master/purposes/*') || request()->is('master/purposes') ? '' : 'collapsed' }}"
+                        data-bs-target="#purpose-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-upload"></i><span>Tujuan</span><i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="purpose-nav"
+                        class="nav-content collapse {{ request()->is('master/purposes/*') || request()->is('master/purposes') ? 'show' : '' }}"
+                        data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a href="{{ route('purposes.index') }}">
                                 <i class="bi bi-circle"></i><span>Daftar</span>
                             </a>
                         </li>

@@ -30,6 +30,11 @@ class PermissionTableSeeder extends Seeder
         Permission::create(['name' => 'master.instructions.edit', 'guard_name' => 'web']);
         Permission::create(['name' => 'master.instructions.destroy', 'guard_name' => 'web']);
 
+        Permission::create(['name' => 'master.purposes.index', 'guard_name' => 'web']);
+        Permission::create(['name' => 'master.purposes.create', 'guard_name' => 'web']);
+        Permission::create(['name' => 'master.purposes.edit', 'guard_name' => 'web']);
+        Permission::create(['name' => 'master.purposes.destroy', 'guard_name' => 'web']);
+
         Permission::create(['name' => 'transaction.memos.index', 'guard_name' => 'web']);
         Permission::create(['name' => 'transaction.memos.show', 'guard_name' => 'web']);
         Permission::create(['name' => 'transaction.memos.create', 'guard_name' => 'web']);

@@ -46,10 +46,12 @@ class ChangeStatusController extends Controller
             $disposition = Disposition::with(['memo', 'memo.from_user'])->where('id', $id)->first();
             $numberTransaction = $disposition->number_transaction;
 
+            $purpose =  $request->purpose_id ?? null;
+
             $data = [
                 'status' => $request->status,
                 'note' => $request->note,
-                'committee' => $request->committee,
+                'purpose_id' => $purpose,
                 'is_urgent' => $request->is_urgent,
             ];
 

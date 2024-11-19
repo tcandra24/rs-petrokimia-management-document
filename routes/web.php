@@ -29,6 +29,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
         Route::resource('/instructions', \App\Http\Controllers\Master\InstructionController::class, [ 'except' => [ 'show' ] ])
         ->middleware('permission:master.instructions.index|master.instructions.create|master.instructions.edit|master.instructions.destroy');
+
+        Route::resource('/purposes', \App\Http\Controllers\Master\PurposeController::class, [ 'except' => [ 'show' ] ])
+        ->middleware('permission:master.purposes.index|master.purposes.create|master.purposes.edit|master.purposes.destroy');
     });
 
     Route::prefix('transaction')->group(function() {

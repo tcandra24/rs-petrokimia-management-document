@@ -101,6 +101,31 @@ trait BreadcrumbsTrait
         }
     }
 
+    private function purpose($method, $routeParams)
+    {
+        $breadcrumbs = new BreadcrumbHelper('Tujuan');
+
+        switch ($method) {
+            case 'index':
+                $breadcrumbs->add('Daftar', route('purposes.index'));
+                return $breadcrumbs->get();
+
+                break;
+            case 'create':
+                $breadcrumbs->add('Daftar', route('purposes.index'))->add('Tambah', route('purposes.create'));
+                return $breadcrumbs->get();
+
+                break;
+            case 'edit':
+                $breadcrumbs->add('Daftar', route('purposes.index'))->add('Edit', route('purposes.edit', $routeParams->id))->add($routeParams->name);
+                return $breadcrumbs->get();
+
+                break;
+            default:
+                return null;
+        }
+    }
+
     private function permission($method, $routeParams)
     {
         $breadcrumbs = new BreadcrumbHelper('Hak Akses');

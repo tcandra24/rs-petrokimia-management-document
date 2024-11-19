@@ -79,13 +79,14 @@
                                     <div class="col-lg-3 col-md-4 label fw-bold">Dituju Kepada</div>
                                     <div class="col-lg-6 col-md-4">
                                         <div class="row g-3">
-                                            <select id="committee" name="committee"
-                                                class="form-select {{ $errors->has('committee') ? 'border border-danger' : '' }}">
-                                                <option value="-" selected>Pilih Komite</option>
-                                                <option value="medic">Medik</option>
-                                                <option value="nursing">Keperawatan</option>
+                                            <select id="purpose_id" name="purpose_id"
+                                                class="form-select {{ $errors->has('purpose_id') ? 'border border-danger' : '' }}">
+                                                <option value="" selected>Pilih Tujuan</option>
+                                                @foreach ($purposes as $purpose)
+                                                    <option value="{{ $purpose->id }}">{{ $purpose->name }}</option>
+                                                @endforeach
                                             </select>
-                                            @error('committee')
+                                            @error('purpose_id')
                                                 <span class="text-danger">
                                                     <small>
                                                         <i>{{ $message }}</i>
@@ -173,7 +174,15 @@
                                     <div class="col-lg-3 col-md-4 label fw-bold">Note</div>
                                     <div class="col-lg-9 col-md-8">
                                         <div class="row g-3">
-                                            <textarea class="form-control" name="note" id="" cols="30" rows="5"></textarea>
+                                            <textarea class="form-control {{ $errors->has('note') ? 'border border-danger' : '' }}" name="note" id=""
+                                                cols="30" rows="5"></textarea>
+                                            @error('note')
+                                                <span class="text-danger">
+                                                    <small>
+                                                        <i>{{ $message }}</i>
+                                                    </small>
+                                                </span>
+                                            @enderror
                                             <fieldset class="row my-2">
                                                 <div class="col-sm-10">
                                                     <div class="form-check">
@@ -215,7 +224,7 @@
                             </div>
                             <div class="row my-2">
                                 <div class="col-lg-3 col-md-4 label fw-bold">Dituju Kepada</div>
-                                <div class="col-lg-9 col-md-8">{{ $disposition->committee }}</div>
+                                <div class="col-lg-9 col-md-8">{{ $disposition->purpose->name ?? '-' }}</div>
                             </div>
 
                             <div class="row my-2">

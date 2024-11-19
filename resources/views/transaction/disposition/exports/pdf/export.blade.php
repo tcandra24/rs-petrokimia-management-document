@@ -89,7 +89,7 @@
             <span style="font-weight: bold">Nomor Agenda:</span> {{ $disposition->number_transaction }}<br>
             <span style="font-weight: bold">Tipe:</span> {{ $disposition->memo ? 'Memo' : 'Surat Masuk' }}<br>
             <span style="font-weight: bold">Sifat:</span> {{ $disposition->is_urgent ? 'Segera' : 'Biasa' }}<br>
-            <span style="font-weight: bold">Komite:</span> {{ $disposition->committee }}<br>
+            <span style="font-weight: bold">Dituju Kepada:</span> {{ $disposition->purpose->name ?? '-' }}<br>
             <span style="font-weight: bold">Status:</span> {{ $disposition->status }}<br>
             <span style="font-weight: bold">Tanggal:</span>
             {{ Carbon\Carbon::parse($disposition->created_at)->format('d F Y') }}

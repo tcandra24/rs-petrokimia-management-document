@@ -16,7 +16,7 @@ class Disposition extends Model
         'counter',
         'memo_id',
         'number_transaction',
-        'committee',
+        'purpose_id',
         'is_urgent',
         'note',
         'file',
@@ -29,6 +29,11 @@ class Disposition extends Model
     public function memo(): BelongsTo
     {
         return $this->belongsTo(Memo::class);
+    }
+
+    public function purpose(): BelongsTo
+    {
+        return $this->belongsTo(Purpose::class);
     }
 
     public function sub_divisions(): BelongsToMany
@@ -51,21 +56,6 @@ class Disposition extends Model
                     return 'Ditolak';
                 } else {
                     return 'Dibuat';
-                }
-            },
-        );
-    }
-
-    public function committee(): Attribute
-    {
-        return Attribute::make(
-            get: function(string|null $value){
-                if($value === 'medic') {
-                    return 'Medik';
-                } elseif($value === 'nursing') {
-                    return 'Keperawatan';
-                } else {
-                    return '';
                 }
             },
         );

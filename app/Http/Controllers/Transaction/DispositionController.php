@@ -19,6 +19,7 @@ use App\Models\Disposition;
 use App\Models\Division;
 use App\Models\Instruction;
 use App\Models\Memo;
+use App\Models\Purpose;
 use App\Models\User;
 
 // Traits
@@ -44,12 +45,14 @@ class DispositionController extends Controller
         $breadcrumbs = $this->setBreadcrumbs('disposition', 'show', $disposition);
         $instructions = Instruction::all();
         $divisions = Division::with(['sub_divisions'])->get();
+        $purposes = Purpose::where('is_active', true)->get();
 
         return view('transaction.disposition.show', [
             'breadcrumbs' => $breadcrumbs,
             'disposition' => $disposition,
             'instructions' => $instructions,
             'divisions' => $divisions,
+            'purposes' => $purposes
         ]);
     }
 
