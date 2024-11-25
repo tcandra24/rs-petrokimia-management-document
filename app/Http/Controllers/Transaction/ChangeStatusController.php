@@ -56,6 +56,14 @@ class ChangeStatusController extends Controller
             ];
 
             if($request->status === 'approve') {
+                $data['approve_datetime'] = Carbon::now();
+                $data['approve_by'] = Auth::user()->name;
+
+                if($disposition->memo){
+                    $numberTransaction = $this->generateNumber($disposition->counter);
+                    $data['number_transaction'] = $numberTransaction;
+                }
+
                 $payload = [
                     'number_transaction' => $numberTransaction,
                 ];
@@ -64,13 +72,6 @@ class ChangeStatusController extends Controller
                 $qrcode_name = $this->generateQrCode('disposition/qr-codes-signature/', $signature, $numberTransaction);
 
                 $data['qr_code_file'] = $qrcode_name;
-                $data['approve_datetime'] = Carbon::now();
-                $data['approve_by'] = Auth::user()->name;
-
-                if($disposition->memo){
-                    $numberTransaction = $this->generateNumber($disposition->counter);
-                    $data['number_transaction'] = $numberTransaction;
-                }
             }
 
             $disposition->update($data);
