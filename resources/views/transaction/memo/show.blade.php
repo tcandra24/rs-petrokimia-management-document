@@ -21,22 +21,22 @@
                         <h5 class="card-title">Detail Memo</h5>
                         <div class="row g-3">
                             <div class="col-md-12">
-                                <h4 class="col-sm-4 fw-bold">Perihal</h4>
+                                <h4 class="col-sm-12 fw-bold">Perihal</h4>
                                 <p>{{ $memo->regarding }}</p>
                             </div>
 
                             <div class="col-md-6">
-                                <h4 class="col-sm-4 fw-bold">Pemohon</h4>
+                                <h4 class="col-sm-12 fw-bold">Pemohon</h4>
                                 <p>{{ $memo->from_user->name }}</p>
                             </div>
 
                             <div class="col-md-6">
-                                <h4 class="col-sm-4 fw-bold">Termohon</h4>
+                                <h4 class="col-sm-12 fw-bold">Termohon</h4>
                                 <p>{{ $memo->to_user->name }}</p>
                             </div>
                             @if ($memo->file)
                                 <div class="col-md-6">
-                                    <h4 class="col-sm-4 fw-bold">Lampiran</h4>
+                                    <h4 class="col-sm-12 fw-bold">Lampiran</h4>
                                     <a href="{{ route('attachment.memo', $memo->id) }}" target="_blank"
                                         class="btn btn-primary" target="_blank">Download</a>
                                 </div>

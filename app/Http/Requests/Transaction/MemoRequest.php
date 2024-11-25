@@ -24,7 +24,7 @@ class MemoRequest extends FormRequest
         return [
             'regarding' => 'required',
             'content' => 'required',
-            'file' => 'nullable|mimes:pdf'
+            'file' => 'nullable|mimes:pdf|max:5000'
         ];
     }
 }

@@ -270,4 +270,34 @@ trait BreadcrumbsTrait
                 return null;
         }
     }
+
+    private function memoSignature($method, $routeParams)
+    {
+        $breadcrumbs = new BreadcrumbHelper('Memo Signature');
+
+        switch ($method) {
+            case 'index':
+                $breadcrumbs->add('Verifikasi', route('digital-signature.memo.index'));
+                return $breadcrumbs->get();
+
+                break;
+            default:
+                return null;
+        }
+    }
+
+    private function dispositionSignature($method, $routeParams)
+    {
+        $breadcrumbs = new BreadcrumbHelper('Disposisi Signature');
+
+        switch ($method) {
+            case 'index':
+                $breadcrumbs->add('Verifikasi', route('digital-signature.disposition.index'));
+                return $breadcrumbs->get();
+
+                break;
+            default:
+                return null;
+        }
+    }
 }

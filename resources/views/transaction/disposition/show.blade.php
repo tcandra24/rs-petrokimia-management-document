@@ -72,6 +72,16 @@
                             <div class="col-lg-9 col-md-8">{{ $disposition->created_at }}</div>
                         </div>
 
+                        @if ($disposition->file)
+                            <div class="row my-2">
+                                <div class="col-lg-3 col-md-4 label fw-bold">Lampiran</div>
+                                <div class="col-lg-9 col-md-8">
+                                    <a href="{{ route('attachment.disposition', $disposition->id) }}" target="_blank"
+                                        class="btn btn-primary" target="_blank">Download</a>
+                                </div>
+                            </div>
+                        @endif
+
                         @if (auth()->user()->type === 'director' && $disposition->status === 'Dibuat')
                             <form method="POST" action="{{ route('transaction.change-status', $disposition->id) }}">
                                 @csrf

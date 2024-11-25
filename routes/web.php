@@ -55,7 +55,23 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
         Route::prefix('download')->group(function() {
             Route::prefix('memo')->group(function() {
-                Route::get('/attachment/{id}', \App\Http\Controllers\Transaction\Download\AttachmentController::class)->name('attachment.memo');
+                Route::get('/attachment/{id}', \App\Http\Controllers\Transaction\Download\Memo\AttachmentController::class)->name('attachment.memo');
+            });
+
+            Route::prefix('disposition')->group(function() {
+                Route::get('/attachment/{id}', \App\Http\Controllers\Transaction\Download\Disposition\AttachmentController::class)->name('attachment.disposition');
+            });
+        });
+
+        Route::prefix('digital-signature')->group(function() {
+            Route::prefix('memo')->group(function() {
+                Route::get('/', [\App\Http\Controllers\Transaction\DigitalSignature\Memo\VerifyController::class, 'index'])->name('digital-signature.memo.index');
+                Route::get('/verify', [\App\Http\Controllers\Transaction\DigitalSignature\Memo\VerifyController::class, 'check'])->name('digital-signature.memo.verify');
+            });
+
+            Route::prefix('disposition')->group(function() {
+                Route::get('/', [\App\Http\Controllers\Transaction\DigitalSignature\Disposition\VerifyController::class, 'index'])->name('digital-signature.disposition.index');
+                Route::get('/verify', [\App\Http\Controllers\Transaction\DigitalSignature\Disposition\VerifyController::class, 'check'])->name('digital-signature.disposition.verify');
             });
         });
     });

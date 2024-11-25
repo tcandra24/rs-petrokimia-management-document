@@ -58,7 +58,6 @@ class ChangeStatusController extends Controller
             if($request->status === 'approve') {
                 $payload = [
                     'number_transaction' => $numberTransaction,
-                    'content' => $request->content
                 ];
 
                 $signature = $this->createSignature($payload);

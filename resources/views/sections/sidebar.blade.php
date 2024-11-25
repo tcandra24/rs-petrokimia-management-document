@@ -107,6 +107,30 @@
             @endcan
         @endif
 
+        <li class="nav-heading">Alat & Bantuan</li>
+        <li class="nav-item">
+            <a class="nav-link {{ request()->is('transaction/digital-signature/*') || request()->is('transaction/digital-signature') ? '' : 'collapsed' }}"
+                data-bs-target="#tool-help-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-search"></i>
+                <span>Verifikasi Signature</span>
+                <i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="tool-help-nav"
+                class="nav-content collapse {{ request()->is('transaction/digital-signature/*') || request()->is('transaction/digital-signature') ? 'show' : '' }}"
+                data-bs-parent="#sidebar-nav">
+                <li>
+                    <a href="{{ route('digital-signature.memo.index') }}">
+                        <i class="bi bi-circle"></i><span>Memo</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('digital-signature.disposition.index') }}">
+                        <i class="bi bi-circle"></i><span>Disposisi</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
         @if (auth()->user()->can('setting.users.index') ||
                 auth()->user()->can('setting.roles.index') ||
                 auth()->user()->can('setting.permissions.index'))

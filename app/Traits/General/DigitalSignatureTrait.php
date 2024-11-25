@@ -27,4 +27,13 @@ trait DigitalSignatureTrait
 
         return $qrcode_name;
     }
+
+    public function verification($signature, $payload, $publicKey)
+    {
+        $signature = base64_decode($signature);
+
+        $publicKey = RSA::load($publicKey);
+
+        return $publicKey->verify(json_encode($payload), $signature);
+    }
 }

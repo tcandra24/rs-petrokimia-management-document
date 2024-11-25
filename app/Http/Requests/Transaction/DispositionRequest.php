@@ -23,7 +23,7 @@ class DispositionRequest extends FormRequest
     {
         return [
             'memo_id' => 'nullable',
-            'file' => 'nullable|mimes:pdf'
+            'file' => 'nullable|mimes:pdf|max:5000'
         ];
     }
 }
