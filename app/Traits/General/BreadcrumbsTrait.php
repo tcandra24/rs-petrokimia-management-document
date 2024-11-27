@@ -325,4 +325,19 @@ trait BreadcrumbsTrait
                 return null;
         }
     }
+
+    private function profile($method, $routeParams)
+    {
+        $breadcrumbs = new BreadcrumbHelper('Profil');
+
+        switch ($method) {
+            case 'index':
+                $breadcrumbs->add('Profil', route('profile.index'))->add($routeParams->name);
+                return $breadcrumbs->get();
+
+                break;
+            default:
+                return null;
+        }
+    }
 }
