@@ -21,6 +21,7 @@ use App\Http\Requests\Setting\User\EditRequest;
 // Models
 use App\Models\User;
 use App\Models\Division;
+use App\Models\Position;
 
 // Traits
 use App\Traits\General\BreadcrumbsTrait;
@@ -46,9 +47,15 @@ class UserController extends Controller
     {
         $roles = Role::all();
         $divisions = Division::all();
+        $positions = Position::all();
         $breadcrumbs = $this->setBreadcrumbs('user', 'create');
 
-        return view('setting.user.create', ['roles' => $roles, 'breadcrumbs' => $breadcrumbs, 'divisions' => $divisions]);
+        return view('setting.user.create', [
+            'roles' => $roles,
+            'breadcrumbs' => $breadcrumbs,
+            'divisions' => $divisions,
+            'positions' => $positions,
+        ]);
     }
 
     public function store(StoreRequest $request)
@@ -65,6 +72,7 @@ class UserController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'division_id' => $request->division_id ?? null,
+                'position_id' => $request->position_id ?? null,
                 'type' => $request->type,
                 'public_key' => $publicKeyString,
                 'private_key' => $privateKeyString,
@@ -98,13 +106,15 @@ class UserController extends Controller
     {
         $roles = Role::all();
         $divisions = Division::all();
+        $positions = Position::all();
         $breadcrumbs = $this->setBreadcrumbs('user', 'edit', $user);
 
         return view('setting.user.edit', [
             'breadcrumbs' => $breadcrumbs,
             'user' => $user,
             'roles' => $roles,
-            'divisions' => $divisions
+            'divisions' => $divisions,
+            'positions' => $positions,
         ]);
     }
 
@@ -115,6 +125,7 @@ class UserController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'division_id' => $request->division_id ?? null,
+                'position_id' => $request->position_id ?? null,
                 'type' => $request->type,
             ];
 

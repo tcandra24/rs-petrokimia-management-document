@@ -27,10 +27,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'division_id',
         'public_key',
         'private_key',
-        'token'
+        'token',
+        'position_id',
     ];
 
-    protected $with = ['division', 'roles'];
+    protected $with = ['division', 'roles', 'position'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -45,6 +46,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function division(): BelongsTo
     {
         return $this->belongsTo(Division::class);
+    }
+
+    public function position(): BelongsTo
+    {
+        return $this->belongsTo(Position::class);
     }
 
     /**

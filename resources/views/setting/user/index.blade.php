@@ -71,7 +71,8 @@
                                     <th scope="col">#</th>
                                     <th scope="col">Nama</th>
                                     <th scope="col">Email</th>
-                                    <th scope="col">Divisi</th>
+                                    <th scope="col">Unit</th>
+                                    <th scope="col">Jabatan</th>
                                     <th scope="col">Tipe</th>
                                     <th scope="col">Peran</th>
                                     <th scope="col">Aksi</th>
@@ -84,6 +85,7 @@
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->division?->name }}</td>
+                                        <td>{{ $user->position?->name }}</td>
                                         <td>{{ $user->type }}</td>
                                         <td>
                                             <div class="row">

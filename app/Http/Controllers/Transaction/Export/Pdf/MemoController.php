@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Transaction\Export\Pdf;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 // Models
 use App\Models\Memo;

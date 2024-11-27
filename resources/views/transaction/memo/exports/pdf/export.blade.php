@@ -29,7 +29,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
         th,
@@ -44,7 +44,7 @@
         }
 
         .instructions {
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
         .instructions p {
@@ -52,7 +52,7 @@
         }
 
         .numbered-list {
-            margin-left: 20px;
+            margin-left: 10px;
         }
 
         .container-title {
@@ -70,6 +70,24 @@
             width: 100px;
             height: 100px;
         }
+
+        .memo-container .table-header {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .memo-container td {
+            padding: 3px;
+            vertical-align: top;
+        }
+
+        .title-row {
+            text-align: left;
+        }
+
+        .content-row {
+            text-align: left;
+        }
     </style>
 </head>
 
@@ -85,14 +103,37 @@
                 Memo
             </h1>
         </div>
-        <p>
-            <span style="font-weight: bold">Kepada:</span> Direktur RSPG Driyorejo<br>
-            <span style="font-weight: bold">Dari:</span> {{ $memo->from_user->division->name }}<br>
-            <span style="font-weight: bold">Perihal:</span> {{ $memo->regarding }}<br>
-            <span style="font-weight: bold">Nomor:</span> {{ $memo->number_transaction }}<br>
-            <span style="font-weight: bold">Tanggal:</span>
-            {{ Carbon\Carbon::parse($memo->created_at)->format('d F Y') }}
-        </p>
+        <div class="memo-container">
+            <table class="table-header">
+                <tr>
+                    <td class="title-row no-border" width="80">Kepada</td>
+                    <td class="no-border">:</td>
+                    <td class="content-row no-border">Direktur RS Petrokimia Gresik Driyorejo</td>
+                </tr>
+                <tr>
+                    <td class="title-row no-border" width="80">Dari</td>
+                    <td class="no-border">:</td>
+                    <td class="content-row no-border">{{ $memo->from_user->division?->name }}</td>
+                </tr>
+                <tr>
+                    <td class="title-row no-border" width="80">Perihal</td>
+                    <td class="no-border">:</td>
+                    <td class="content-row no-border">{{ $memo->regarding }}</td>
+                </tr>
+                <tr>
+                    <td class="title-row no-border" width="80">Nomor</td>
+                    <td class="no-border">:</td>
+                    <td class="content-row no-border">{{ $memo->number_transaction }}</td>
+                </tr>
+                <tr>
+                    <td class="title-row no-border" width="80">Tanggal</td>
+                    <td class="no-border">:</td>
+                    <td class="content-row no-border">
+                        {{ Carbon\Carbon::parse($memo->created_at)->format('d F Y') }}
+                    </td>
+                </tr>
+            </table>
+        </div>
         <hr>
     </div>
 
@@ -101,12 +142,12 @@
     </div>
 
     <div class="container-signature">
-        <p style="font-weight: bold">Rumah sakit Petrokimia Gresik</p>
+        <p style="font-weight: bold">{{ $memo->from_user->division?->name }}</p>
         <div class="signature">
             <img src="{{ $qrcode_image }}" width="100" height="100" alt="{{ $memo->number_transaction }}">
         </div>
         <p style="font-weight: bold">{{ $memo->from_user->name }}</p>
-        <p>{{ $memo->from_user->division->name }}</p>
+        <p>{{ $memo->from_user->position?->name }}</p>
     </div>
 </body>
 

@@ -10,19 +10,24 @@
 
 @section('scripts')
     <script src="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>
-    <script src="https://unpkg.com/@zxing/browser@latest"></script>
+    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
     <script>
         $(document).ready(function() {
-            const codeReader = new ZXing.BrowserQRCodeReader();
-            codeReader.decodeFromVideoDevice(null, 'video', (result, err) => {
-                if (result) {
-                    console.log('Scanned QR Code: ', result.text);
+            const html5QrCode = new Html5Qrcode("reader");
+            html5QrCode.start({
+                    facingMode: "environment"
+                }, {
+                    fps: 10,
+                    qrbox: {
+                        width: 250,
+                        height: 250
+                    }
+                },
+                (decodedText, decodedResult) => {
+                    console.log(`Scanned: ${decodedText}`);
                 }
-                if (err && !(err instanceof ZXing.NotFoundException)) {
-                    console.error(err);
-                }
-            });
-        })
+            ).catch(err => console.error(err));
+        });
     </script>
 @endsection
 
@@ -32,7 +37,7 @@
             {{-- <div class="col-lg-8">
                 <div class="card">
                     <div class="card-body">
-                        <video id="video" style="width: 100%; max-width: 300px;"></video>
+                        <div id="reader" style="width: 300px;"></div>
                     </div>
                 </div>
             </div> --}}

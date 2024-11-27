@@ -48,10 +48,10 @@
                                 @enderror
                             </div>
                             <div class="col-md-6">
-                                <label for="division" class="form-label">Divisi</label>
+                                <label for="division" class="form-label">Unit</label>
                                 <select id="division" name="division_id"
                                     class="form-select {{ $errors->has('division_id') ? 'border border-danger' : '' }}">
-                                    <option value="">Pilih Divisi</option>
+                                    <option value="">Pilih Unit</option>
                                     @foreach ($divisions as $division)
                                         <option value="{{ $division->id }}">{{ $division->name }}</option>
                                     @endforeach
@@ -82,6 +82,40 @@
                                 @enderror
                             </div>
                             <div class="col-md-6">
+                                <label for="type" class="form-label">Tipe</label>
+                                <select id="type" name="type"
+                                    class="form-select {{ $errors->has('type') ? 'border border-danger' : '' }}">
+                                    <option value="">Pilih Tipe</option>
+                                    <option value="general">Umum</option>
+                                    <option value="assistant">Asisten</option>
+                                    <option value="director">Direktur</option>
+                                </select>
+                                @error('type')
+                                    <span class="text-danger">
+                                        <small>
+                                            <i>{{ $message }}</i>
+                                        </small>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="position_id" class="form-label">Jabatan</label>
+                                <select id="position_id" name="position_id"
+                                    class="form-select {{ $errors->has('position_id') ? 'border border-danger' : '' }}">
+                                    <option value="">Pilih Jabatan</option>
+                                    @foreach ($positions as $position)
+                                        <option value="{{ $position->id }}">{{ $position->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('position_id')
+                                    <span class="text-danger">
+                                        <small>
+                                            <i>{{ $message }}</i>
+                                        </small>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="col-md-6">
                                 <label for="password" class="form-label">Password</label>
                                 <input type="password" name="password"
                                     class="form-control {{ $errors->has('password') ? 'border border-danger' : '' }}"
@@ -100,23 +134,6 @@
                                     class="form-control {{ $errors->has('confirm_password') ? 'border border-danger' : '' }}"
                                     id="confirm_password">
                                 @error('confirm_password')
-                                    <span class="text-danger">
-                                        <small>
-                                            <i>{{ $message }}</i>
-                                        </small>
-                                    </span>
-                                @enderror
-                            </div>
-                            <div class="col-md-6">
-                                <label for="type" class="form-label">Tipe</label>
-                                <select id="type" name="type"
-                                    class="form-select {{ $errors->has('type') ? 'border border-danger' : '' }}">
-                                    <option value="">Pilih Tipe</option>
-                                    <option value="general">Umum</option>
-                                    <option value="assistant">Asisten</option>
-                                    <option value="director">Direktur</option>
-                                </select>
-                                @error('type')
                                     <span class="text-danger">
                                         <small>
                                             <i>{{ $message }}</i>

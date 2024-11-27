@@ -32,6 +32,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
         Route::resource('/purposes', \App\Http\Controllers\Master\PurposeController::class, [ 'except' => [ 'show' ] ])
         ->middleware('permission:master.purposes.index|master.purposes.create|master.purposes.edit|master.purposes.destroy');
+
+        Route::resource('/positions', \App\Http\Controllers\Master\PositionController::class, [ 'except' => [ 'show' ] ])
+        ->middleware('permission:master.positions.index|master.positions.create|master.positions.edit|master.positions.destroy');
     });
 
     Route::prefix('transaction')->group(function() {

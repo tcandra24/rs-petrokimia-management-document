@@ -53,7 +53,7 @@
                                     <th scope="col">Nomer Agenda</th>
                                     <th scope="col">Komite</th>
                                     <th scope="col">Tipe</th>
-                                    <th scope="col">Divisi</th>
+                                    <th scope="col">Unit</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Aksi</th>
                                 </tr>

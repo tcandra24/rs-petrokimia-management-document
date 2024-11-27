@@ -70,6 +70,24 @@
             width: 100px;
             height: 100px;
         }
+
+        .memo-container .table-header {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .memo-container td {
+            padding: 3px;
+            vertical-align: top;
+        }
+
+        .title-row {
+            text-align: left;
+        }
+
+        .content-row {
+            text-align: left;
+        }
     </style>
 </head>
 
@@ -85,33 +103,64 @@
                 Disposisi
             </h1>
         </div>
-        <p>
-            <span style="font-weight: bold">Nomor Agenda:</span> {{ $disposition->number_transaction }}<br>
-            <span style="font-weight: bold">Tipe:</span> {{ $disposition->memo ? 'Memo' : 'Surat Masuk' }}<br>
-            <span style="font-weight: bold">Sifat:</span> {{ $disposition->is_urgent ? 'Segera' : 'Biasa' }}<br>
-            <span style="font-weight: bold">Dituju Kepada:</span> {{ $disposition->purpose->name ?? '-' }}<br>
-            <span style="font-weight: bold">Status:</span> {{ $disposition->status }}<br>
-            <span style="font-weight: bold">Tanggal:</span>
-            {{ Carbon\Carbon::parse($disposition->created_at)->format('d F Y') }}
-        </p>
-        <p>
-            <span style="font-weight: bold">Divisi:</span>
-            <br>
-            @foreach ($disposition->sub_divisions as $sub_division)
-                <span>
-                    {{ $sub_division->division->name }} | {{ $sub_division->name }},
-                </span>
-            @endforeach
-        </p>
-        <p>
-            <span style="font-weight: bold">Instruksi / Delegasi:</span>
-            <br>
-            @foreach ($disposition->instructions as $instruction)
-                <span>
-                    {{ $instruction->name }},
-                </span>
-            @endforeach
-        </p>
+        <div class="memo-container">
+            <table class="table-header">
+                <tr>
+                    <td class="title-row no-border" width="130">Nomor Agenda:</td>
+                    <td class="no-border">:</td>
+                    <td class="content-row no-border">{{ $disposition->number_transaction }}</td>
+                </tr>
+                <tr>
+                    <td class="title-row no-border" width="130">Tipe</td>
+                    <td class="no-border">:</td>
+                    <td class="content-row no-border">{{ $disposition->memo ? 'Memo' : 'Surat Masuk' }}</td>
+                </tr>
+                <tr>
+                    <td class="title-row no-border" width="130">Sifat</td>
+                    <td class="no-border">:</td>
+                    <td class="content-row no-border">{{ $disposition->is_urgent ? 'Segera' : 'Biasa' }}</td>
+                </tr>
+                <tr>
+                    <td class="title-row no-border" width="150">Dituju Kepada</td>
+                    <td class="no-border">:</td>
+                    <td class="content-row no-border">{{ $disposition->purpose->name ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <td class="title-row no-border" width="130">Status</td>
+                    <td class="no-border">:</td>
+                    <td class="content-row no-border">{{ $disposition->status }}</td>
+                </tr>
+                <tr>
+                    <td class="title-row no-border" width="130">Tanggal</td>
+                    <td class="no-border">:</td>
+                    <td class="content-row no-border">
+                        {{ Carbon\Carbon::parse($disposition->created_at)->format('d F Y') }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title-row no-border" width="130">Unit</td>
+                    <td class="no-border">:</td>
+                    <td class="content-row no-border">
+                        @foreach ($disposition->sub_divisions as $sub_division)
+                            <span>
+                                {{ $sub_division->division->name }} | {{ $sub_division->name }},
+                            </span>
+                        @endforeach
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title-row no-border" width="130">Instruksi / Delegasi</td>
+                    <td class="no-border">:</td>
+                    <td class="content-row no-border">
+                        @foreach ($disposition->instructions as $instruction)
+                            <span>
+                                {{ $instruction->name }},
+                            </span>
+                        @endforeach
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
 
     <div class="content">
