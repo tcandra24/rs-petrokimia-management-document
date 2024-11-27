@@ -26,4 +26,12 @@ class DispositionRequest extends FormRequest
             'file' => 'nullable|mimes:pdf|max:5000'
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'file.mimes' => 'File harus mempunyai format pdf',
+            'file.max' => 'File tidak boleh lebih dari 5MB'
+        ];
+    }
 }

@@ -15,6 +15,9 @@ use App\Notifications\GeneralNotification;
 // Mail
 use App\Mail\SendDispositionMail;
 
+// Requests
+use App\Http\Requests\Transaction\ChangeStatusRequest;
+
 // Models
 use App\Models\Disposition;
 use App\Models\User;
@@ -32,16 +35,8 @@ class ChangeStatusController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request, $id)
+    public function __invoke(ChangeStatusRequest $request, $id)
     {
-        $request->validate([
-            'is_urgent' => 'required',
-            'sub_divisions' => 'required',
-            'instructions' => 'required',
-            'note' => 'required',
-            'status' => 'required',
-        ]);
-
         try {
             $disposition = Disposition::with(['memo', 'memo.from_user'])->where('id', $id)->first();
             $numberTransaction = $disposition->number_transaction;

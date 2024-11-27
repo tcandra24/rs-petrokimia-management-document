@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 // Model
 use App\Models\Memo;
 
+// Requests
+use App\Http\Requests\Transaction\DigitalSignature\VerifyRequest;
+
 // Traits
 use App\Traits\General\BreadcrumbsTrait;
 use App\Traits\General\DigitalSignatureTrait;
@@ -27,13 +30,8 @@ class VerifyController extends Controller
         ]);
     }
 
-    public function check(Request $request)
+    public function check(VerifyRequest $request)
     {
-        $request->validate([
-            'number_transaction' => 'required',
-            'signature' => 'required',
-        ]);
-
         try {
             $breadcrumbs = $this->setBreadcrumbs('memoSignature', 'index');
 

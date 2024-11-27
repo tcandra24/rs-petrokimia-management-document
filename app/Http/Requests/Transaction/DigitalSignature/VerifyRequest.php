@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Setting;
+namespace App\Http\Requests\Transaction\DigitalSignature;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RoleRequest extends FormRequest
+class VerifyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,16 +22,16 @@ class RoleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'          => 'required',
-            'permissions'   => 'required'
+            'number_transaction' => 'required',
+            'signature' => 'required',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'name.required' => 'Nama wajib diisi',
-            'permissions.required' => 'Hak Akses wajib diisi',
+            'number_transaction.required' => 'Nomer transaksi wajib diisi',
+            'signature.required' => 'Signature wajib diisi'
         ];
     }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Requests\Transaction;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class MemoRequest extends FormRequest
+class ChangeStatusRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,19 +22,22 @@ class MemoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'regarding' => 'required',
-            'content' => 'required',
-            'file' => 'nullable|mimes:pdf|max:5000'
+            'is_urgent' => 'required',
+            'sub_divisions' => 'required',
+            'instructions' => 'required',
+            'note' => 'required',
+            'status' => 'required',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'regarding.required' => 'Perihal wajib diisi',
-            'content.required' => 'Isi wajib diisi',
-            'file.mimes' => 'File harus mempunyai format pdf',
-            'file.max' => 'File tidak boleh lebih dari 5MB'
+            'is_urgent.required' => 'Sifat harus diisi',
+            'sub_divisions.required' => 'Unit harus diisi',
+            'instructions.required' => 'Instruksi harus diisi',
+            'note.required' => 'Catatan harus diisi',
+            'status.required' => 'Status harus diisi',
         ];
     }
 }

@@ -29,4 +29,19 @@ class StoreRequest extends FormRequest
             'confirm_password' => 'min:6',
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Nama wajib diisi',
+            'email.required' => 'Email wajib diisi',
+            'email.unique' => 'Email sudah digunakan',
+            'roles.required' => 'Peran harus diisi',
+            'password.required' => 'Password harus diisi',
+            'password.min' => 'Password minimal 6 karakter',
+            'password.required_with' => 'Konfirmasi password harus diisi',
+            'password.same' => 'Password dan Konfirmasi password harus sama',
+            'confirm_password.min' => 'Konfirmasi password minimal 6 karakter',
+        ];
+    }
 }
