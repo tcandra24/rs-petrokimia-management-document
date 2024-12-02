@@ -14,7 +14,7 @@ trait UploadImageTrait
             $this->deleteImage($storage_name, $path, $file);
 
             $file = $request->file('file');
-            $file->storeAs($path, $file->hashName());
+            $file->storeAs($path, $file->hashName(), $storage_name);
 
             $filename = $file->hashName();
         }

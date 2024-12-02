@@ -29,6 +29,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'private_key',
         'token',
         'position_id',
+        'image',
     ];
 
     protected $with = ['division', 'roles', 'position'];

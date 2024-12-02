@@ -478,7 +478,9 @@ h6 {
 }
 
 .header-nav .nav-profile img {
-    max-height: 36px;
+    height: 36px;
+    width: 36px;
+    object-fit: cover;
 }
 
 .header-nav .nav-profile span {
@@ -996,7 +998,10 @@ h6 {
 # Profie Page
 --------------------------------------------------------------*/
 .profile .profile-card img {
-    max-width: 120px;
+    width: 150px;
+    object-fit: cover;
+    height: 150px;
+    border-radius: 50%;
 }
 
 .profile .profile-card h2 {

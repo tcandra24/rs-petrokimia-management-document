@@ -93,6 +93,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::prefix('my-profile')->group(function() {
         Route::get('/', App\Http\Controllers\Profile\MyProfileController::class)->name('profile.index');
         Route::post('/change-password', App\Http\Controllers\Profile\ChangePasswordController::class)->name('profile.change-password');
+
+        Route::patch('/change-profile', App\Http\Controllers\Profile\ChangeProfileController::class)->name('profile.change-profile');
+        Route::delete('/delete-profile', App\Http\Controllers\Profile\DeleteImageProfileController::class)->name('profile.delete-profile');
     });
 
     Route::post('/resend-email/{email}', App\Http\Controllers\Auth\ResendEmailController::class)->name('email.resend');

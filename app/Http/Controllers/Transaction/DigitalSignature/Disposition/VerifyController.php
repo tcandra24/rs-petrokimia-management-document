@@ -22,7 +22,7 @@ class VerifyController extends Controller
 
     public function index()
     {
-        $dispositions = Disposition::all();
+        $dispositions = Disposition::where('status', 'approve')->get();
         $breadcrumbs = $this->setBreadcrumbs('dispositionSignature', 'index');
 
         return view('transaction.disposition.digital-signature.index', [

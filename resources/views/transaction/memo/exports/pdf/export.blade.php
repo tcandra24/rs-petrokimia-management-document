@@ -67,8 +67,8 @@
         }
 
         .signature {
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
         }
 
         .memo-container .table-header {
@@ -95,7 +95,7 @@
 
     <div class="header">
         <div class="image">
-            <img src="{{ $logo }}" width="200" alt="Logo">
+            <img src="{{ $logo }}" width="150" alt="Logo">
         </div>
 
         <div class="container-title">
@@ -144,7 +144,7 @@
     <div class="container-signature">
         <p style="font-weight: bold">{{ $memo->from_user->division?->name }}</p>
         <div class="signature">
-            <img src="{{ $qrcode_image }}" width="100" height="100" alt="{{ $memo->number_transaction }}">
+            <img src="{{ $qrcode_image }}" width="120" height="120" alt="{{ $memo->number_transaction }}">
         </div>
         <p style="font-weight: bold">{{ $memo->from_user->name }}</p>
         <p>{{ $memo->from_user->position?->name }}</p>

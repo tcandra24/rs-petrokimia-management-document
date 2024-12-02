@@ -10,11 +10,34 @@
 
 @section('scripts')
     <script src="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>
-    @if ($errors->any())
+    <script src="{{ asset('assets/vendor/sweetalert2/sweetalert2.min.js') }}"></script>
+    @if (session('active_tab') === 'profile-edit')
+        <script>
+            $('#button-change-profile').trigger('click')
+        </script>
+    @elseif(session('active_tab') === 'profile-change-password')
         <script>
             $('#button-change-password').trigger('click')
         </script>
     @endif
+
+    <script>
+        $('.delete-image').on('click', function() {
+            Swal.fire({
+                title: "Yakin Hapus Gambar ?",
+                text: 'Gambar yang dihapus tidak bisa dikembalikan',
+                icon: "warning",
+                showCancelButton: !0,
+                confirmButtonColor: "#5d87ff",
+                confirmButtonText: "Yes",
+                closeOnConfirm: !1
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#form-delete-image').submit()
+                }
+            })
+        })
+    </script>
 @endsection
 
 @section('content')
@@ -24,9 +47,18 @@
 
                 <div class="card">
                     <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-
-                        <img src="https://ui-avatars.com/api/?name={{ auth()->user()->name }}&amp;background=random&amp;color=ffffff&amp;size=100"
+                        <img class="profile-img-container"
+                            src="{{ auth()->user()->image ? asset('storage/users/avatar/' . auth()->user()->image) : 'https://ui-avatars.com/api/?name=' . auth()->user()->name . '&background=random&color=ffffff&size=200' }}"
                             alt="Profile" class="rounded-circle">
+                        @if (auth()->user()->image)
+                            <button class="btn btn-danger btn-sm my-2 delete-image" title="Remove Image">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                            <form id="form-delete-image" method="POST" action="{{ route('profile.delete-profile') }}">
+                                @csrf
+                                @method('DELETE')
+                            </form>
+                        @endif
                         <h2>{{ auth()->user()->name }}</h2>
                         <h3>{{ auth()->user()->division->name ?? '-' }}</h3>
                     </div>
@@ -40,6 +72,12 @@
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview"
                                     aria-selected="true" role="tab">Rangkuman</button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit"
+                                    id="button-change-profile">Edit
+                                    Profil
+                                </button>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password"
@@ -76,6 +114,47 @@
                                     </div>
                                 </div>
 
+                            </div>
+
+                            <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+                                <form method="POST" action="{{ route('profile.change-profile') }}"
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    @method('PATCH')
+                                    <div class="row mb-3">
+                                        <label for="file" class="col-md-4 col-lg-3 col-form-label">Gambar</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            <input name="file" type="file" class="form-control" id="file"
+                                                value="">
+                                            @error('file')
+                                                <span class="text-danger">
+                                                    <small>
+                                                        <i>{{ $message }}</i>
+                                                    </small>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label for="name" class="col-md-4 col-lg-3 col-form-label">Nama</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            <input name="name" type="text" class="form-control" id="name"
+                                                value="">
+                                            @error('name')
+                                                <span class="text-danger">
+                                                    <small>
+                                                        <i>{{ $message }}</i>
+                                                    </small>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </form>
                             </div>
 
                             <div class="tab-pane fade pt-3" id="profile-change-password" role="tabpanel">

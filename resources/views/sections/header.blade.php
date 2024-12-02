@@ -27,7 +27,7 @@
 
             <li class="nav-item dropdown pe-3">
                 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                    <img src="https://ui-avatars.com/api/?name={{ auth()->user()->name }}&amp;background=4e73df&amp;color=ffffff&amp;size=100"
+                    <img src="{{ auth()->user()->image ? asset('storage/users/avatar/' . auth()->user()->image) : 'https://ui-avatars.com/api/?name=' . auth()->user()->name . '&background=random&color=ffffff&size=100' }}"
                         alt="Profile" class="rounded-circle">
                     <span class="d-none d-md-block dropdown-toggle ps-2">{{ auth()->user()->name }}</span>
                 </a>
@@ -46,9 +46,6 @@
                             <i class="bi bi-person"></i>
                             <span>Profil Saya</span>
                         </a>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
                     </li>
                     <li>
                         <hr class="dropdown-divider">
