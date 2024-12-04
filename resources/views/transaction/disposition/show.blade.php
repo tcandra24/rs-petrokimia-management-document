@@ -86,27 +86,6 @@
                             <form method="POST" action="{{ route('transaction.change-status', $disposition->id) }}">
                                 @csrf
                                 <div class="row my-2">
-                                    <div class="col-lg-3 col-md-4 label fw-bold">Dituju Kepada</div>
-                                    <div class="col-lg-6 col-md-4">
-                                        <div class="row g-3">
-                                            <select id="purpose_id" name="purpose_id"
-                                                class="form-select {{ $errors->has('purpose_id') ? 'border border-danger' : '' }}">
-                                                <option value="" selected>Pilih Tujuan</option>
-                                                @foreach ($purposes as $purpose)
-                                                    <option value="{{ $purpose->id }}">{{ $purpose->name }}</option>
-                                                @endforeach
-                                            </select>
-                                            @error('purpose_id')
-                                                <span class="text-danger">
-                                                    <small>
-                                                        <i>{{ $message }}</i>
-                                                    </small>
-                                                </span>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row my-2">
                                     <div class="col-lg-3 col-md-4 label fw-bold">Sifat</div>
                                     <div class="col-lg-9 col-md-8">
                                         <div class="row g-3">
@@ -127,6 +106,32 @@
                                                 </div>
                                             </div>
                                             @error('is_urgent')
+                                                <span class="text-danger">
+                                                    <small>
+                                                        <i>{{ $message }}</i>
+                                                    </small>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row my-4">
+                                    <div class="col-lg-3 col-md-4 label fw-bold">Ditujukan Kepada</div>
+                                    <div class="col-lg-6 col-md-4">
+                                    </div>
+                                </div>
+                                <div class="row my-2">
+                                    <div class="col-lg-3 col-md-4 label fw-bold">Komite/Tim/SPI</div>
+                                    <div class="col-lg-6 col-md-4">
+                                        <div class="row g-3">
+                                            <select id="purpose_id" name="purpose_id"
+                                                class="form-select {{ $errors->has('purpose_id') ? 'border border-danger' : '' }}">
+                                                <option value="" selected>Pilih Tujuan</option>
+                                                @foreach ($purposes as $purpose)
+                                                    <option value="{{ $purpose->id }}">{{ $purpose->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('purpose_id')
                                                 <span class="text-danger">
                                                     <small>
                                                         <i>{{ $message }}</i>
