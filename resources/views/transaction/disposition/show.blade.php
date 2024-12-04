@@ -199,7 +199,7 @@
                                                         <input class="form-check-input" type="radio" name="status"
                                                             id="approve" value="approve" checked>
                                                         <label class="form-check-label" for="approve">
-                                                            Menyutujui
+                                                            Menyetujui
                                                         </label>
                                                     </div>
                                                     <div class="form-check">
