@@ -19,6 +19,7 @@ class Memo extends Model
         'regarding',
         'content',
         'file',
+        'pre_memo_id',
         'qr_code_file',
         'approve_datetime'
     ];
@@ -26,6 +27,11 @@ class Memo extends Model
     public function dispositions(): HasOne
     {
         return $this->hasOne(Disposition::class);
+    }
+
+    public function pre_memo(): BelongsTo
+    {
+        return $this->belongsTo(PreMemo::class);
     }
 
     public function from_user(): BelongsTo

@@ -44,9 +44,18 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::resource('/memos', \App\Http\Controllers\Transaction\MemoController::class)
         ->middleware('permission:transaction.memos.index|transaction.memos.show|transaction.memos.create|transaction.memos.edit|transaction.memos.destroy');
 
-        Route::post('disposition/change-status/{id}', \App\Http\Controllers\Transaction\ChangeStatusController::class)->name('transaction.change-status');
+        Route::resource('/pre-memos', \App\Http\Controllers\Transaction\PreMemoController::class)
+        ->middleware('permission:transaction.pre-memos.index|transaction.pre-memos.show|transaction.pre-memos.create|transaction.pre-memos.edit|transaction.pre-memos.destroy');
+
+        Route::post('disposition/change-status/{id}', \App\Http\Controllers\Transaction\Approval\Disposition\ChangeStatusController::class)->name('transaction.disposition.change-status');
+
+        Route::post('pre-memo/change-status/{id}', \App\Http\Controllers\Transaction\Approval\PreMemo\ChangeStatusController::class)->name('transaction.pre-memo.change-status');
 
         Route::prefix('export')->group(function() {
+            Route::prefix('pre-memo')->group(function() {
+                Route::get('/pdf/{id}', [\App\Http\Controllers\Transaction\Export\Pdf\PreMemoController::class, 'download'])->name('download.pre-memos');
+            });
+
             Route::prefix('memo')->group(function() {
                 Route::get('/pdf/{id}', [\App\Http\Controllers\Transaction\Export\Pdf\MemoController::class, 'download'])->name('download.memos');
             });
@@ -57,6 +66,10 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         });
 
         Route::prefix('download')->group(function() {
+            Route::prefix('pre-memo')->group(function() {
+                Route::get('/attachment/{id}', \App\Http\Controllers\Transaction\Download\PreMemo\AttachmentController::class)->name('attachment.pre-memo');
+            });
+
             Route::prefix('memo')->group(function() {
                 Route::get('/attachment/{id}', \App\Http\Controllers\Transaction\Download\Memo\AttachmentController::class)->name('attachment.memo');
             });
@@ -67,6 +80,11 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         });
 
         Route::prefix('digital-signature')->group(function() {
+            Route::prefix('pre-memo')->group(function() {
+                Route::get('/', [\App\Http\Controllers\Transaction\DigitalSignature\PreMemo\VerifyController::class, 'index'])->name('digital-signature.pre-memo.index');
+                Route::get('/verify', [\App\Http\Controllers\Transaction\DigitalSignature\PreMemo\VerifyController::class, 'check'])->name('digital-signature.pre-memo.verify');
+            });
+
             Route::prefix('memo')->group(function() {
                 Route::get('/', [\App\Http\Controllers\Transaction\DigitalSignature\Memo\VerifyController::class, 'index'])->name('digital-signature.memo.index');
                 Route::get('/verify', [\App\Http\Controllers\Transaction\DigitalSignature\Memo\VerifyController::class, 'check'])->name('digital-signature.memo.verify');

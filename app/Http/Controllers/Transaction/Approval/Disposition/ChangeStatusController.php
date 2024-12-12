@@ -1,12 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Transaction;
+namespace App\Http\Controllers\Transaction\Approval\Disposition;
 
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 // Notification
@@ -16,7 +13,7 @@ use App\Notifications\GeneralNotification;
 use App\Mail\SendDispositionMail;
 
 // Requests
-use App\Http\Requests\Transaction\ChangeStatusRequest;
+use App\Http\Requests\Transaction\Disposition\ChangeStatusRequest;
 
 // Models
 use App\Models\Disposition;

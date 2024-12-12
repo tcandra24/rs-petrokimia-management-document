@@ -13,6 +13,7 @@ use App\Mail\SendMemoMail;
 use App\Http\Requests\Transaction\MemoRequest;
 
 // Models
+use App\Models\PreMemo;
 use App\Models\Memo;
 use App\Models\User;
 
@@ -51,9 +52,13 @@ class MemoController extends Controller
      */
     public function create()
     {
+        $preMemos = PreMemo::doesntHave('memo')->where('status', 'approve')->get();
         $breadcrumbs = $this->setBreadcrumbs('memo', 'create');
 
-        return view('transaction.memo.create', ['breadcrumbs' => $breadcrumbs]);
+        return view('transaction.memo.create', [
+            'breadcrumbs' => $breadcrumbs,
+            'preMemos' => $preMemos,
+        ]);
     }
 
     /**
@@ -62,6 +67,8 @@ class MemoController extends Controller
     public function store(MemoRequest $request)
     {
         try {
+            $preMemo =  $request->pre_memo_id ?? null;
+
             $maxCounter = Memo::max('counter') + 1;
             $numberTransaction = $this->generatesTransactionNumber('Memo', $maxCounter);
 
@@ -84,6 +91,7 @@ class MemoController extends Controller
                 'to_user_id' => $assistant->id,
                 'content' => $request->content,
                 'file' => $file,
+                'pre_memo_id' => $preMemo,
                 'qr_code_file' => $qrcode_name,
                 'approve_datetime' => Carbon::now(),
             ]);
@@ -96,6 +104,11 @@ class MemoController extends Controller
                 array_push($files, 'files/memos/' . $file);
             }
 
+            $preMemoRef = null;
+            if($preMemo){
+                $preMemoRef = PreMemo::where('id', $preMemo)->first();
+            }
+
             $dataEmail = [
                 'detail' => [
                     'email' => $to->email,
@@ -105,6 +118,7 @@ class MemoController extends Controller
                 'content' => [
                     'title' => 'Memo ' . $numberTransaction,
                     'number_transaction' => $numberTransaction,
+                    'preMemo' => $preMemoRef,
                     'files' => $files,
                     'link' => route('memos.show', $memo->id),
                 ],
@@ -136,7 +150,10 @@ class MemoController extends Controller
     {
         $breadcrumbs = $this->setBreadcrumbs('memo', 'show', $memo);
 
-        return view('transaction.memo.show', ['breadcrumbs' => $breadcrumbs, 'memo' => $memo]);
+        return view('transaction.memo.show', [
+            'breadcrumbs' => $breadcrumbs,
+            'memo' => $memo
+        ]);
     }
 
     /**
@@ -144,10 +161,17 @@ class MemoController extends Controller
      */
     public function edit(Memo $memo)
     {
+        $preMemos = PreMemo::doesntHave('memo')->where('status', 'approve')->get()->sortBy('id');
+        if ($memo->pre_memo){
+            $preMemos->push($memo->pre_memo);
+            $preMemos = $preMemos->sortBy('id');
+        }
+
         $breadcrumbs = $this->setBreadcrumbs('memo', 'edit', $memo);
 
         return view('transaction.memo.edit', [
             'breadcrumbs' => $breadcrumbs,
+            'preMemos' => $preMemos,
             'memo' => $memo,
         ]);
     }
@@ -158,9 +182,12 @@ class MemoController extends Controller
     public function update(MemoRequest $request, Memo $memo)
     {
         try {
+            $preMemo =  $request->pre_memo_id ?? null;
+
             $data  = [
                 'regarding' => $request->regarding,
                 'content' => $request->content,
+                'pre_memo_id' => $preMemo,
             ];
 
             $file = $this->doUpload('local', $request, 'files/memos', $memo->file);
@@ -182,6 +209,11 @@ class MemoController extends Controller
                 }
             }
 
+            $preMemoRef = null;
+            if($preMemo){
+                $preMemoRef = PreMemo::where('id', $preMemo)->first();
+            }
+
             $dataEmail = [
                 'detail' => [
                     'email' => $to->email,
@@ -191,6 +223,7 @@ class MemoController extends Controller
                 'content' => [
                     'title' => '[Update] Memo ' . $memo->number_transaction,
                     'number_transaction' => $memo->number_transaction,
+                    'preMemo' => $preMemoRef,
                     'files' => $files,
                     'link' => route('memos.show', $memo->id),
                 ],

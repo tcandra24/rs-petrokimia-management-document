@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Transaction;
+namespace App\Http\Requests\Transaction\PreMemo;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -22,9 +22,6 @@ class ChangeStatusRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'is_urgent' => 'required',
-            'sub_divisions' => 'required',
-            'instructions' => 'required',
             'note' => 'required',
             'status' => 'required',
         ];
@@ -33,9 +30,6 @@ class ChangeStatusRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'is_urgent.required' => 'Sifat harus diisi',
-            'sub_divisions.required' => 'Unit harus diisi',
-            'instructions.required' => 'Instruksi harus diisi',
             'note.required' => 'Catatan harus diisi',
             'status.required' => 'Status harus diisi',
         ];

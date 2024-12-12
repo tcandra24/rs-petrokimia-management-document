@@ -104,17 +104,36 @@
             @endcan
         @endif
 
-        @if (auth()->user()->can('transaction.memos.index') || auth()->user()->can('transaction.dispositions.index'))
+        @if (auth()->user()->can('transaction.pre-memos.index') ||
+                auth()->user()->can('transaction.memos.index') ||
+                auth()->user()->can('transaction.dispositions.index'))
             <li class="nav-heading">Transaksi</li>
-            @can('transaction.memos.index')
+            @if (auth()->user()->can('transaction.pre-memos.index') || auth()->user()->can('transaction.memos.index'))
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->is('transaction/memos/*') || request()->is('transaction/memos') ? '' : 'collapsed' }}"
-                        href="{{ route('memos.index') }}">
-                        <i class="bi bi-calculator"></i>
-                        <span>Memo</span>
+                    <a class="nav-link {{ request()->is('transaction/memos*') || request()->is('transaction/pre-memos*') ? '' : 'collapsed' }}"
+                        data-bs-target="#memo-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-calculator"></i><span>Memo</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
+                    <ul id="memo-nav"
+                        class="nav-content collapse {{ request()->is('transaction/memos*') || request()->is('transaction/pre-memos*') ? 'show' : '' }}"
+                        data-bs-parent="#sidebar-nav">
+                        @can('transaction.pre-memos.index')
+                            <li>
+                                <a href="{{ route('pre-memos.index') }}">
+                                    <i class="bi bi-circle"></i><span>Kainst</span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('transaction.memos.index')
+                            <li>
+                                <a href="{{ route('memos.index') }}">
+                                    <i class="bi bi-circle"></i><span>Kepala Bagian</span>
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
                 </li>
-            @endcan
+            @endif
             @can('transaction.dispositions.index')
                 <li class="nav-item">
                     <a class="nav-link {{ request()->is('transaction/dispositions/*') || request()->is('transaction/dispositions') ? '' : 'collapsed' }}"
@@ -138,8 +157,14 @@
                 class="nav-content collapse {{ request()->is('transaction/digital-signature/*') || request()->is('transaction/digital-signature') ? 'show' : '' }}"
                 data-bs-parent="#sidebar-nav">
                 <li>
+                    <a href="{{ route('digital-signature.pre-memo.index') }}">
+                        <i class="bi bi-circle"></i><span>Memo Kainst</span>
+                    </a>
+                </li>
+
+                <li>
                     <a href="{{ route('digital-signature.memo.index') }}">
-                        <i class="bi bi-circle"></i><span>Memo</span>
+                        <i class="bi bi-circle"></i><span>Memo Kepala Bagian</span>
                     </a>
                 </li>
                 <li>

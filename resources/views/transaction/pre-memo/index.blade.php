@@ -40,8 +40,8 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Daftar Memo</h5>
-                        @can('transaction.memos.create')
-                            <a href="{{ route('memos.create') }}" class="btn btn-primary">
+                        @can('transaction.pre-memos.create')
+                            <a href="{{ route('pre-memos.create') }}" class="btn btn-primary">
                                 <i class="bi bi-plus-lg me-1"></i>
                                 Tambah
                             </a>
@@ -54,7 +54,7 @@
                                     <th scope="col">Perihal</th>
                                     <th scope="col">Pemohon</th>
                                     <th scope="col">Termohon</th>
-                                    <th scope="col">Memo Kainst</th>
+                                    <th scope="col">Status</th>
                                     <th scope="col">Aksi</th>
                                 </tr>
                             </thead>
@@ -84,9 +84,10 @@
                                         </td>
                                         <td>
                                             <div class="row">
-                                                <div class="d-flex align-items-center gap-2 flex-wrap">
-                                                    <span class="badge bg-danger rounded-3 fw-semibold">
-                                                        {{ $memo->pre_memo ? 'Ya' : 'Tidak' }}
+                                                <div class="d-flex align-items-center gap-2 flex-wrap"
+                                                    style="min-width: 200px;">
+                                                    <span class="badge bg-secondary rounded-3 fw-semibold">
+                                                        {{ $memo->status }}
                                                     </span>
                                                 </div>
                                             </div>
@@ -103,31 +104,33 @@
                                                     </a>
                                                     <div class="dropdown-menu"
                                                         aria-labelledby="dropdown-menu-{{ $memo->id }}">
-                                                        <a href="{{ route('download.memos', $memo->id) }}"
-                                                            class="dropdown-item">
-                                                            Unduh
-                                                        </a>
+                                                        @if ($memo->status === 'Disetujui')
+                                                            <a href="{{ route('download.pre-memos', $memo->id) }}"
+                                                                class="dropdown-item">
+                                                                Unduh
+                                                            </a>
+                                                        @endif
 
-                                                        @can('transaction.memos.show')
-                                                            <a href="{{ route('memos.show', $memo->id) }}"
+                                                        @can('transaction.pre-memos.show')
+                                                            <a href="{{ route('pre-memos.show', $memo->id) }}"
                                                                 class="dropdown-item">
                                                                 Tampilkan
                                                             </a>
                                                         @endcan
 
-                                                        @can('transaction.memos.edit')
-                                                            <a href="{{ route('memos.edit', $memo->id) }}"
+                                                        @can('transaction.pre-memos.edit')
+                                                            <a href="{{ route('pre-memos.edit', $memo->id) }}"
                                                                 class="dropdown-item">
                                                                 Ubah
                                                             </a>
                                                         @endcan
 
-                                                        @can('transaction.memos.destroy')
+                                                        @can('transaction.pre-memos.destroy')
                                                             <button class="dropdown-item btn-delete" type="button"
                                                                 data-id="{{ $memo->id }}"
                                                                 data-name="{{ $memo->number_transaction }}">Hapus</button>
                                                             <form id="form-delete-memo-{{ $memo->id }}" method="POST"
-                                                                action="{{ route('memos.destroy', $memo->id) }}">
+                                                                action="{{ route('pre-memos.destroy', $memo->id) }}">
                                                                 @csrf
                                                                 @method('DELETE')
                                                             </form>

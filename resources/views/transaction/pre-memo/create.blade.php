@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    Edit Memo
+    Tambah Memo
 @endsection
 
 @section('styles')
@@ -36,16 +36,15 @@
             <div class="col-lg-8">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Edit</h5>
-                        <form class="row g-3" method="POST" action="{{ route('memos.update', $memo->id) }}"
+                        <h5 class="card-title">Tambah</h5>
+                        <form class="row g-3" method="POST" action="{{ route('pre-memos.store') }}"
                             enctype="multipart/form-data">
                             @csrf
-                            @method('PATCH')
                             <div class="col-md-12">
                                 <label for="committee" class="form-label">Perihal<span class="text-danger">*</span></label>
                                 <input type="text" name="regarding"
                                     class="form-control {{ $errors->has('regarding') ? 'border border-danger' : '' }}"
-                                    id="regarding" value="{{ $memo->regarding }}">
+                                    id="regarding">
                                 @error('regarding')
                                     <span class="text-danger">
                                         <small>
@@ -54,10 +53,53 @@
                                     </span>
                                 @enderror
                             </div>
+
+                            <div class="col-md-6">
+                                <label for="from_user_id" class="form-label">Pemohon<span
+                                        class="text-danger">*</span></label>
+                                <select name="from_user_id" id="from_user_id"
+                                    class="form-control {{ $errors->has('from_user_id') ? 'border border-danger' : '' }}">
+                                    <option value="">Pilih Pemohon</option>
+                                    @foreach ($users as $user)
+                                        <option value="{{ $user->id }}"
+                                            {{ Auth::user()->id === $user->id ? 'selected' : '' }}>{{ $user->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('from_user_id')
+                                    <span class="text-danger">
+                                        <small>
+                                            <i>{{ $message }}</i>
+                                        </small>
+                                    </span>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="to_user_id" class="form-label">Termohon<span
+                                        class="text-danger">*</span></label>
+                                <select name="to_user_id" id="to_user_id"
+                                    class="form-control {{ $errors->has('to_user_id') ? 'border border-danger' : '' }}">
+                                    <option value="">Pilih Termohon</option>
+                                    @foreach ($users as $user)
+                                        <option value="{{ $user->id }}">
+                                            {{ $user->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('to_user_id')
+                                    <span class="text-danger">
+                                        <small>
+                                            <i>{{ $message }}</i>
+                                        </small>
+                                    </span>
+                                @enderror
+                            </div>
+
                             <div class="col-md-12">
                                 <label for="content" class="form-label">Isi<span class="text-danger">*</span></label>
                                 <div class="d-block">
-                                    <textarea name="content" class="tinymce-editor">{!! $memo->content !!}</textarea>
+                                    <textarea name="content" class="tinymce-editor"></textarea>
                                 </div>
                                 @error('content')
                                     <span class="text-danger">
@@ -74,27 +116,6 @@
                                     class="form-control {{ $errors->has('file') ? 'border border-danger' : '' }}"
                                     id="file">
                                 @error('file')
-                                    <span class="text-danger">
-                                        <small>
-                                            <i>{{ $message }}</i>
-                                        </small>
-                                    </span>
-                                @enderror
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="pre_memo_id" class="form-label">Memo Kainst</label>
-                                <select id="pre_memo_id" name="pre_memo_id"
-                                    class="form-select {{ $errors->has('pre_memo_id') ? 'border border-danger' : '' }}">
-                                    <option value="" selected>Pilih Memo Kainst</option>
-                                    @foreach ($preMemos as $preMemo)
-                                        <option value="{{ $preMemo->id }}"
-                                            {{ $memo->pre_memo?->id === $preMemo->id ? 'selected' : '' }}>
-                                            {{ $memo->number_transaction }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('pre_memo_id')
                                     <span class="text-danger">
                                         <small>
                                             <i>{{ $message }}</i>

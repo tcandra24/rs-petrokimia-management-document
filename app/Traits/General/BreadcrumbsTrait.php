@@ -257,22 +257,52 @@ trait BreadcrumbsTrait
 
         switch ($method) {
             case 'index':
-                $breadcrumbs->add('Daftar', route('memos.index'));
+                $breadcrumbs->add('Daftar', route('memos.index'))->add('Kepala Bagian');
                 return $breadcrumbs->get();
 
                 break;
             case 'create':
-                $breadcrumbs->add('Daftar', route('memos.index'))->add('Tambah', route('memos.create'));
+                $breadcrumbs->add('Daftar', route('memos.index'))->add('Kepala Bagian')->add('Tambah', route('memos.create'));
                 return $breadcrumbs->get();
 
                 break;
             case 'show':
-                $breadcrumbs->add('Daftar', route('memos.index'))->add('Tampilkan', route('memos.show', $routeParams->id))->add($routeParams->number_transaction );
+                $breadcrumbs->add('Daftar', route('memos.index'))->add('Kepala Bagian')->add('Tampilkan', route('memos.show', $routeParams->id))->add($routeParams->number_transaction );
                 return $breadcrumbs->get();
 
                 break;
             case 'edit':
-                $breadcrumbs->add('Daftar', route('memos.index'))->add('Edit', route('memos.edit', $routeParams->id))->add($routeParams->number_transaction );
+                $breadcrumbs->add('Daftar', route('memos.index'))->add('Kepala Bagian')->add('Edit', route('memos.edit', $routeParams->id))->add($routeParams->number_transaction );
+                return $breadcrumbs->get();
+
+                break;
+            default:
+                return null;
+        }
+    }
+
+    private function preMemo($method, $routeParams)
+    {
+        $breadcrumbs = new BreadcrumbHelper('Memo');
+
+        switch ($method) {
+            case 'index':
+                $breadcrumbs->add('Daftar', route('pre-memos.index'))->add('Kainst');
+                return $breadcrumbs->get();
+
+                break;
+            case 'create':
+                $breadcrumbs->add('Daftar', route('pre-memos.index'))->add('Kainst')->add('Tambah', route('pre-memos.create'));
+                return $breadcrumbs->get();
+
+                break;
+            case 'show':
+                $breadcrumbs->add('Daftar', route('pre-memos.index'))->add('Kainst')->add('Tampilkan', route('pre-memos.show', $routeParams->id))->add($routeParams->number_transaction );
+                return $breadcrumbs->get();
+
+                break;
+            case 'edit':
+                $breadcrumbs->add('Daftar', route('pre-memos.index'))->add('Kainst')->add('Edit', route('pre-memos.edit', $routeParams->id))->add($routeParams->number_transaction );
                 return $breadcrumbs->get();
 
                 break;
@@ -303,6 +333,21 @@ trait BreadcrumbsTrait
         switch ($method) {
             case 'index':
                 $breadcrumbs->add('Verifikasi', route('digital-signature.memo.index'));
+                return $breadcrumbs->get();
+
+                break;
+            default:
+                return null;
+        }
+    }
+
+    private function memoKainstSignature($method, $routeParams)
+    {
+        $breadcrumbs = new BreadcrumbHelper('Memo Signature');
+
+        switch ($method) {
+            case 'index':
+                $breadcrumbs->add('Kainst')->add('Verifikasi', route('digital-signature.memo.index'));
                 return $breadcrumbs->get();
 
                 break;

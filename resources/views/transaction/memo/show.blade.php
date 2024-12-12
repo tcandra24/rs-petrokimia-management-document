@@ -21,6 +21,10 @@
                         <h5 class="card-title">Detail Memo</h5>
                         <div class="row g-3">
                             <div class="col-md-12">
+                                <h4 class="col-sm-12 fw-bold">Nomor Memo</h4>
+                                <p>{{ $memo->number_transaction }}</p>
+                            </div>
+                            <div class="col-md-12">
                                 <h4 class="col-sm-12 fw-bold">Perihal</h4>
                                 <p>{{ $memo->regarding }}</p>
                             </div>
@@ -67,5 +71,36 @@
                 </div>
             </div>
         </div>
+        @if ($memo->pre_memo)
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Memo Kainst</h5>
+                            <div class="row my-2">
+                                <div class="col-lg-3 col-md-4 label fw-bold">Nomor Memo</div>
+                                <div class="col-lg-9 col-md-8">{{ $memo->pre_memo->number_transaction }}</div>
+                            </div>
+
+                            <div class="row my-2">
+                                <div class="col-lg-3 col-md-4 label fw-bold">Dari</div>
+                                <div class="col-lg-9 col-md-8">{{ $memo->pre_memo->from_user->name }}</div>
+                            </div>
+
+                            <div class="row my-2">
+                                <div class="col-lg-3 col-md-4 label fw-bold">Dibuat</div>
+                                <div class="col-lg-9 col-md-8">{{ $memo->pre_memo->created_at }}</div>
+                            </div>
+
+                            <div class="row my-2">
+                                <div class="col-lg-3 col-md-4 label fw-bold">Isi</div>
+                                <div class="col-lg-9 col-md-8">{!! $memo->pre_memo->content !!}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        @endif
     </section>
 @endsection

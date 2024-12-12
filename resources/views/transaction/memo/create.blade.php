@@ -82,6 +82,24 @@
                                 @enderror
                             </div>
 
+                            <div class="col-md-6">
+                                <label for="pre_memo_id" class="form-label">Memo Kainst</label>
+                                <select id="pre_memo_id" name="pre_memo_id"
+                                    class="form-select {{ $errors->has('pre_memo_id') ? 'border border-danger' : '' }}">
+                                    <option value="" selected>Pilih Memo Kainst</option>
+                                    @foreach ($preMemos as $memo)
+                                        <option value="{{ $memo->id }}">{{ $memo->number_transaction }}</option>
+                                    @endforeach
+                                </select>
+                                @error('pre_memo_id')
+                                    <span class="text-danger">
+                                        <small>
+                                            <i>{{ $message }}</i>
+                                        </small>
+                                    </span>
+                                @enderror
+                            </div>
+
                             <div class="text-left">
                                 <button type="submit" class="btn btn-primary">Submit</button>
                                 <button type="reset" class="btn btn-secondary">Reset</button>

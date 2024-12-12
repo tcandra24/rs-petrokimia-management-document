@@ -66,12 +66,4 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
-
-    protected function name(): Attribute
-    {
-        return Attribute::make(
-            get: fn(string $value) => ucwords($value),
-            set: fn(string $value) => strtolower($value)
-        );
-    }
 }

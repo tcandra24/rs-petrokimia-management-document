@@ -4,22 +4,22 @@ namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Attachment;
 
-class SendMemoMail extends Mailable
+class SendPreMemoMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $title;
     public $memo;
-    public $preMemo;
     public $files;
     public $link;
+    public $view;
+    public $note;
 
     /**
      * Create a new message instance.
@@ -28,9 +28,10 @@ class SendMemoMail extends Mailable
     {
         $this->title = $content['title'];
         $this->memo  = $content['number_transaction'];
-        $this->preMemo = $content['preMemo'];
         $this->files = $content['files'];
         $this->link = $content['link'];
+        $this->view = $content['view'];
+        $this->note = $content['note'];
     }
 
     /**
@@ -49,10 +50,10 @@ class SendMemoMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.memo',
+            view: $this->view,
             with: [
                 'noMemo' => $this->memo,
-                'noPreMemo' => $this->preMemo,
+                'note' => $this->note,
                 'link' => $this->link
             ],
         );

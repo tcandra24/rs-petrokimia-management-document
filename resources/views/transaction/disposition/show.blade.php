@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    Tampilkan Detail Disposisi
+    Detail Disposisi {{ $disposition->number_transaction }}
 @endsection
 
 @section('styles')
@@ -17,28 +17,8 @@
 
 @section('scripts')
     <script src="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/select2/js/select2.full.min.js') }}"></script>
     <script>
-        $('.btn-delete').on('click', function() {
-            const id = $(this).attr('data-id')
-            const name = $(this).attr('data-name')
-
-            Swal.fire({
-                title: "Yakin Hapus Disposisi ?",
-                text: name,
-                icon: "warning",
-                showCancelButton: !0,
-                confirmButtonColor: "#5d87ff",
-                confirmButtonText: "Yes",
-                closeOnConfirm: !1
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $('#form-delete-disposition-' + id).submit()
-                }
-            })
-        })
-
         $('#divisions').select2({
             placeholder: "Pilih Divisi",
             allowClear: true
@@ -83,7 +63,8 @@
                         @endif
 
                         @if (auth()->user()->type === 'director' && $disposition->status === 'Dibuat')
-                            <form method="POST" action="{{ route('transaction.change-status', $disposition->id) }}">
+                            <form method="POST"
+                                action="{{ route('transaction.disposition.change-status', $disposition->id) }}">
                                 @csrf
                                 <div class="row my-2">
                                     <div class="col-lg-3 col-md-4 label fw-bold">Sifat</div>
