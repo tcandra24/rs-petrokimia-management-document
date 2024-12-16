@@ -70,7 +70,7 @@ class MemoController extends Controller
             $preMemo =  $request->pre_memo_id ?? null;
 
             $maxCounter = Memo::max('counter') + 1;
-            $numberTransaction = $this->generatesTransactionNumber('Memo', $maxCounter);
+            $numberTransaction = $this->generatesTransactionNumber('MEMO', $maxCounter);
 
             $payload = [
                 'number_transaction' => $numberTransaction,

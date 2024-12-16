@@ -46,9 +46,6 @@ class ChangeStatusController extends Controller
                 $data['approve_datetime'] = Carbon::now();
                 $data['approve_by'] = Auth::user()->name;
 
-                $numberTransaction = $this->generatesTransactionNumber('Memo', $preMemo->counter);
-                $data['number_transaction'] = $numberTransaction;
-
                 $payload = [
                     'number_transaction' => $numberTransaction,
                 ];

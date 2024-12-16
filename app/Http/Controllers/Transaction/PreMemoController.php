@@ -63,16 +63,9 @@ class PreMemoController extends Controller
      */
     public function store(PreMemoRequest $request)
     {
-        // try {
+        try {
             $maxCounter = PreMemo::max('counter') + 1;
-            $now = Carbon::now();
-            $length = 5;
-            $random = '';
-            for ($i = 0; $i < $length; $i++) {
-                $random .= rand(0, 1) ? rand(0, 9) : chr(rand(ord('a'), ord('z')));
-            }
-
-            $numberTransaction = $maxCounter . '/TEMP/' . Str::upper($random) . '/' . str_pad($now->month, 2, '0', STR_PAD_LEFT) . '/' . $now->year;
+            $numberTransaction = $this->generatesTransactionNumber('MEMO-KAINST', $maxCounter, false);
 
             $file = $this->doUpload('local', $request, 'files/pre-memos');
 
@@ -123,10 +116,10 @@ class PreMemoController extends Controller
 
             toastr()->success('Memo Berhasil Disimpan');
             return redirect()->route('pre-memos.index');
-        // } catch (\Exception $e) {
-        //     toastr()->error($e->getMessage());
-        //     return back();
-        // }
+        } catch (\Exception $e) {
+            toastr()->error($e->getMessage());
+            return back();
+        }
     }
 
     /**
