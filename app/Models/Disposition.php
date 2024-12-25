@@ -36,6 +36,11 @@ class Disposition extends Model
         return $this->belongsTo(Purpose::class);
     }
 
+    public function divisions(): BelongsToMany
+    {
+        return $this->belongsToMany(Division::class, 'division_dispositions');
+    }
+
     public function sub_divisions(): BelongsToMany
     {
         return $this->belongsToMany(SubDivision::class, 'sub_division_dispositions');

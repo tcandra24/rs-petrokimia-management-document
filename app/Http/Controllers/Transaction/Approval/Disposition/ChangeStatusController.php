@@ -19,6 +19,7 @@ use App\Http\Requests\Transaction\Disposition\ChangeStatusRequest;
 use App\Models\Disposition;
 use App\Models\User;
 use App\Models\Instruction;
+use App\Models\Division;
 use App\Models\SubDivision;
 
 // Traits
@@ -67,6 +68,9 @@ class ChangeStatusController extends Controller
             }
 
             $disposition->update($data);
+
+            $division = Division::select('id')->whereIn('id', $request->divisions)->get();
+            $disposition->divisions()->attach($division);
 
             $subDivision = SubDivision::select('id')->whereIn('id', $request->sub_divisions)->get();
             $disposition->sub_divisions()->attach($subDivision);

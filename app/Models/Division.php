@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Model;
 
 class Division extends Model
@@ -25,6 +26,11 @@ class Division extends Model
     public function sub_divisions(): HasMany
     {
         return $this->hasMany(SubDivision::class);
+    }
+
+    public function dispositions(): BelongsToMany
+    {
+        return $this->belongsToMany(Disposition::class, 'division_dispositions');
     }
 
     protected function name(): Attribute

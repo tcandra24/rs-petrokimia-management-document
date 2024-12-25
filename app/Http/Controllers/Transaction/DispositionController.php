@@ -17,6 +17,7 @@ use App\Http\Requests\Transaction\DispositionRequest;
 // Models
 use App\Models\Disposition;
 use App\Models\Division;
+use App\Models\SubDivision;
 use App\Models\Instruction;
 use App\Models\Memo;
 use App\Models\Purpose;
@@ -34,7 +35,7 @@ class DispositionController extends Controller
 
     public function index()
     {
-        $dispositions = Disposition::with(['sub_divisions', 'sub_divisions.division', 'instructions'])->paginate(10);
+        $dispositions = Disposition::with(['sub_divisions', 'divisions', 'instructions'])->paginate(10);
         $breadcrumbs = $this->setBreadcrumbs('disposition', 'index');
 
         return view('transaction.disposition.index', ['breadcrumbs' => $breadcrumbs, 'dispositions' => $dispositions ]);
@@ -44,7 +45,8 @@ class DispositionController extends Controller
     {
         $breadcrumbs = $this->setBreadcrumbs('disposition', 'show', $disposition);
         $instructions = Instruction::all();
-        $divisions = Division::with(['sub_divisions'])->get();
+        $divisions = Division::all();
+        $sub_divisions = SubDivision::all();
         $purposes = Purpose::where('is_active', true)->get();
 
         return view('transaction.disposition.show', [
@@ -52,6 +54,7 @@ class DispositionController extends Controller
             'disposition' => $disposition,
             'instructions' => $instructions,
             'divisions' => $divisions,
+            'sub_divisions' => $sub_divisions,
             'purposes' => $purposes
         ]);
     }

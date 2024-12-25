@@ -20,9 +20,15 @@
     <script src="{{ asset('assets/vendor/select2/js/select2.full.min.js') }}"></script>
     <script>
         $('#divisions').select2({
-            placeholder: "Pilih Divisi",
+            placeholder: "Pilih Kabag/Kabid",
             allowClear: true
         })
+
+        $('#sub_divisions').select2({
+            placeholder: "Pilih Unit",
+            allowClear: true
+        })
+
         $('#instructions').select2({
             placeholder: "Pilih instruksi",
             allowClear: true
@@ -123,18 +129,32 @@
                                     </div>
                                 </div>
                                 <div class="row my-2">
-                                    <div class="col-lg-3 col-md-4 label fw-bold">Unit</div>
+                                    <div class="col-lg-3 col-md-4 label fw-bold">Kabag/Kabid</div>
                                     <div class="col-lg-9 col-md-8">
-                                        <select id="divisions" name="sub_divisions[]"
-                                            class="form-select {{ $errors->has('sub_divisions') ? 'border border-danger' : '' }}"
+                                        <select id="divisions" name="divisions[]"
+                                            class="form-select {{ $errors->has('divisions') ? 'border border-danger' : '' }}"
                                             multiple="multiple">
                                             @foreach ($divisions as $division)
-                                                <optgroup label="{{ $division->name }}">
-                                                    @foreach ($division->sub_divisions as $sub_division)
-                                                        <option value="{{ $sub_division->id }}">
-                                                            {{ $sub_division->name }}</option>
-                                                    @endforeach
-                                                </optgroup>
+                                                <option value="{{ $division->id }}">{{ $division->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('divisions')
+                                            <span class="text-danger">
+                                                <small>
+                                                    <i>{{ $message }}</i>
+                                                </small>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="row my-2">
+                                    <div class="col-lg-3 col-md-4 label fw-bold">Unit</div>
+                                    <div class="col-lg-9 col-md-8">
+                                        <select id="sub_divisions" name="sub_divisions[]"
+                                            class="form-select {{ $errors->has('sub_divisions') ? 'border border-danger' : '' }}"
+                                            multiple="multiple">
+                                            @foreach ($sub_divisions as $sub_division)
+                                                <option value="{{ $sub_division->id }}">{{ $sub_division->name }}</option>
                                             @endforeach
                                         </select>
                                         @error('sub_divisions')
@@ -224,13 +244,28 @@
                             </div>
 
                             <div class="row my-2">
+                                <div class="col-lg-3 col-md-4 label fw-bold">Kabag / Kabid</div>
+                                <div class="col-lg-9 col-md-8">
+                                    <div class="row">
+                                        <div class="d-flex align-items-center gap-2 flex-wrap" style="min-width: 200px;">
+                                            @foreach ($disposition->divisions as $division)
+                                                <span class="badge bg-primary rounded-3 fw-semibold">
+                                                    {{ $division->name }}
+                                                </span>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row my-2">
                                 <div class="col-lg-3 col-md-4 label fw-bold">Unit</div>
                                 <div class="col-lg-9 col-md-8">
                                     <div class="row">
                                         <div class="d-flex align-items-center gap-2 flex-wrap" style="min-width: 200px;">
                                             @foreach ($disposition->sub_divisions as $sub_division)
                                                 <span class="badge bg-primary rounded-3 fw-semibold">
-                                                    {{ $sub_division->division->name }} | {{ $sub_division->name }}
+                                                    {{ $sub_division->name }}
                                                 </span>
                                             @endforeach
                                         </div>

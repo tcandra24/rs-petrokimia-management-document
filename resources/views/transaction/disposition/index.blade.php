@@ -53,6 +53,7 @@
                                     <th scope="col">Nomer Agenda</th>
                                     <th scope="col">Komite</th>
                                     <th scope="col">Tipe</th>
+                                    <th scope="col">Kabag / Kabid</th>
                                     <th scope="col">Unit</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Aksi</th>
@@ -86,9 +87,20 @@
                                         <td>
                                             <div class="row">
                                                 <div class="d-flex align-items-center gap-2 flex-wrap">
-                                                    @foreach ($disposition->sub_divisions as $sub_division)
+                                                    @foreach ($disposition->divisions as $division)
                                                         <span class="badge bg-primary rounded-3 fw-semibold">
-                                                            {{ $sub_division->division->name }} | {{ $sub_division->name }}
+                                                            {{ $division->name }}
+                                                        </span>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="row">
+                                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                                    @foreach ($disposition->sub_divisions as $sub_division)
+                                                        <span class="badge bg-success rounded-3 fw-semibold">
+                                                            {{ $sub_division->name }}
                                                         </span>
                                                     @endforeach
                                                 </div>
@@ -157,7 +169,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7">
+                                        <td colspan="8">
                                             <div class="alert alert-info alert-dismissible fade show text-center"
                                                 role="alert">
                                                 <i class="bi bi-info-circle me-1"></i>
