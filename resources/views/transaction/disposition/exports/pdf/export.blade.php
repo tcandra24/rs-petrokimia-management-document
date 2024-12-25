@@ -138,12 +138,23 @@
                     </td>
                 </tr>
                 <tr>
+                    <td class="title-row no-border" width="130">Kabag / Kabid</td>
+                    <td class="no-border">:</td>
+                    <td class="content-row no-border">
+                        @foreach ($disposition->divisions as $division)
+                            <span>
+                                {{ $division->name }},
+                            </span>
+                        @endforeach
+                    </td>
+                </tr>
+                <tr>
                     <td class="title-row no-border" width="130">Unit</td>
                     <td class="no-border">:</td>
                     <td class="content-row no-border">
                         @foreach ($disposition->sub_divisions as $sub_division)
                             <span>
-                                {{ $sub_division->division->name }} | {{ $sub_division->name }},
+                                {{ $sub_division->name }},
                             </span>
                         @endforeach
                     </td>

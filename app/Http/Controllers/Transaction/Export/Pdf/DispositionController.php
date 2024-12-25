@@ -17,7 +17,7 @@ class DispositionController extends Controller
 
     public function download(Request $request)
     {
-        $disposition = Disposition::with(['memo', 'sub_divisions', 'sub_divisions.division', 'instructions'])->where('id', $request->id)->first();
+        $disposition = Disposition::with(['memo', 'sub_divisions', 'divisions', 'instructions'])->where('id', $request->id)->first();
         $filenameDisposition = str_replace('/', '-', $disposition->number_transaction) . '.pdf';
 
         $qrcode_image = $disposition->qr_code_file ? public_path('storage/disposition/qr-codes-signature/' . $disposition->qr_code_file) : null;
