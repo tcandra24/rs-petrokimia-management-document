@@ -21,19 +21,26 @@ class ChangeStatusRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'is_urgent' => 'required',
-            'sub_divisions' => 'required',
-            'instructions' => 'required',
-            'note' => 'required',
+            'sub_divisions' => 'nullable',
+            'note' => 'nullable',
             'status' => 'required',
         ];
+
+        if($this->input('status') === 'approve') {
+            $rules['divisions'] = 'required';
+            $rules['instructions'] = 'required';
+        }
+
+        return $rules;
     }
 
     public function messages(): array
     {
         return [
             'is_urgent.required' => 'Sifat harus diisi',
+            'divisions.required' => 'Kabag/Kabid harus diisi',
             'sub_divisions.required' => 'Unit harus diisi',
             'instructions.required' => 'Instruksi harus diisi',
             'note.required' => 'Catatan harus diisi',

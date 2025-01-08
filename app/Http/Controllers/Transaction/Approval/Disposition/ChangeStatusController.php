@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Transaction\Approval\Disposition;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 // Notification
@@ -41,42 +42,49 @@ class ChangeStatusController extends Controller
 
             $purpose =  $request->purpose_id ?? null;
 
-            $data = [
-                'status' => $request->status,
-                'note' => $request->note,
-                'purpose_id' => $purpose,
-                'is_urgent' => $request->is_urgent,
-            ];
 
-            if($request->status === 'approve') {
-                $data['approve_datetime'] = Carbon::now();
-                $data['approve_by'] = Auth::user()->name;
-
-                if($disposition->memo){
-                    $numberTransaction = $this->generateNumber($disposition->counter);
-                    $data['number_transaction'] = $numberTransaction;
-                }
-
-                $payload = [
-                    'number_transaction' => $numberTransaction,
+            DB::transaction(function() use ($request, $disposition, $purpose, $numberTransaction){
+                $data = [
+                    'status' => $request->status,
+                    'note' => $request->note,
+                    'purpose_id' => $purpose,
+                    'is_urgent' => $request->is_urgent,
                 ];
 
-                $signature = $this->createSignature($payload);
-                $qrcode_name = $this->generateQrCode('disposition/qr-codes-signature/', $signature, $numberTransaction);
+                if($request->status === 'approve') {
+                    $data['approve_datetime'] = Carbon::now();
+                    $data['approve_by'] = Auth::user()->name;
 
-                $data['qr_code_file'] = $qrcode_name;
-            }
+                    if($disposition->memo){
+                        $numberTransaction = $this->generateNumber($disposition->counter);
+                        $data['number_transaction'] = $numberTransaction;
+                    }
 
-            $disposition->update($data);
+                    $payload = [
+                        'number_transaction' => $numberTransaction,
+                    ];
 
-            $division = Division::select('id')->whereIn('id', $request->divisions)->get();
-            $disposition->divisions()->attach($division);
+                    $signature = $this->createSignature($payload);
+                    $qrcode_name = $this->generateQrCode('disposition/qr-codes-signature/', $signature, $numberTransaction);
 
-            $subDivision = SubDivision::select('id')->whereIn('id', $request->sub_divisions)->get();
-            $disposition->sub_divisions()->attach($subDivision);
+                    $data['qr_code_file'] = $qrcode_name;
 
-            $instructions = Instruction::select('id')->whereIn('id', $request->instructions)->get();
-            $disposition->instructions()->attach($instructions);
+                    $division = Division::select('id')->whereIn('id', $request->divisions)->get();
+                    $disposition->divisions()->attach($division);
+
+                    if($request->sub_divisions){
+                        $subDivision = SubDivision::select('id')->whereIn('id', $request->sub_divisions)->get();
+                        $disposition->sub_divisions()->attach($subDivision);
+                    }
+
+                    $instructions = Instruction::select('id')->whereIn('id', $request->instructions)->get();
+                    $disposition->instructions()->attach($instructions);
+
+                }
+
+                $disposition->update($data);
+            });
+
 
             $to = User::where('type', 'assistant')->first();
 

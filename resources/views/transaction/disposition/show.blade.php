@@ -299,7 +299,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Tanda Tangan</h5>
-                        @if ($disposition->status === 'Dibuat')
+                        @if ($disposition->status === 'Dibuat' || $disposition->status === 'Ditolak')
                             <div class="row my-2">
                                 <div class="col-lg-12">
                                     <div class="alert alert-primary alert-dismissible fade show" role="alert">
