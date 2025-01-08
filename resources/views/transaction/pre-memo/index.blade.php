@@ -93,9 +93,9 @@
                                             </div>
                                         </td>
                                         <td>
-                                            @if (auth()->user()->can('transaction.memos.edit') ||
-                                                    auth()->user()->can('transaction.memos.destroy') ||
-                                                    auth()->user()->can('transaction.memos.show'))
+                                            @if (auth()->user()->can('transaction.pre-memos.edit') ||
+                                                    auth()->user()->can('transaction.pre-memos.destroy') ||
+                                                    auth()->user()->can('transaction.pre-memos.show'))
                                                 <div class="dropdown">
                                                     <a href="javascript:void(0)" class="btn btn-light"
                                                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
