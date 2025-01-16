@@ -230,6 +230,7 @@ class DispositionController extends Controller
         try {
             DB::transaction(function () use ($id){
                 $disposition = Disposition::findOrFail($id);
+                $disposition->divisions()->detach();
                 $disposition->sub_divisions()->detach();
                 $disposition->instructions()->detach();
                 $disposition->delete();
