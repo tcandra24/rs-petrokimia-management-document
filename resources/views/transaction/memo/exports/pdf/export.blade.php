@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Memo Kepala Bagian | {{ $memo->number_transaction }}</title>
+    <title>Memo | {{ $memo->number_transaction }}</title>
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
@@ -100,7 +100,7 @@
 
         <div class="container-title">
             <h1 class="title">
-                Memo Kepala Bagian
+                Memo
             </h1>
         </div>
         <div class="memo-container">

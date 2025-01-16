@@ -182,7 +182,7 @@
 
     @if ($qrcode_image)
         <div class="container-signature">
-            <p style="font-weight: bold">Rumah sakit Petrokimia Gresik</p>
+            <p style="font-weight: bold">Rumah Sakit Petrokimia Gresik Driyorejo</p>
             <div class="signature">
                 <img src="{{ $qrcode_image }}" width="120" height="120"
                     alt="{{ $disposition->number_transaction }}">
