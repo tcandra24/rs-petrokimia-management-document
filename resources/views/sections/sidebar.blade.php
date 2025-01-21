@@ -127,7 +127,7 @@
                         @can('transaction.memos.index')
                             <li>
                                 <a href="{{ route('memos.index') }}">
-                                    <i class="bi bi-circle"></i><span>Kepala Bagian</span>
+                                    <i class="bi bi-circle"></i><span>Kabag / Kabid</span>
                                 </a>
                             </li>
                         @endcan

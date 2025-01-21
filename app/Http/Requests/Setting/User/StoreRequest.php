@@ -25,6 +25,7 @@ class StoreRequest extends FormRequest
             'name' => 'required',
             'email' => 'required|unique:users',
             'roles' => 'required',
+            'type' => 'required',
             'password' => 'required|min:6|required_with:confirm_password|same:confirm_password',
             'confirm_password' => 'min:6',
         ];
@@ -37,6 +38,7 @@ class StoreRequest extends FormRequest
             'email.required' => 'Email wajib diisi',
             'email.unique' => 'Email sudah digunakan',
             'roles.required' => 'Peran harus diisi',
+            'type.required' => 'Tipe harus diisi',
             'password.required' => 'Password harus diisi',
             'password.min' => 'Password minimal 6 karakter',
             'password.required_with' => 'Konfirmasi password harus diisi',

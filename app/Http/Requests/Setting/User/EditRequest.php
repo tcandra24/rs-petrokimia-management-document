@@ -27,6 +27,7 @@ class EditRequest extends FormRequest
             'name' => 'required',
             'email' => 'required|unique:users,email,'.$user->id,
             'roles' => 'required',
+            'type' => 'required',
             'password' => 'nullable|min:6|required_with:confirm_password|same:confirm_password',
             'confirm_password' => 'nullable|min:6',
         ];
@@ -39,6 +40,7 @@ class EditRequest extends FormRequest
             'email.required' => 'Email wajib diisi',
             'email.unique' => 'Email sudah digunakan',
             'roles.required' => 'Peran harus diisi',
+            'type.required' => 'Tipe harus diisi',
             'password.min' => 'Password minimal 6 karakter',
             'password.required_with' => 'Konfirmasi password harus diisi',
             'password.same' => 'Password dan Konfirmasi password harus sama',
