@@ -69,7 +69,8 @@
                                             @if ($disposition->memo)
                                                 <div class="row">
                                                     <div class="d-flex align-items-center gap-2 flex-wrap">
-                                                        <span class="badge bg-danger rounded-3 fw-semibold">
+                                                        <span class="badge rounded-3 fw-semibold"
+                                                            style="background-color: #EB5A3C">
                                                             Memo
                                                         </span>
                                                     </div>
@@ -77,7 +78,8 @@
                                             @else
                                                 <div class="row">
                                                     <div class="d-flex align-items-center gap-2 flex-wrap">
-                                                        <span class="badge bg-danger rounded-3 fw-semibold">
+                                                        <span class="badge rounded-3 fw-semibold"
+                                                            style="background-color: #EB5A3C">
                                                             Surat Masuk
                                                         </span>
                                                     </div>
@@ -88,7 +90,8 @@
                                             <div class="row">
                                                 <div class="d-flex align-items-center gap-2 flex-wrap">
                                                     @foreach ($disposition->divisions as $division)
-                                                        <span class="badge bg-primary rounded-3 fw-semibold">
+                                                        <span class="badge rounded-3 fw-semibold"
+                                                            style="background-color: #98D8EF; color: rgb(28, 28, 28);">
                                                             {{ $division->name }}
                                                         </span>
                                                     @endforeach
@@ -99,7 +102,8 @@
                                             <div class="row">
                                                 <div class="d-flex align-items-center gap-2 flex-wrap">
                                                     @foreach ($disposition->sub_divisions as $sub_division)
-                                                        <span class="badge bg-success rounded-3 fw-semibold">
+                                                        <span class="badge rounded-3 fw-semibold"
+                                                            style="background-color: #F0FF42; color: rgb(28, 28, 28);">
                                                             {{ $sub_division->name }}
                                                         </span>
                                                     @endforeach
@@ -109,8 +113,9 @@
                                         <td>
                                             <div class="row">
                                                 <div class="d-flex align-items-center gap-2 flex-wrap"
-                                                    style="min-width: 200px;">
-                                                    <span class="badge bg-secondary rounded-3 fw-semibold">
+                                                    style="min-width: 50px;">
+                                                    <span class="badge rounded-3 fw-semibold"
+                                                        style="background-color: #5D8736">
                                                         {{ $disposition->status }}
                                                     </span>
                                                 </div>
