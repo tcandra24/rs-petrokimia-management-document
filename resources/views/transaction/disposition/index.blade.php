@@ -51,7 +51,7 @@
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Nomer Agenda</th>
-                                    <th scope="col">Komite</th>
+                                    <th scope="col">Perihal</th>
                                     <th scope="col">Tipe</th>
                                     <th scope="col">Kabag / Kabid</th>
                                     <th scope="col">Unit</th>
@@ -64,7 +64,7 @@
                                     <tr>
                                         <th scope="row">{{ $dispositions->firstItem() + $key }}</th>
                                         <td>{{ $disposition->number_transaction }}</td>
-                                        <td>{{ $disposition->committee }}</td>
+                                        <td>{{ $disposition->memo ? $disposition->memo->regarding : '' }}</td>
                                         <td>
                                             @if ($disposition->memo)
                                                 <div class="row">
