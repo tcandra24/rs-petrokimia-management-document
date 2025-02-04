@@ -1,5 +1,12 @@
 <div class="pagetitle">
-    <h1>{{ $breadcrumbs['title'] }}</h1>
+    <div class="d-flex">
+        <h1>
+            {{ $breadcrumbs['title'] }}
+        </h1>
+        <h5 class="w-100 text-center">
+            SIMETRIS (SISTEM INFORMASI MEMO DAN SURAT MASUK TERINTEGRASI)
+        </h5>
+    </div>
     <nav>
         <ol class="breadcrumb">
             @foreach ($breadcrumbs['list'] as $breadcrumb)

@@ -5,7 +5,11 @@
 @endsection
 
 @section('styles')
-    {{--  --}}
+    <style>
+        .bg-created {
+            background-color: #5D8736
+        }
+    </style>
 @endsection
 
 @section('scripts')
@@ -78,8 +82,7 @@
                                             @else
                                                 <div class="row">
                                                     <div class="d-flex align-items-center gap-2 flex-wrap">
-                                                        <span class="badge rounded-3 fw-semibold"
-                                                            style="background-color: #EB5A3C">
+                                                        <span class="badge bg-primary rounded-3 fw-semibold">
                                                             Surat Masuk
                                                         </span>
                                                     </div>
@@ -114,8 +117,8 @@
                                             <div class="row">
                                                 <div class="d-flex align-items-center gap-2 flex-wrap"
                                                     style="min-width: 50px;">
-                                                    <span class="badge rounded-3 fw-semibold"
-                                                        style="background-color: #5D8736">
+                                                    <span
+                                                        class="badge {{ $disposition->status === 'Dibuat' ? 'bg-danger' : 'bg-created' }} rounded-3 fw-semibold">
                                                         {{ $disposition->status }}
                                                     </span>
                                                 </div>
