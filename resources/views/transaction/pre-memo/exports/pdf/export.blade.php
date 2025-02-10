@@ -113,7 +113,7 @@
                 <tr>
                     <td class="title-row no-border" width="80">Dari</td>
                     <td class="no-border">:</td>
-                    <td class="content-row no-border">{{ $memo->from_user->division?->name }}</td>
+                    <td class="content-row no-border">Kepala Instalasi</td>
                 </tr>
                 <tr>
                     <td class="title-row no-border" width="80">Perihal</td>
@@ -142,12 +142,12 @@
     </div>
 
     <div class="container-signature">
-        <p style="font-weight: bold">{{ $memo->from_user->division?->name }}</p>
+        <p style="font-weight: bold">Kepala Instalasi</p>
         <div class="signature">
             <img src="{{ $qrcode_image }}" width="120" height="120" alt="{{ $memo->number_transaction }}">
         </div>
-        <p style="font-weight: bold">{{ $memo->from_user->name }}</p>
-        <p>{{ $memo->from_user->position?->name }}</p>
+        <p style="font-weight: bold; margin-bottom: 0px;">{{ $memo->from_user->name }}</p>
+        <p style="margin-top: 0px;">Kepala</p>
     </div>
 </body>
 

@@ -18,9 +18,9 @@ trait TransactionNumberTrait
                 $random .= rand(0, 1) ? rand(0, 9) : chr(rand(ord('a'), ord('z')));
             }
 
-            return $counter . '/TEMP/' . Str::upper($random) . '/' . str_pad($now->month, 2, '0', STR_PAD_LEFT) . '/' . $now->year;
+            return str_pad($counter, 2, '0', STR_PAD_LEFT) . '/TEMP/' . Str::upper($random) . '/' . str_pad($now->month, 2, '0', STR_PAD_LEFT) . '/' . $now->year;
         } else {
-           return $counter . '/' . str_pad($now->month, 2, '0', STR_PAD_LEFT) . '/SEKRE/' . $now->year;
+           return str_pad($counter, 2, '0', STR_PAD_LEFT) . '/' . str_pad($now->month, 2, '0', STR_PAD_LEFT) . '/SEKRE/' . $now->year;
         }
 
 

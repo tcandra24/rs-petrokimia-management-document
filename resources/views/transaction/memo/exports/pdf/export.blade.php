@@ -146,8 +146,8 @@
         <div class="signature">
             <img src="{{ $qrcode_image }}" width="120" height="120" alt="{{ $memo->number_transaction }}">
         </div>
-        <p style="font-weight: bold">{{ $memo->from_user->name }}</p>
-        <p>{{ $memo->from_user->position?->name }}</p>
+        <p style="font-weight: bold; margin-bottom: 0px;">{{ $memo->from_user->name }}</p>
+        <p style="margin-top: 0px;">{{ $memo->from_user->position?->name }}</p>
     </div>
 </body>
 

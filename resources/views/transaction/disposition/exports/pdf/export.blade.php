@@ -187,8 +187,8 @@
                 <img src="{{ $qrcode_image }}" width="120" height="120"
                     alt="{{ $disposition->number_transaction }}">
             </div>
-            <p style="font-weight: bold">{{ $disposition->approve_by }}</p>
-            <p> Direktur </p>
+            <p style="font-weight: bold; margin-bottom: 0px;">{{ $disposition->approve_by }}</p>
+            <p style="margin-top: 0px;"> Direktur </p>
         </div>
     @endif
 </body>
