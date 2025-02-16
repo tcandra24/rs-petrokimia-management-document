@@ -39,7 +39,7 @@ class MemoController extends Controller
             $query->whereHas('from_user', function($query){
                 $query->where('division_id', Auth::user()->division_id);
             });
-        })->with(['to_user', 'from_user'])->paginate(10);
+        })->with(['to_user', 'from_user'])->orderBy('created_at', 'desc')->paginate(10);
         $breadcrumbs = $this->setBreadcrumbs('memo', 'index');
 
         // event(new SendNotificationEvent('Hi', Auth::user()->id));

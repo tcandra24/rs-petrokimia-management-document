@@ -31,7 +31,7 @@
 
                         <div class="row my-2">
                             <div class="col-lg-3 col-md-4 label fw-bold">Perihal</div>
-                            <div class="col-lg-9 col-md-8">{{ $memo->from_user->name }}</div>
+                            <div class="col-lg-9 col-md-8">{{ $memo->regarding }}</div>
                         </div>
 
                         <div class="row my-2">

@@ -35,7 +35,7 @@ class DispositionController extends Controller
 
     public function index()
     {
-        $dispositions = Disposition::with(['sub_divisions', 'divisions', 'instructions'])->paginate(10);
+        $dispositions = Disposition::with(['sub_divisions', 'divisions', 'instructions'])->orderBy('created_at', 'desc')->paginate(10);
         $breadcrumbs = $this->setBreadcrumbs('disposition', 'index');
 
         return view('transaction.disposition.index', ['breadcrumbs' => $breadcrumbs, 'dispositions' => $dispositions ]);

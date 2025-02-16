@@ -41,7 +41,7 @@ class PreMemoController extends Controller
                     $query->where('division_id', Auth::user()->division_id);
                 });
             });
-        })->with(['to_user', 'from_user'])->paginate(10);
+        })->with(['to_user', 'from_user'])->orderBy('created_at', 'desc')->paginate(10);
         $breadcrumbs = $this->setBreadcrumbs('preMemo', 'index');
 
         return view('transaction.pre-memo.index', ['breadcrumbs' => $breadcrumbs, 'memos' => $memos ]);

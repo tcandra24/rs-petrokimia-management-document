@@ -116,9 +116,10 @@
 
                             <div class="col-md-6">
                                 <label for="file" class="form-label">File</label>
-                                <input type="file" name="file"
+                                <input type="file" name="file" accept=".pdf"
                                     class="form-control {{ $errors->has('file') ? 'border border-danger' : '' }}"
                                     id="file">
+                                <p class="small fst-italic m-0 mt-2"> *Hanya menerima file berekstensi .pdf </p>
                                 @error('file')
                                     <span class="text-danger">
                                         <small>
