@@ -44,9 +44,9 @@ class DispositionController extends Controller
     public function show(Disposition $disposition)
     {
         $breadcrumbs = $this->setBreadcrumbs('disposition', 'show', $disposition);
-        $instructions = Instruction::all();
-        $divisions = Division::all();
-        $sub_divisions = SubDivision::all();
+        $instructions = Instruction::where('is_active', true)->get();
+        $divisions = Division::where('is_active', true)->get();
+        $sub_divisions = SubDivision::where('is_active', true)->get();
         $purposes = Purpose::where('is_active', true)->get();
 
         return view('transaction.disposition.show', [
