@@ -14,6 +14,7 @@ class Disposition extends Model
 
     protected $fillable = [
         'counter',
+        'regarding',
         'memo_id',
         'number_transaction',
         'purpose_id',

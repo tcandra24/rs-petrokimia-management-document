@@ -111,6 +111,11 @@
                     <td class="content-row no-border">{{ $disposition->number_transaction }}</td>
                 </tr>
                 <tr>
+                    <td class="title-row no-border" width="130">Perihal</td>
+                    <td class="no-border">:</td>
+                    <td class="content-row no-border">{{ $disposition->regarding }}</td>
+                </tr>
+                <tr>
                     <td class="title-row no-border" width="130">Tipe</td>
                     <td class="no-border">:</td>
                     <td class="content-row no-border">{{ $disposition->memo ? 'Memo' : 'Surat Masuk' }}</td>

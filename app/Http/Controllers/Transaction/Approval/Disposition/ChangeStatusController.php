@@ -69,8 +69,10 @@ class ChangeStatusController extends Controller
 
                     $data['qr_code_file'] = $qrcode_name;
 
-                    $division = Division::select('id')->whereIn('id', $request->divisions)->get();
-                    $disposition->divisions()->attach($division);
+                    if($request->divisions){
+                        $division = Division::select('id')->whereIn('id', $request->divisions)->get();
+                        $disposition->divisions()->attach($division);
+                    }
 
                     if($request->sub_divisions){
                         $subDivision = SubDivision::select('id')->whereIn('id', $request->sub_divisions)->get();

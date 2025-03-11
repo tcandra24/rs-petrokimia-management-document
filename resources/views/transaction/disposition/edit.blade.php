@@ -23,6 +23,21 @@
                             enctype="multipart/form-data">
                             @method('PATCH')
                             @csrf
+
+                            <div class="col-md-12">
+                                <label for="committee" class="form-label">Perihal</label>
+                                <input type="text" name="regarding"
+                                    class="form-control {{ $errors->has('regarding') ? 'border border-danger' : '' }}"
+                                    value="{{ $disposition->regarding }}" id="regarding">
+                                @error('regarding')
+                                    <span class="text-danger">
+                                        <small>
+                                            <i>{{ $message }}</i>
+                                        </small>
+                                    </span>
+                                @enderror
+                            </div>
+
                             <div class="col-md-6">
                                 <label for="file" class="form-label">File</label>
                                 <input type="file" name="file" accept=".pdf"

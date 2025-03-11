@@ -68,7 +68,9 @@
                                     <tr>
                                         <th scope="row">{{ $dispositions->firstItem() + $key }}</th>
                                         <td>{{ $disposition->number_transaction }}</td>
-                                        <td>{{ $disposition->memo ? $disposition->memo->regarding : '' }}</td>
+                                        <td>
+                                            {{ $disposition->memo ? $disposition->memo->regarding : $disposition->regarding }}
+                                        </td>
                                         <td>
                                             @if ($disposition->memo)
                                                 <div class="row">
@@ -92,24 +94,32 @@
                                         <td>
                                             <div class="row">
                                                 <div class="d-flex align-items-center gap-2 flex-wrap">
-                                                    @foreach ($disposition->divisions as $division)
-                                                        <span class="badge rounded-3 fw-semibold"
-                                                            style="background-color: #98D8EF; color: rgb(28, 28, 28);">
-                                                            {{ $division->name }}
-                                                        </span>
-                                                    @endforeach
+                                                    @if (count($disposition->divisions) > 0)
+                                                        @foreach ($disposition->divisions as $division)
+                                                            <span class="badge rounded-3 fw-semibold"
+                                                                style="background-color: #98D8EF; color: rgb(28, 28, 28);">
+                                                                {{ $division->name }}
+                                                            </span>
+                                                        @endforeach
+                                                    @else
+                                                        -
+                                                    @endif
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="row">
                                                 <div class="d-flex align-items-center gap-2 flex-wrap">
-                                                    @foreach ($disposition->sub_divisions as $sub_division)
-                                                        <span class="badge rounded-3 fw-semibold"
-                                                            style="background-color: #F0FF42; color: rgb(28, 28, 28);">
-                                                            {{ $sub_division->name }}
-                                                        </span>
-                                                    @endforeach
+                                                    @if (count($disposition->sub_divisions) > 0)
+                                                        @foreach ($disposition->sub_divisions as $sub_division)
+                                                            <span class="badge rounded-3 fw-semibold"
+                                                                style="background-color: #F0FF42; color: rgb(28, 28, 28);">
+                                                                {{ $sub_division->name }}
+                                                            </span>
+                                                        @endforeach
+                                                    @else
+                                                        -
+                                                    @endif
                                                 </div>
                                             </div>
                                         </td>

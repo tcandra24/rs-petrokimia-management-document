@@ -29,7 +29,6 @@ class ChangeStatusRequest extends FormRequest
         ];
 
         if($this->input('status') === 'approve') {
-            $rules['divisions'] = 'required';
             $rules['instructions'] = 'required';
         }
 
@@ -40,7 +39,6 @@ class ChangeStatusRequest extends FormRequest
     {
         return [
             'is_urgent.required' => 'Sifat harus diisi',
-            'divisions.required' => 'Kabag/Kabid harus diisi',
             'sub_divisions.required' => 'Unit harus diisi',
             'instructions.required' => 'Instruksi harus diisi',
             'note.required' => 'Catatan harus diisi',

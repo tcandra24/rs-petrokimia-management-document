@@ -61,7 +61,7 @@ class DispositionController extends Controller
 
     public function create()
     {
-        $memos = Memo::doesntHave('dispositions')->get();
+        $memos = Memo::doesntHave('dispositions')->orderBy('created_at', 'desc')->get();
         $breadcrumbs = $this->setBreadcrumbs('disposition', 'create');
 
         return view('transaction.disposition.create', [
@@ -81,6 +81,7 @@ class DispositionController extends Controller
                 $file = $this->doUpload('local', $request, 'files/dispositions');
 
                 $disposition = Disposition::create([
+                    'regarding' => $request->regarding,
                     'counter' => $maxCounter,
                     'number_transaction' => $numberTransaction,
                     'memo_id' => $memo,
@@ -161,6 +162,7 @@ class DispositionController extends Controller
                 $memo = $request->memo_id ?? null;
 
                 $data  = [
+                    'regarding' => $request->regarding,
                     'memo_id' => $memo,
                     'status' => '',
                 ];

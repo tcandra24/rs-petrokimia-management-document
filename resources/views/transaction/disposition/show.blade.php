@@ -49,6 +49,11 @@
                         </div>
 
                         <div class="row my-2">
+                            <div class="col-lg-3 col-md-4 label fw-bold">Perihal</div>
+                            <div class="col-lg-9 col-md-8">{{ $disposition->regarding }}</div>
+                        </div>
+
+                        <div class="row my-2">
                             <div class="col-lg-3 col-md-4 label fw-bold">Status</div>
                             <div class="col-lg-9 col-md-8">{{ $disposition->status }}</div>
                         </div>
@@ -248,11 +253,15 @@
                                 <div class="col-lg-9 col-md-8">
                                     <div class="row">
                                         <div class="d-flex align-items-center gap-2 flex-wrap" style="min-width: 200px;">
-                                            @foreach ($disposition->divisions as $division)
-                                                <span class="badge bg-primary rounded-3 fw-semibold">
-                                                    {{ $division->name }}
-                                                </span>
-                                            @endforeach
+                                            @if (count($disposition->divisions) > 0)
+                                                @foreach ($disposition->divisions as $division)
+                                                    <span class="badge bg-primary rounded-3 fw-semibold">
+                                                        {{ $division->name }}
+                                                    </span>
+                                                @endforeach
+                                            @else
+                                                -
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -263,11 +272,15 @@
                                 <div class="col-lg-9 col-md-8">
                                     <div class="row">
                                         <div class="d-flex align-items-center gap-2 flex-wrap" style="min-width: 200px;">
-                                            @foreach ($disposition->sub_divisions as $sub_division)
-                                                <span class="badge bg-primary rounded-3 fw-semibold">
-                                                    {{ $sub_division->name }}
-                                                </span>
-                                            @endforeach
+                                            @if (count($disposition->sub_divisions) > 0)
+                                                @foreach ($disposition->sub_divisions as $sub_division)
+                                                    <span class="badge bg-primary rounded-3 fw-semibold">
+                                                        {{ $sub_division->name }}
+                                                    </span>
+                                                @endforeach
+                                            @else
+                                                -
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -334,6 +347,11 @@
                             </div>
 
                             <div class="row my-2">
+                                <div class="col-lg-3 col-md-4 label fw-bold">Perihal</div>
+                                <div class="col-lg-9 col-md-8">{{ $disposition->memo->regarding }}</div>
+                            </div>
+
+                            <div class="row my-2">
                                 <div class="col-lg-3 col-md-4 label fw-bold">Dari</div>
                                 <div class="col-lg-9 col-md-8">{{ $disposition->memo->from_user->name }}</div>
                             </div>
@@ -342,6 +360,16 @@
                                 <div class="col-lg-3 col-md-4 label fw-bold">Dibuat</div>
                                 <div class="col-lg-9 col-md-8">{{ $disposition->memo->created_at }}</div>
                             </div>
+
+                            @if ($disposition->memo->file)
+                                <div class="row my-2">
+                                    <div class="col-lg-3 col-md-4 label fw-bold">Lampiran Memo</div>
+                                    <div class="col-lg-9 col-md-8">
+                                        <a href="{{ route('attachment.memo', $disposition->memo->id) }}" target="_blank"
+                                            class="btn btn-primary" target="_blank">Download</a>
+                                    </div>
+                                </div>
+                            @endif
 
                             <div class="row my-2">
                                 <div class="col-lg-3 col-md-4 label fw-bold">Isi</div>
