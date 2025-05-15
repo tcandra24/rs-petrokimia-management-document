@@ -38,6 +38,10 @@
                             <div class="col-lg-3 col-md-4 label fw-bold">Termohon</div>
                             <div class="col-lg-9 col-md-8">{{ $memo->to_user->name }}</div>
                         </div>
+                        <div>
+                            <p>{{ auth()->user()->id }}</p>
+                            <p>{{ $memo->to_user->id }}</p>
+                        </div>
                         @if ($memo->file)
                             <div class="row my-2">
                                 <div class="col-lg-3 col-md-4 label fw-bold">Lampiran</div>
