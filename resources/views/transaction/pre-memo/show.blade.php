@@ -48,7 +48,7 @@
                             </div>
                         @endif
 
-                        @if (auth()->user()->id === $memo->to_user_id && $memo->status === 'Dibuat')
+                        @if (auth()->user()->id === $memo->to_user->id && $memo->status === 'Dibuat')
                             <form method="POST" action="{{ route('transaction.pre-memo.change-status', $memo->id) }}">
                                 @csrf
                                 <div class="row my-2">
