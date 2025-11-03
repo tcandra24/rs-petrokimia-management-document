@@ -128,7 +128,7 @@
                                                 <div class="d-flex align-items-center gap-2 flex-wrap"
                                                     style="min-width: 50px;">
                                                     <span
-                                                        class="badge {{ $disposition->status === 'Dibuat' ? 'bg-danger' : 'bg-created' }} rounded-3 fw-semibold">
+                                                        class="badge {{ $disposition->status === 'Ditolak' ? 'bg-danger' : 'bg-created' }} rounded-3 fw-semibold">
                                                         {{ $disposition->status }}
                                                     </span>
                                                 </div>
