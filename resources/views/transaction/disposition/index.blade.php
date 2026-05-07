@@ -9,6 +9,9 @@
         .bg-created {
             background-color: #8B008B
         }
+        .bg-approve {
+            background-color: #5D8736
+        }
     </style>
 @endsection
 
@@ -127,8 +130,18 @@
                                             <div class="row">
                                                 <div class="d-flex align-items-center gap-2 flex-wrap"
                                                     style="min-width: 50px;">
+                                                    @switch($disposition->status)
+                                                        @case('Ditolak')
+                                                            @php $classStatus = 'bg-danger'; @endphp
+                                                            @break
+                                                        @case('Disetujui')
+                                                            @php $classStatus = 'bg-approve'; @endphp
+                                                            @break
+                                                        @default
+                                                            @php $classStatus = 'bg-created'; @endphp
+                                                    @endswitch
                                                     <span
-                                                        class="badge {{ $disposition->status === 'Ditolak' ? 'bg-danger' : 'bg-created' }} rounded-3 fw-semibold">
+                                                        class="badge {{ $classStatus }} rounded-3 fw-semibold">
                                                         {{ $disposition->status }}
                                                     </span>
                                                 </div>
