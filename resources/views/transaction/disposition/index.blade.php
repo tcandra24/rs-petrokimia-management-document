@@ -7,7 +7,7 @@
 @section('styles')
     <style>
         .bg-created {
-            background-color: #5D8736
+            background-color: #8B008B
         }
     </style>
 @endsection
